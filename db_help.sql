@@ -71,13 +71,13 @@ create table days_off(
 );
 create table problems(
     id int not null primary key auto_increment,
-    id_problem int,
+    id_problem_type int,
     id_user int,
     id_status int,
     day_request date,
     create_at date,
     description text,
-    constraint foreign key (id_problem) references problems_type(id),
+    constraint foreign key (id_problem_type) references problems_type(id),
     constraint foreign key (id_user) references users(id),
     constraint foreign key (id_status) references status(id)
 );
