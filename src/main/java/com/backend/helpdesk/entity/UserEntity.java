@@ -49,6 +49,7 @@ public class UserEntity {
     public UserEntity() {
     }
 
+
     public int getId() {
         return id;
     }
@@ -127,5 +128,13 @@ public class UserEntity {
 
     public void setStartingDay(Date startingDay) {
         this.startingDay = startingDay;
+    }
+
+    public Set<RoleEntity> getRoleEntities() {
+        return roleEntities;
+    }
+
+    public void setRoleEntities(Set<RoleEntity> roleEntities) {
+        this.roleEntities = roleEntities;
     }
 }

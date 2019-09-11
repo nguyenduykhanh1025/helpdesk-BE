@@ -13,6 +13,10 @@ public class RoleEntity {
     public RoleEntity() {
     }
 
+    public RoleEntity(String name) {
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }
@@ -28,4 +32,6 @@ public class RoleEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }
