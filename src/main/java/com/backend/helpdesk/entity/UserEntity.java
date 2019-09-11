@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Entity(name="users")
+@Entity(name="uses")
 public class UserEntity {
 
     @Id
@@ -23,19 +23,14 @@ public class UserEntity {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
     private int age;
 
-    @Column(nullable = false)
     private Date birthday;
 
-    @Column(nullable = false)
     private boolean sex;
 
-    @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
     private Date startingDay;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -49,6 +44,12 @@ public class UserEntity {
     public UserEntity() {
     }
 
+    public UserEntity(String email, String password, String firstName, String lastName) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public int getId() {
         return id;

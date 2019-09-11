@@ -1,6 +1,7 @@
 package com.backend.helpdesk.configurations;
 
 import com.backend.helpdesk.entity.RoleEntity;
+import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.RoleRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
 
 @Component
 @Configuration
@@ -28,6 +32,18 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
     }
 
+    private void addUserIfMissing(String username, String password, String... roles) {
+        if (userRepository.findByEmail(username) == null) {
+            UserEntity user = new UserEntity(username, new BCryptPasswordEncoder().encode(password), "f", "l");
+            user.setRoleEntities(new HashSet<>());
+
+            for (String role : roles) {
+                user.getRoleEntities().add(roleRepository.findByName(role));
+            }
+
+            userRepository.save(user);
+        }
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -36,7 +52,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-
+        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_MEMBER");
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
