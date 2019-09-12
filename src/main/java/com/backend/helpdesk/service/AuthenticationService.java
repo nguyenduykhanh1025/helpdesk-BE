@@ -49,7 +49,7 @@ public class AuthenticationService {
         return null;
     }
 
-    public ResponseEntity<?> generateToken(String email) {
+    public ResponseEntity<String> generateToken(String email) {
 
         if (CommonMethods.isEmailNovaHub(email)) {
             final Authentication authentication = authenticationManager.authenticate(
