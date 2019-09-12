@@ -1,6 +1,8 @@
 package com.backend.helpdesk.service;
 
+import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.configurations.TokenProvider;
+import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
 import com.backend.helpdesk.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -41,25 +43,27 @@ public class AuthenticationService {
 
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
-            // Print user identifier
             String userId = payload.getSubject();
-            // Get profile information from payload
             return payload.getEmail();
-
         }
         return null;
     }
 
-    public ResponseEntity<?> generateToken(String userName){
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userName,
-                        userName
-                )
-        );
+    public ResponseEntity<?> generateToken(String email) {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(token);
+        if (CommonMethods.isEmailNovaHub(email)) {
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            email,
+                            email
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final String token = jwtTokenUtil.generateToken(authentication);
+            return ResponseEntity.ok(token);
+        }
+
+        throw new EmailUserIsNotMatch();
     }
 }
