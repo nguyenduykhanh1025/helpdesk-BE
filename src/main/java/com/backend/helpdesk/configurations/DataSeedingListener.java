@@ -26,7 +26,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private RoleRepository roleRepository;
 
-    private void addRoleIfMissing(String name){
+    private void addRoleIfMissing(String name) {
         if (roleRepository.findByName(name) == null) {
             roleRepository.save(new RoleEntity(name));
         }
@@ -52,8 +52,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_MEMBER");
-        if(signingKey == null || signingKey.length() ==0){
+        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_EMPLOYEES");
+        if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
                     .signWith(SignatureAlgorithm.HS256, "helpdeskAPI").compact();
@@ -62,6 +62,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             System.out.println("jwt-key=" + jws);
         }
     }
+
     @Value("${jwt-key}")
     private String signingKey;
 }

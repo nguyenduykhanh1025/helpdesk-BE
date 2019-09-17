@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name="categories")
+@Entity(name = "categories")
 public class CategoriesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,6 +14,11 @@ public class CategoriesEntity {
     private String name;
 
     public CategoriesEntity() {
+    }
+
+    public CategoriesEntity(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public int getId() {
