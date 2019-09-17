@@ -4,6 +4,7 @@ import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +15,11 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+@Component("test")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
+
     private UserRepository userRepository;
 
     @Override
