@@ -17,25 +17,25 @@ public class SkillsController {
     SkillsService skillsService;
 
     @GetMapping("/{id}")
-    public Skills getSkillFollowId(@PathVariable("id") int id){
+    public Skills getSkillFollowId(@PathVariable("id") int id) {
         return skillsService.getSkillFollowId(id);
     }
 
     @GetMapping
-    public List<Skills> getAllSkills(){
+    public List<Skills> getAllSkills() {
         return skillsService.getAllSkills();
     }
 
     @Secured("ROLE_EMPLOYEES")
     @PostMapping
-    public void addNewSkills(@RequestBody @Validated Skills skills){
+    public void addNewSkills(@RequestBody @Validated Skills skills) {
         skillsService.addNewSkills(skills);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @PutMapping("/{id}")
     public void editSkills(@RequestBody @Validated Skills skills,
-                                        @PathVariable("id") int id){
+                           @PathVariable("id") int id) {
         skills.setId(id);
         skillsService.editSkills(skills);
     }
@@ -43,8 +43,8 @@ public class SkillsController {
     @GetMapping("/pagination")
     public List<Skills> getListItem(@RequestParam(name = "sizeList") int sizeList,
                                     @RequestParam(name = "indexPage") int indexPage,
-                                    @RequestParam(name="valueSearch") String valueSearch,
-                                    @RequestParam(name="keySort") int keySort){
+                                    @RequestParam(name = "valueSearch") String valueSearch,
+                                    @RequestParam(name = "keySort") int keySort) {
         return skillsService.getListItem(sizeList, indexPage, valueSearch, keySort);
     }
 }

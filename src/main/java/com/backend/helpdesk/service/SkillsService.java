@@ -55,7 +55,7 @@ public class SkillsService {
 
         if (isCategoriesExist(skillsEntity.getCategoriesEntity())) {
             skillsRepository.save(skillsEntity);
-        }else {
+        } else {
             throw new CategoriesNotFound();
         }
     }
@@ -72,7 +72,7 @@ public class SkillsService {
                 throw new CategoriesNotFound();
             }
 
-        }else{
+        } else {
             throw new SkillsNotFound();
         }
     }
@@ -92,10 +92,10 @@ public class SkillsService {
         List<Skills> skillsList = new ArrayList<>();
 
         Pageable sortedPage = PageRequest.of(indexPage, sizeList, Sort.by("id"));
-        System.out.println("kekekek: " + keySort);
-        if(keySort == SORT_BY_NAME){
+
+        if (keySort == SORT_BY_NAME) {
             sortedPage = PageRequest.of(indexPage, sizeList, Sort.by("name"));
-        }else if(keySort == SORT_BY_NAME_DESC){
+        } else if (keySort == SORT_BY_NAME_DESC) {
             sortedPage = PageRequest.of(indexPage, sizeList, Sort.by("name").descending());
         }
 
