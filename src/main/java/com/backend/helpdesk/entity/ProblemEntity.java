@@ -10,14 +10,17 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Data
-@Entity
-public class Problem {
+@Entity(name = "problem")
+public class ProblemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @JsonAlias("id_problem_type")
     private int idProblemType;
+
+    @JsonAlias("id_status")
+    private int idStatus;
 
     @JsonAlias("id_user")
     private int idUser;

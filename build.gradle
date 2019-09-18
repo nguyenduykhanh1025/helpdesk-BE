@@ -27,7 +27,7 @@ dependencies {
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
 
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
-	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
 
 	// https://mvnrepository.com/artifact/org.postgresql/postgresql
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'

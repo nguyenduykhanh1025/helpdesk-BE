@@ -1,10 +1,12 @@
 package com.backend.helpdesk.controller;
 
-import com.backend.helpdesk.entity.Problem;
+import com.backend.helpdesk.DTO.ProblemDTO;
+import com.backend.helpdesk.entity.ProblemEntity;
 import com.backend.helpdesk.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,12 +17,22 @@ public class ProblemController {
     private ProblemService problemService;
 
     @GetMapping
-    public List<Problem> getAllProblem(){
+    public List<ProblemEntity> getAllProblem(){
         return problemService.getAllProblem();
     }
 
     @PostMapping
-    public Problem postProlem(@RequestBody Problem problem){
-        return problemService.postProlem(problem);
+    public ProblemDTO postProlem(@RequestBody @Valid ProblemDTO problemDTO){
+        return problemService.postProlem(problemDTO);
+    }
+
+    @PutMapping
+    public ProblemDTO putProblem(@RequestBody @Valid ProblemDTO problemDTO){
+        return problemService.putProblem(problemDTO);
+    }
+
+    @DeleteMapping
+    public void delProblem(@RequestParam int id){
+        problemService.delProblem(id);
     }
 }
