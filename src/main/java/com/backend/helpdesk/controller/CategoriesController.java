@@ -1,10 +1,8 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.DTO.Categories;
-import com.backend.helpdesk.configurations.TokenProvider;
 import com.backend.helpdesk.service.CategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +16,8 @@ public class CategoriesController {
     @Autowired
     CategoriesService categoriesService;
 
-    @Autowired
-    private TokenProvider tokenProvider;
-
     @GetMapping("/{id}")
-    public ResponseEntity<?> getFollowId(@PathVariable("id") int id) {
+    public Categories getFollowId(@PathVariable("id") int id) {
         return categoriesService.getFollowId(id);
     }
 
@@ -34,16 +29,14 @@ public class CategoriesController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public void addNewItem(@RequestHeader("Authorization") String token,
-                           @RequestBody @Validated Categories categories) {
+    public void addNewItem(@RequestBody @Validated Categories categories) {
         categoriesService.addNewItem(categories);
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteItemFollowId(@RequestHeader("Authorization") String token,
-                                                @PathVariable("id") int id) {
-        return categoriesService.deleteItemFollowId(id);
+    public void deleteItemFollowId(@PathVariable("id") int id) {
+        categoriesService.deleteItemFollowId(id);
     }
 
     @GetMapping("/search")

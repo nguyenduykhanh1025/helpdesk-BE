@@ -6,8 +6,6 @@ import com.backend.helpdesk.entity.CategoriesEntity;
 import com.backend.helpdesk.exception.CategoriesException.CategoriesNotFound;
 import com.backend.helpdesk.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,9 +27,9 @@ public class CategoriesService {
     private Converter<Categories, CategoriesEntity> categoriesToCategoriesEntity;
 
 
-    public ResponseEntity<?> getFollowId(int id) {
+    public Categories getFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
-            return ResponseEntity.ok(categoriesEntityToCategories.convert(categoriesRepository.findById(id).get()));
+            return categoriesEntityToCategories.convert(categoriesRepository.findById(id).get());
         }
         throw new CategoriesNotFound();
     }
@@ -49,12 +47,12 @@ public class CategoriesService {
         categoriesRepository.save(categoriesToCategoriesEntity.convert(categories));
     }
 
-    public ResponseEntity<?> deleteItemFollowId(int id) {
+    public void deleteItemFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
             categoriesRepository.delete(categoriesRepository.findById(id).get());
-            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            throw new CategoriesNotFound();
         }
-        throw new CategoriesNotFound();
     }
 
     public List<Categories> searchCategories(String valueSearch) {
