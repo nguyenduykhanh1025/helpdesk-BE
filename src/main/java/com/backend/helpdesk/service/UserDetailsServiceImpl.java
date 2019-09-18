@@ -15,11 +15,10 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component("test")
+@Component("userDetail")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-
     private UserRepository userRepository;
 
     @Override

@@ -25,7 +25,7 @@ public class DayOffService {
     public List<DayOff> getDayOffsByStatus(String enable){
         Status status=statusRepository.findByName(enable);
         if(status==null){
-            throw new NotFoundException("Enable isn't exist");
+            throw new NotFoundException("Day off not found!");
         }
         return dayOffRepository.findByStatus(status);
     }
