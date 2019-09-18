@@ -1,8 +1,10 @@
 package com.backend.helpdesk.configurations;
 
 import com.backend.helpdesk.entity.RoleEntity;
+import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.RoleRepository;
+import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,6 +28,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private StatusRepository statusRepository;
+
     private void addRoleIfMissing(String name){
         if (roleRepository.findByName(name) == null) {
             roleRepository.save(new RoleEntity(name));
@@ -45,6 +50,12 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
     }
 
+    private void addStatusIfMissing(String name){
+        if(statusRepository.findByName(name) == null){
+            statusRepository.save(new Status(name));
+        }
+    }
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
@@ -52,7 +63,14 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_MEMBER");
+        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
+        addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
+        addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
+
+        addStatusIfMissing("STATUS_ACCESS");
+        addStatusIfMissing("STATUS_DECLINE");
+        addStatusIfMissing("STATUS_WAITING");
+
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
