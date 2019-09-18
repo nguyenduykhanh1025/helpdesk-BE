@@ -23,4 +23,9 @@ public class DayOffController {
     public List<DayOff> getDayOffByEnable(@RequestParam(value = "status",required = false) String enable){
         return dayOffService.getDayOffsByStatus(enable);
     }
+
+    @GetMapping("user")
+    public List<DayOff> getDayOffByUser(@RequestParam(value = "id",required = false) int id){
+        return dayOffService.getDayOffByUser(id);
+    }
 }

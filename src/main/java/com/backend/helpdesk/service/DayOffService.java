@@ -2,9 +2,11 @@ package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.entity.Status;
+import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.exception.UserException.NotFoundException;
 import com.backend.helpdesk.repository.DayOffRepository;
 import com.backend.helpdesk.repository.StatusRepository;
+import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,9 @@ public class DayOffService {
     @Autowired
     private StatusRepository statusRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<DayOff> getAllDayOff(){
         return dayOffRepository.findAll();
     }
@@ -28,5 +33,13 @@ public class DayOffService {
             throw new NotFoundException("Day off not found!");
         }
         return dayOffRepository.findByStatus(status);
+    }
+
+    public List<DayOff> getDayOffByUser(int id){
+        UserEntity userEntity=userRepository.findById(id);
+        if(userEntity==null){
+            throw new NotFoundException("Day off not found!");
+        }
+        return dayOffRepository.findByUserEntity(userEntity);
     }
 }

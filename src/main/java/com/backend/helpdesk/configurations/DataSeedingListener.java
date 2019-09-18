@@ -52,7 +52,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_MEMBER");
+        addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_EMPLOYEES");
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
