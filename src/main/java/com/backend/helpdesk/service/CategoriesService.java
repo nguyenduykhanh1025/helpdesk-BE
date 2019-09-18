@@ -29,9 +29,9 @@ public class CategoriesService {
     private Converter<Categories, CategoriesEntity> categoriesToCategoriesEntity;
 
 
-    public ResponseEntity<?> getFollowId(int id) {
+    public Categories getFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
-            return ResponseEntity.ok(categoriesEntityToCategories.convert(categoriesRepository.findById(id).get()));
+            return categoriesEntityToCategories.convert(categoriesRepository.findById(id).get());
         }
         throw new CategoriesNotFound();
     }
@@ -49,12 +49,12 @@ public class CategoriesService {
         categoriesRepository.save(categoriesToCategoriesEntity.convert(categories));
     }
 
-    public ResponseEntity<?> deleteItemFollowId(int id) {
+    public void deleteItemFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
             categoriesRepository.delete(categoriesRepository.findById(id).get());
-            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            throw new CategoriesNotFound();
         }
-        throw new CategoriesNotFound();
     }
 
     public List<Categories> searchCategories(String valueSearch) {
