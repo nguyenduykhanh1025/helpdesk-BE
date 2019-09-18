@@ -61,6 +61,7 @@ public class ProblemService {
         else {
             problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
+
         }
     }
 
