@@ -1,10 +1,8 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.DTO.Categories;
-import com.backend.helpdesk.configurations.TokenProvider;
 import com.backend.helpdesk.service.CategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

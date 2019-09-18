@@ -6,8 +6,6 @@ import com.backend.helpdesk.entity.CategoriesEntity;
 import com.backend.helpdesk.exception.CategoriesException.CategoriesNotFound;
 import com.backend.helpdesk.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
