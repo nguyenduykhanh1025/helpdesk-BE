@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/send-email")
+@RequestMapping("/api/send-email")
 public class EmailController {
 
     @Autowired
-    public JavaMailSender mailSender;
+    private JavaMailSender mailSender;
 
     @PostMapping
     public void sendEmail(@RequestBody Email email){
