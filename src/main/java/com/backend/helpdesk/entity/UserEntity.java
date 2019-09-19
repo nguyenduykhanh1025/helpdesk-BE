@@ -1,6 +1,7 @@
 package com.backend.helpdesk.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class UserEntity {
 
     private String address;
 
+    @NotBlank
     private Date startingDay;
 
     @ManyToMany(fetch = FetchType.EAGER)
