@@ -4,5 +4,5 @@ import com.backend.helpdesk.entity.DayOffType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DayOffTypeRepository extends JpaRepository<DayOffType,Integer> {
-
+    DayOffType findById(int id);
 }

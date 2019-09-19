@@ -30,12 +30,12 @@ public class DayOff {
     @JsonAlias("create_at")
     @Column(nullable = false)
     @NonNull
-    private float createAt;
+    private Date createAt;
 
     @JsonAlias("description")
     @Column(nullable = false)
     @NonNull
-    private float description;
+    private String description;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

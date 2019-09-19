@@ -19,13 +19,13 @@ public class DayOffController {
         return dayOffService.getAllDayOff();
     }
 
-    @GetMapping("status")
-    public List<DayOff> getDayOffByEnable(@RequestParam(value = "status",required = false) String enable){
+    @GetMapping("enable")
+    public List<DayOff> getDayOffByEnable(@RequestParam(value = "enable",required = false) String enable){
         return dayOffService.getDayOffsByStatus(enable);
     }
 
-    @GetMapping("user")
-    public List<DayOff> getDayOffByUser(@RequestParam(value = "id",required = false) int id){
+    @GetMapping("/user/{id}")
+    public List<DayOff> getDayOffByUser(@PathVariable("id") int id){
         return dayOffService.getDayOffByUser(id);
     }
 }
