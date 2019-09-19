@@ -79,7 +79,6 @@ public class SkillsService {
 
     public boolean isCategoriesExist(CategoriesEntity categoriesEntity) {
         if (categoriesRepository.findById(categoriesEntity.getId()).isPresent()) {
-
             // check name categories is exactly
             if (categoriesRepository.findById(categoriesEntity.getId()).get().getName().equals(categoriesEntity.getName())) {
                 return true;

@@ -3,6 +3,7 @@ package com.backend.helpdesk.DTO;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.List;
 
 public class Profile {
 
@@ -39,6 +40,8 @@ public class Profile {
     @NotEmpty
     @NotBlank
     private Date startingDay;
+
+    private List<Skills> listSkills;
 
     public Profile() {
     }
@@ -115,4 +118,11 @@ public class Profile {
         this.startingDay = startingDay;
     }
 
+    public List<Skills> getListSkills() {
+        return listSkills;
+    }
+
+    public void setListSkills(List<Skills> listSkills) {
+        this.listSkills = listSkills;
+    }
 }

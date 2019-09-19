@@ -23,25 +23,25 @@ public class ProfileService {
     @Autowired
     private Converter<Profile, UserEntity> profileToUserEntity;
 
-    public Profile getProfile(String emailUser){
+    public Profile getProfile(String emailUser) {
 
-        if(userRepository.findByEmail(emailUser) == null){
+        if (userRepository.findByEmail(emailUser) == null) {
             throw new UserNotFound();
         }
 
         return userEntityToProfile.convert(userRepository.findByEmail(emailUser));
     }
 
-    public void editProfile(Profile profile){
+    public void editProfile(Profile profile) {
 
         Optional<UserEntity> userEntityOpt = userRepository.findById(profile.getId());
-        if(!userEntityOpt.isPresent()){
+        if (!userEntityOpt.isPresent()) {
             throw new UserNotFound();
         }
         UserEntity userEntity = userEntityOpt.get();
 
         // check for email from client is exactly
-        if(!userEntity.getEmail().equals(profile.getEmail())){
+        if (!userEntity.getEmail().equals(profile.getEmail())) {
             throw new EmailUserIsNotMatch();
         }
 

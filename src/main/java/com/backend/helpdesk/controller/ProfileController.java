@@ -17,14 +17,14 @@ public class ProfileController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
-    public Profile getProfile(){
+    public Profile getProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return profileService.getProfile(auth.getName());
     }
 
     @Secured("ROLE_EMPLOYEES")
     @PutMapping
-    public void editProfile( @RequestBody Profile profile){
+    public void editProfile(@RequestBody Profile profile) {
         profileService.editProfile(profile);
     }
 }
