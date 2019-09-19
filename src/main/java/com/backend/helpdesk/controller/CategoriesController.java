@@ -26,7 +26,6 @@ public class CategoriesController {
         return categoriesService.getAll();
     }
 
-
     @PostMapping
     @Secured("ROLE_ADMIN")
     public void addNewItem(@RequestBody @Validated Categories categories) {

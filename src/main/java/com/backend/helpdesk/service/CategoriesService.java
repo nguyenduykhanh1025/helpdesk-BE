@@ -18,14 +18,10 @@ public class CategoriesService {
     CategoriesRepository categoriesRepository;
 
     @Autowired
-    AuthenticationService authenticationService;
-
-    @Autowired
     private Converter<CategoriesEntity, Categories> categoriesEntityToCategories;
 
     @Autowired
     private Converter<Categories, CategoriesEntity> categoriesToCategoriesEntity;
-
 
     public Categories getFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
@@ -62,4 +58,5 @@ public class CategoriesService {
         }
         return categoriesList;
     }
+
 }
