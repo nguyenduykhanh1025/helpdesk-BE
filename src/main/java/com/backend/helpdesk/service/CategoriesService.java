@@ -46,7 +46,7 @@ public class CategoriesService {
     public void deleteItemFollowId(int id) {
         if (categoriesRepository.findById(id).isPresent()) {
             categoriesRepository.delete(categoriesRepository.findById(id).get());
-        }else {
+        } else {
             throw new CategoriesNotFound();
         }
     }
