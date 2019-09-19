@@ -12,4 +12,5 @@ public class Constants {
     // const sort follow skill
     public static final int SORT_BY_NAME = 1;
     public static final int SORT_BY_NAME_DESC = 2;
+
 }
