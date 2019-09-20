@@ -13,4 +13,8 @@ public class UserExceptionController {
         return new ResponseEntity<>("Email User Is Not Match", HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @ExceptionHandler(value = UserAccessDeniedException.class)
+    public ResponseEntity<Object> exception(UserAccessDeniedException exception) {
+        return new ResponseEntity<>("User access denied", HttpStatus.FORBIDDEN);
+    }
 }
