@@ -1,9 +1,7 @@
 package com.backend.helpdesk.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "categories")
 public class CategoriesEntity {
@@ -12,6 +10,9 @@ public class CategoriesEntity {
     private int id = 0;
 
     private String name;
+
+    @OneToMany(mappedBy = "categoriesEntity", cascade = CascadeType.ALL)
+    private List<SkillsEntity> skillsEntities;
 
     public CategoriesEntity() {
     }
@@ -35,5 +36,13 @@ public class CategoriesEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<SkillsEntity> getSkillsEntities() {
+        return skillsEntities;
+    }
+
+    public void setSkillsEntities(List<SkillsEntity> skillsEntities) {
+        this.skillsEntities = skillsEntities;
     }
 }

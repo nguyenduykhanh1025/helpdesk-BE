@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.backend.helpdesk.common.Constants.*;
 
@@ -79,7 +80,6 @@ public class SkillsService {
 
     public boolean isCategoriesExist(CategoriesEntity categoriesEntity) {
         if (categoriesRepository.findById(categoriesEntity.getId()).isPresent()) {
-
             // check name categories is exactly
             if (categoriesRepository.findById(categoriesEntity.getId()).get().getName().equals(categoriesEntity.getName())) {
                 return true;
@@ -103,5 +103,19 @@ public class SkillsService {
             skillsList.add(skillsEntityToSkills.convert(skillsEntity));
         }
         return skillsList;
+    }
+
+    public List<Skills> getSkillFollowIdCategories(int idCategories) {
+
+        Optional<CategoriesEntity> categoriesEntityOpt = categoriesRepository.findById(idCategories);
+        if (categoriesEntityOpt.isPresent()) {
+            List<Skills> skillsList = new ArrayList<>();
+            for (SkillsEntity skillsEntity : categoriesEntityOpt.get().getSkillsEntities()) {
+                skillsList.add(skillsEntityToSkills.convert(skillsEntity));
+            }
+            return skillsList;
+        }
+
+        throw new CategoriesNotFound();
     }
 }
