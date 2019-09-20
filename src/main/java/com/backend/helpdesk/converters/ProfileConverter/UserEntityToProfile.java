@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Component
@@ -37,6 +38,8 @@ public class UserEntityToProfile extends Converter<UserEntity, Profile> {
         }
         profile.setListSkills(listSkills);
 
+        // client read image base 64
+        profile.setAvatar(new String(Base64.getEncoder().encode(source.getAvatar())));
         return profile;
     }
 }

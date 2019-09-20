@@ -41,6 +41,8 @@ public class Profile {
     @NotBlank
     private Date startingDay;
 
+    private String avatar;
+
     private List<Skills> listSkills;
 
     public Profile() {
@@ -124,5 +126,13 @@ public class Profile {
 
     public void setListSkills(List<Skills> listSkills) {
         this.listSkills = listSkills;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

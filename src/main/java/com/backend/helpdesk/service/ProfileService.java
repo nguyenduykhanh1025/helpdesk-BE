@@ -7,6 +7,8 @@ import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
 import com.backend.helpdesk.exception.UserException.UserNotFound;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -44,12 +46,22 @@ public class ProfileService {
         if (!userEntity.getEmail().equals(profile.getEmail())) {
             throw new EmailUserIsNotMatch();
         }
-
         UserEntity resultUserEntity = profileToUserEntity.convert(profile);
 
         // add password default
         resultUserEntity.setPassword(userEntity.getPassword());
 
         userRepository.save(resultUserEntity);
+    }
+
+    public void uploadAvatar(byte[] avatar) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        UserEntity userEntity = userRepository.findByEmail(currentPrincipalName);
+        userEntity.setAvatar(avatar);
+
+        userRepository.save(userEntity);
     }
 }

@@ -1,5 +1,7 @@
 package com.backend.helpdesk.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -32,6 +34,11 @@ public class UserEntity {
     private String address;
 
     private Date startingDay;
+
+    @Lob
+    @Column(name="avatar")
+    @Type(type="org.hibernate.type.BinaryType")
+    private byte[] avatar;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -153,5 +160,13 @@ public class UserEntity {
 
     public void setSkillsEntities(Set<SkillsEntity> skillsEntities) {
         this.skillsEntities = skillsEntities;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 }
