@@ -1,6 +1,7 @@
 package com.backend.helpdesk.repository;
 
 import com.backend.helpdesk.entity.CategoriesEntity;
+import com.backend.helpdesk.entity.SkillsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
