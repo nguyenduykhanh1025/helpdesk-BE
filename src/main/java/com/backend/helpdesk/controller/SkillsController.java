@@ -47,4 +47,9 @@ public class SkillsController {
                                     @RequestParam(name = "keySort") int keySort) {
         return skillsService.getListItem(sizeList, indexPage, valueSearch, keySort);
     }
+
+    @GetMapping("/categories")
+    public List<Skills> getSkillFollowIdCategories(@RequestParam int idCategories) {
+        return skillsService.getSkillFollowIdCategories(idCategories);
+    }
 }
