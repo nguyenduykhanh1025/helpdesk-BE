@@ -43,7 +43,7 @@ public class Profile {
 
     private String avatarBase64;
 
-    private List<Skills> listSkills;
+    private List<Skills> skills;
 
     public Profile() {
     }
@@ -120,12 +120,12 @@ public class Profile {
         this.startingDay = startingDay;
     }
 
-    public List<Skills> getListSkills() {
-        return listSkills;
+    public List<Skills> getSkills() {
+        return skills;
     }
 
-    public void setListSkills(List<Skills> listSkills) {
-        this.listSkills = listSkills;
+    public void setSkills(List<Skills> skills) {
+        this.skills = skills;
     }
 
     public String getAvatarBase64() {

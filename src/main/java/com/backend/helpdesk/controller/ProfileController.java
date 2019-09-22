@@ -1,7 +1,7 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.DTO.Profile;
-import com.backend.helpdesk.exception.FileException.FileNotFound;
+import com.backend.helpdesk.exception.FileException.FileNotFoundException;
 import com.backend.helpdesk.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/api/profiles")
 public class ProfileController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ProfileController {
     @PutMapping("/avatar")
     public void editAvatar(@RequestParam MultipartFile avatar) throws IOException {
         if (avatar.isEmpty()) {
-            throw new FileNotFound();
+            throw new FileNotFoundException();
         }
         profileService.uploadAvatar(avatar.getBytes());
     }
