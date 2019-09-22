@@ -1,10 +1,12 @@
 package com.backend.helpdesk.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Entity(name="users")
+@Entity(name = "users")
 public class UserEntity {
 
     @Id
@@ -33,6 +35,11 @@ public class UserEntity {
 
     private Date startingDay;
 
+    @Lob
+    @Column(name="avatar")
+    @Type(type="org.hibernate.type.BinaryType")
+    private byte[] avatar;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -40,6 +47,14 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roleEntities;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_skills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<SkillsEntity> skillsEntities;
 
     public UserEntity() {
     }
@@ -137,5 +152,21 @@ public class UserEntity {
 
     public void setRoleEntities(Set<RoleEntity> roleEntities) {
         this.roleEntities = roleEntities;
+    }
+
+    public Set<SkillsEntity> getSkillsEntities() {
+        return skillsEntities;
+    }
+
+    public void setSkillsEntities(Set<SkillsEntity> skillsEntities) {
+        this.skillsEntities = skillsEntities;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 }

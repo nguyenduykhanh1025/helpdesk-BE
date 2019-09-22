@@ -1,6 +1,7 @@
 package com.backend.helpdesk.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "skills")
 public class SkillsEntity {
@@ -13,6 +14,9 @@ public class SkillsEntity {
     @ManyToOne
     @JoinColumn
     private CategoriesEntity categoriesEntity;
+
+    @ManyToMany(mappedBy = "skillsEntities")
+    private Set<UserEntity> userEntities;
 
     public SkillsEntity() {
     }
@@ -39,5 +43,13 @@ public class SkillsEntity {
 
     public void setCategoriesEntity(CategoriesEntity categoriesEntity) {
         this.categoriesEntity = categoriesEntity;
+    }
+
+    public Set<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(Set<UserEntity> userEntities) {
+        this.userEntities = userEntities;
     }
 }
