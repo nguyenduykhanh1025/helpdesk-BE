@@ -1,6 +1,7 @@
 package com.backend.helpdesk.repository;
 
 import com.backend.helpdesk.entity.SkillsEntity;
+import com.backend.helpdesk.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,5 @@ public interface SkillsRepository extends JpaRepository<SkillsEntity, Integer> {
             nativeQuery = true
     )
     List<SkillsEntity> getSkillFollowValueSearch(@Param("valueSearch") String valueSearch, Pageable pageable);
+    
 }

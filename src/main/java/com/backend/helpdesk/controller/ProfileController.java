@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/profiles")
@@ -39,5 +40,15 @@ public class ProfileController {
             throw new FileNotFoundException();
         }
         profileService.uploadAvatar(avatar.getBytes());
+    }
+
+    @GetMapping("/user")
+    public Profile getProfileFollowIdUser(@RequestParam int idUser){
+        return profileService.getProfileFollowIdUser(idUser);
+    }
+
+    @GetMapping("/search")
+    public List<Profile> searchAllProfileByKeyword(String keyword){
+        return profileService.searchAllUserFollowKeyWord(keyword);
     }
 }

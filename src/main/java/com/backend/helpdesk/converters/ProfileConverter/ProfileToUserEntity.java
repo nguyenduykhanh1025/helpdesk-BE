@@ -40,7 +40,7 @@ public class ProfileToUserEntity extends Converter<Profile, UserEntity> {
         userEntity.setStartingDay(source.getStartingDay());
 
         Set<SkillsEntity> listSkills = new HashSet<>();
-        for (Skills skills : source.getListSkills()) {
+        for (Skills skills : source.getSkills()) {
 
             Optional<SkillsEntity> skillsEntityOptFollowID = skillsRepository.findById(skills.getId());
             Optional<SkillsEntity> skillsEntityOptFollowName = skillsRepository.findByName(skills.getName());
