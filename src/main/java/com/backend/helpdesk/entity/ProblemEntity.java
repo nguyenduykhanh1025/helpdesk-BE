@@ -17,13 +17,13 @@ public class ProblemEntity {
     private int id;
 
     @JsonAlias("id_problem_type")
-    private int idProblemType;
+    private ProblemType problemType;
 
     @JsonAlias("id_status")
-    private int idStatus;
+    private Status status;
 
     @JsonAlias("id_user")
-    private int idUser;
+    private UserEntity user;
 
     private Date dayRequest;
 

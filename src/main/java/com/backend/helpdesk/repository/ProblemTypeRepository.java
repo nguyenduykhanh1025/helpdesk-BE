@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProblemTypeRepository extends JpaRepository<ProblemType, Integer> {
-    public List<ProblemType> findByName(String name);
+    List<ProblemType> findByName(String name);
+    ProblemType findById(int id);
 }

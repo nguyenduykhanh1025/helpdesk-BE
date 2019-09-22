@@ -1,7 +1,6 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.DTO.ProblemDTO;
-import com.backend.helpdesk.entity.ProblemEntity;
 import com.backend.helpdesk.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,13 @@ public class ProblemController {
     private ProblemService problemService;
 
     @GetMapping
-    public List<ProblemEntity> getAllProblem(){
+    public List<ProblemDTO> getAllProblem(){
         return problemService.getAllProblem();
+    }
+
+    @GetMapping("/pagination-and-search")
+    public List<ProblemDTO> searchProblemAndPagination(@RequestParam int page, @RequestParam int items, @RequestParam String sortBy, @RequestParam String search){
+        return problemService.searchProblemAndPagination(page,items,sortBy,search);
     }
 
     @PostMapping

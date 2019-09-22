@@ -1,6 +1,8 @@
 package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.ProblemDTO;
+import com.backend.helpdesk.common.Email;
+import com.backend.helpdesk.controller.EmailController;
 import com.backend.helpdesk.converters.problem.ConvertProblemDTOToProblem;
 import com.backend.helpdesk.converters.problem.ConvertProblemToProblemDTO;
 import com.backend.helpdesk.entity.ProblemEntity;
@@ -14,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,8 +40,37 @@ public class ProblemService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<ProblemEntity> getAllProblem(){
-        return problemRepository.findAll();
+    @Autowired
+    private EmailController emailController;
+
+    public List<ProblemDTO> getAllProblem(){
+        return convertProblemToProblemDTO.convert(problemRepository.findAll());
+    }
+
+    public List<ProblemDTO> searchProblemAndPagination(int page, int items, String sortBy, String search){
+
+        List<ProblemEntity> problemEntities =  this.search(search);
+
+        List<ProblemEntity> result = new ArrayList<>();
+
+        if(sortBy.equals("Email")){
+            this.sortByEmail(problemEntities);
+        }
+        if(sortBy.equals("Status")){
+            this.sortByStatus(problemEntities);
+        }
+        if(sortBy.equals("Problem Type")){
+            this.sortByProblemType(problemEntities);
+        }
+
+        int n = (page+1)*items;
+        if(n<problemEntities.size()) n= problemEntities.size();
+
+        for(int i=page*items; i<n; i++){
+            result.add(problemEntities.get(i));
+        }
+
+        return convertProblemToProblemDTO.convert(result);
     }
 
     public ProblemDTO postProlem(ProblemDTO problemDTO){
@@ -53,19 +85,108 @@ public class ProblemService {
         boolean isAdmin = false;
 
         for(RoleEntity role: userRepository.findByEmail(username).getRoleEntities()){
-            if(role.getName()=="ROLE_ADMIN") isAdmin=true;
+            if(role.getName()=="ROLE_ADMIN"){
+                isAdmin=true;
+                break;
+            }
         }
 
-        if (isAdmin)
-        return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
-        else {
-            problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
+        if (isAdmin){
+            Email email = new Email();
+            email.setSendToEmail(userRepository.findById(problemDTO.getIdUser()).getEmail());
+            email.setSubject(problemTypeRepository.findById(problemDTO.getIdProblemType()).getName());
+            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_ACCESS").getId()){
+                email.setText("ACCESS");
+            }
+            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_DECLINE").getId()){
+                email.setText("DECLINE");
+            }
+            emailController.sendEmail(email);
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
-
+        }
+        else {
+            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_ACCESS").getId())
+                problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
+            return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
         }
     }
 
     public void delProblem(@RequestParam int id){
         problemRepository.deleteById(id);
+    }
+
+    private List<ProblemEntity> search(String keySearch){
+        if(keySearch.equals("")) return problemRepository.findAll();
+
+        List<ProblemEntity> problemEntitiesByProblemType = problemRepository.findByProblemTypeName(keySearch);
+        List<ProblemEntity> problemEntitiesByUser = problemRepository.findByUserEmail(keySearch);
+        List<ProblemEntity> problemEntitiesByStatus = problemRepository.findByStatusName(keySearch);
+
+        List<ProblemEntity> results = new ArrayList<>();
+        results.addAll(problemEntitiesByProblemType);
+
+        for(ProblemEntity problemEntityByUser : problemEntitiesByUser){
+            Boolean add = true;
+            for(ProblemEntity result : results){
+                if(problemEntityByUser.getId() == result.getId()){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                results.add(problemEntityByUser);
+            }
+        }
+
+        for(ProblemEntity problemEntityByStatus : problemEntitiesByStatus){
+            Boolean add = true;
+            for(ProblemEntity result : results){
+                if(problemEntityByStatus.getId() == result.getId()){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                results.add(problemEntityByStatus);
+            }
+        }
+
+        return results;
+    }
+
+    private void sortByEmail(List<ProblemEntity> problemEntitys){
+        for(int i=0; i<problemEntitys.size()-1; i++){
+            for(int j=i+1; j<problemEntitys.size(); j++){
+                if(problemEntitys.get(i).getUser().getEmail().compareTo(problemEntitys.get(j).getUser().getEmail())>0){
+                    ProblemEntity swap = problemEntitys.get(i);
+                    problemEntitys.set(i,problemEntitys.get(j));
+                    problemEntitys.set(j,swap);
+                }
+            }
+        }
+    }
+
+    private void sortByStatus(List<ProblemEntity> problemEntitys){
+        for(int i=0; i<problemEntitys.size()-1; i++){
+            for(int j=i+1; j<problemEntitys.size(); j++){
+                if(problemEntitys.get(i).getStatus().getName().compareTo(problemEntitys.get(j).getStatus().getName())>0){
+                    ProblemEntity swap = problemEntitys.get(i);
+                    problemEntitys.set(i,problemEntitys.get(j));
+                    problemEntitys.set(j,swap);
+                }
+            }
+        }
+    }
+
+    private void sortByProblemType(List<ProblemEntity> problemEntitys){
+        for(int i=0; i<problemEntitys.size()-1; i++){
+            for(int j=i+1; j<problemEntitys.size(); j++){
+                if(problemEntitys.get(i).getProblemType().getName().compareTo(problemEntitys.get(j).getProblemType().getName())>0){
+                    ProblemEntity swap = problemEntitys.get(i);
+                    problemEntitys.set(i,problemEntitys.get(j));
+                    problemEntitys.set(j,swap);
+                }
+            }
+        }
     }
 }
