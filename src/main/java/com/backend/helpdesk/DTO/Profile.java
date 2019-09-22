@@ -11,6 +11,7 @@ public class Profile {
     @NotBlank
     private int id = 0;
 
+    @NotBlank
     private String email;
 
     @NotEmpty
