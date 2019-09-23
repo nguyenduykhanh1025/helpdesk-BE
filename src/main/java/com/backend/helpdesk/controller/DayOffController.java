@@ -46,4 +46,8 @@ public class DayOffController {
         return dayOffService.getNumberOfDayOffUsed(id,year);
     }
 
+    @GetMapping("/the_number_of_day_off_remaining_user/{id}")
+    public float getNumberDayOffByUserRemaining(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getNumberDayOffByUserRemaining(id,year);
+    }
 }

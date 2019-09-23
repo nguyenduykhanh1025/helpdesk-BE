@@ -84,8 +84,6 @@ public class DayOffService {
         return ChronoUnit.YEARS.between(startingLocalDate, now) + Constants.DAYOFFBYRULE;
     }
 
-
-
     public float getNumberOfDayOffUsed(int id, int year) {
         UserEntity userEntity = userRepository.findById(id);
         if (userEntity == null) {
@@ -107,6 +105,14 @@ public class DayOffService {
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         return dayOffDayOffDTOConverter.convert(dayOffs);
+    }
+
+    public float getNumberDayOffByUserRemaining(int id,int year){
+        UserEntity userEntity = userRepository.findById(id);
+        if (userEntity == null) {
+            throw new NotFoundException("User not found!");
+        }
+        return getNumberOfDayOffByUser(id,year)-getNumberOfDayOffUsed(id,year);
     }
 
 }
