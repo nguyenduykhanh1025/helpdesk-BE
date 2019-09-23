@@ -20,7 +20,7 @@ public class DayOffDTO {
     private Date dayStartOff;
 
     @NotBlank
-    private float numberOfDayOff;
+    private Date dayEndOff;
 
     @NotBlank
     private Date createAt;

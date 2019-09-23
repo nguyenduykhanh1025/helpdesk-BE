@@ -21,7 +21,7 @@ public class DayOffType {
     @JsonAlias("name")
     @Column(nullable = false)
     @NonNull
-    private int name;
+    private String name;
 
     @OneToMany(mappedBy = "dayOffType")
     List<DayOff> dayOffs;

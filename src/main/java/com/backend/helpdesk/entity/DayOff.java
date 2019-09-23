@@ -2,6 +2,7 @@ package com.backend.helpdesk.entity;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.api.client.util.DateTime;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class DayOff {
     @JsonAlias("number_of_day_off")
     @Column(nullable = false)
     @NonNull
-    private float numberOfDayOff;
+    private Date dayEndOff;
 
     @JsonAlias("create_at")
     @Column(nullable = false)

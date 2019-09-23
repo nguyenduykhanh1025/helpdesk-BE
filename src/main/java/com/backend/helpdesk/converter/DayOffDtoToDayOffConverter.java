@@ -26,7 +26,7 @@ public class DayOffDtoToDayOffConverter extends Converter<DayOffDTO, DayOff> {
         dayOff.setId(source.getId());
         dayOff.setCreateAt(source.getCreateAt());
         dayOff.setDayStartOff(source.getDayStartOff());
-        dayOff.setNumberOfDayOff(source.getNumberOfDayOff());
+        dayOff.setDayEndOff(source.getDayEndOff());
         dayOff.setDescription(source.getDescription());
         dayOff.setUserEntity(userRepository.findById(source.getUserEntity()));
         dayOff.setStatus(statusRepository.findById(source.getStatus()));

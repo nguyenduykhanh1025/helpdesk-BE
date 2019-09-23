@@ -32,7 +32,6 @@ public class UserEntity {
 
     private String address;
 
-    @NotBlank
     private Date startingDay;
 
     @ManyToMany(fetch = FetchType.EAGER)

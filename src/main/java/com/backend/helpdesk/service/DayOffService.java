@@ -16,14 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-@Component
+@Service
 public class DayOffService {
     @Autowired
     private DayOffRepository dayOffRepository;
@@ -35,10 +41,10 @@ public class DayOffService {
     private UserRepository userRepository;
 
     @Autowired
-    private Converter<DayOff,DayOffDTO> dayOffDayOffDTOConverter;
+    private Converter<DayOff, DayOffDTO> dayOffDayOffDTOConverter;
 
     @Autowired
-    private Converter<DayOffDTO,DayOff> dayOffDTODayOffConverter;
+    private Converter<DayOffDTO, DayOff> dayOffDTODayOffConverter;
 
     public List<DayOff> getAllDayOff() {
         return dayOffRepository.findAll();
@@ -60,34 +66,20 @@ public class DayOffService {
         return dayOffRepository.findByUserEntity(userEntity);
     }
 
-    public int getNumberOfDayOffByUser(int id) {
+    public long getNumberOfDayOffByUser(int id, int year) {
         UserEntity userEntity = userRepository.findById(id);
-        if(userEntity==null){
+        if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(userEntity.getStartingDay());
-        int startingYear =calendar.get(Calendar.YEAR);
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int numberOfDayOff=Constants.DAYOFFBYRULE + currentYear - startingYear;
-        if(numberOfDayOff>20){
-            return 20;
-        }else{
-            return numberOfDayOff;
+        Date startingDay = userEntity.getStartingDay();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startingDay);
+        int startingYear = calendar.get(Calendar.YEAR);
+        if (startingYear > year) {
+            throw new BadRequestException("Bad request!");
         }
+        LocalDate startingLocalDate = startingDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate now = LocalDate.of(year, 12, 31);
+        return ChronoUnit.YEARS.between(startingLocalDate, now) + Constants.DAYOFFBYRULE;
     }
-
-    public float getNumberTheRestDayOffByUser(int id){
-        UserEntity userEntity=userRepository.findById(id);
-        if(userEntity==null){
-            throw new NotFoundException("User not found!");
-        }
-        List<DayOff> dayOffs = getDayOffByUser(userEntity.getId());
-        float numberOfDayOffUsed = 0;
-        for (DayOff dayOff1 : dayOffs) {
-            numberOfDayOffUsed += dayOff1.getNumberOfDayOff();
-        }
-        return getNumberOfDayOffByUser(id) - numberOfDayOffUsed;
-    }
-
 }

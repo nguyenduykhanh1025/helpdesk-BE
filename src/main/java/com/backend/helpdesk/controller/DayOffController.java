@@ -1,10 +1,12 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.entity.DayOff;
+import com.backend.helpdesk.entityDTO.DayOffDTO;
 import com.backend.helpdesk.service.DayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,8 +21,8 @@ public class DayOffController {
         return dayOffService.getAllDayOff();
     }
 
-    @GetMapping("status")
-    public List<DayOff> getDayOffByEnable(@RequestParam(value = "status", required = false) String enable) {
+    @GetMapping("enable")
+    public List<DayOff> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
         return dayOffService.getDayOffsByStatus(enable);
     }
 
@@ -30,12 +32,8 @@ public class DayOffController {
     }
 
     @GetMapping("/the_number_of_day_off_by_user/{id}")
-    public int getNumberOfDayOffByUser(@PathVariable("id") int id) {
-        return dayOffService.getNumberOfDayOffByUser(id);
+    public long getNumberOfDayOffByUser(@PathVariable("id") int id,@RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getNumberOfDayOffByUser(id,year);
     }
 
-    @GetMapping("/the_rest_day_off_by_user/{id}")
-    public float getNumberTheRestDayOffByUser(@PathVariable("id") int id) {
-        return dayOffService.getNumberTheRestDayOffByUser(id);
-    }
 }
