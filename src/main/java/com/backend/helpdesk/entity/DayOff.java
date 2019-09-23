@@ -52,7 +52,4 @@ public class DayOff {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_status")
     private Status status;
-
-
-
 }

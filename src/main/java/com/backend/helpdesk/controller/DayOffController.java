@@ -36,4 +36,14 @@ public class DayOffController {
         return dayOffService.getNumberOfDayOffByUser(id,year);
     }
 
+    @GetMapping("user_of_year/{id}")
+    public List<DayOffDTO> getListDayOffUsed(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getListDayOffUsed(id,year);
+    }
+
+    @GetMapping("/the_number_of_day_off_by_user_used/{id}")
+    public float getNumberOfDayOffUsed(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getNumberOfDayOffUsed(id,year);
+    }
+
 }
