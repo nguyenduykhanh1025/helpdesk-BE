@@ -25,10 +25,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DayOffService {
@@ -113,6 +110,25 @@ public class DayOffService {
             throw new NotFoundException("User not found!");
         }
         return getNumberOfDayOffByUser(id,year)-getNumberOfDayOffUsed(id,year);
+    }
+
+    public DayOff addDayOff(DayOffDTO dayOffDTO){
+        float numberOfDayOff=CommonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(),dayOffDTO.getDayEndOff());
+        LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int yearStart = localDateStart.getYear();
+        float numberOfDayOffRemainingThisYear=getNumberDayOffByUserRemaining(dayOffDTO.getUserEntity(),yearStart);
+        if(numberOfDayOff> numberOfDayOffRemainingThisYear){
+            throw new BadRequestException("The number of days left is not enough!");
+        }
+        LocalDate localDateEnd = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int yearEnd = localDateStart.getYear();
+        if(yearStart!=yearEnd&&yearEnd!=Calendar.getInstance().get(Calendar.YEAR)){
+            throw new BadRequestException("Please register day off this year!");
+        }
+        Date date = new Date(System.currentTimeMillis());
+        dayOffDTO.setCreateAt(date);
+        dayOffDTO.setStatus(1);
+        return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
     }
 
 }

@@ -50,4 +50,9 @@ public class DayOffController {
     public float getNumberDayOffByUserRemaining(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
         return dayOffService.getNumberDayOffByUserRemaining(id,year);
     }
+
+    @PostMapping("/create")
+    public DayOff addDayOff(@Valid @RequestBody DayOffDTO dayOffDTO){
+        return dayOffService.addDayOff(dayOffDTO);
+    }
 }
