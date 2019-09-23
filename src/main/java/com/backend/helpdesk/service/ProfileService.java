@@ -44,6 +44,7 @@ public class ProfileService {
         }
         UserEntity userEntity = userEntityOpt.get();
 
+        System.out.println(userEntity.getEmail() + " " + profile.getEmail());
         // check for email from client is exactly
         if (!userEntity.getEmail().equals(profile.getEmail())) {
             throw new EmailUserIsNotMatch();

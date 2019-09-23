@@ -43,12 +43,12 @@ public class ProfileController {
     }
 
     @GetMapping("/user")
-    public Profile getProfileFollowIdUser(@RequestParam int idUser){
+    public Profile getProfileFollowIdUser(@RequestParam int idUser) {
         return profileService.getProfileFollowIdUser(idUser);
     }
 
     @GetMapping("/search")
-    public List<Profile> searchAllProfileByKeyword(String keyword){
+    public List<Profile> searchAllProfileByKeyword(String keyword) {
         return profileService.searchAllUserFollowKeyWord(keyword);
     }
 }

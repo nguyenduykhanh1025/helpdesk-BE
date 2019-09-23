@@ -39,23 +39,26 @@ public class ProfileToUserEntity extends Converter<Profile, UserEntity> {
         userEntity.setSex(source.isSex());
         userEntity.setStartingDay(source.getStartingDay());
 
-        Set<SkillsEntity> listSkills = new HashSet<>();
-        for (Skills skills : source.getSkills()) {
+        if (source.getSkills() != null) {
+            Set<SkillsEntity> listSkills = new HashSet<>();
+            for (Skills skills : source.getSkills()) {
 
-            Optional<SkillsEntity> skillsEntityOptFollowID = skillsRepository.findById(skills.getId());
-            Optional<SkillsEntity> skillsEntityOptFollowName = skillsRepository.findByName(skills.getName());
+                Optional<SkillsEntity> skillsEntityOptFollowID = skillsRepository.findById(skills.getId());
+                Optional<SkillsEntity> skillsEntityOptFollowName = skillsRepository.findByName(skills.getName());
 
-            // client check for skill is edit or create new skill or not
-            if (skillsEntityOptFollowID.isPresent() && !skillsEntityOptFollowName.isPresent()) {
-                skillsService.editSkills(skills);
-            } else if (!skillsEntityOptFollowID.isPresent() && !skillsEntityOptFollowName.isPresent()) {
-                skillsService.addNewSkills(skills);
+                // client check for skill is edit or create new skill or not
+                if (skillsEntityOptFollowID.isPresent() && !skillsEntityOptFollowName.isPresent()) {
+                    skillsService.editSkills(skills);
+                } else if (!skillsEntityOptFollowID.isPresent() && !skillsEntityOptFollowName.isPresent()) {
+                    skillsService.addNewSkills(skills);
+                }
+                SkillsEntity skillsEntity = skillsRepository.findByName(skills.getName()).get();
+
+                listSkills.add(skillsEntity);
             }
-            SkillsEntity skillsEntity = skillsRepository.findByName(skills.getName()).get();
-
-            listSkills.add(skillsEntity);
+            userEntity.setSkillsEntities(listSkills);
         }
-        userEntity.setSkillsEntities(listSkills);
+
 
         return userEntity;
     }
