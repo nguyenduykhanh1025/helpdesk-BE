@@ -11,6 +11,7 @@ public class CommonMethods {
 
         return Pattern.matches(query, email);
     }
+
     public static float calculateDaysBetweenTwoDate(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();

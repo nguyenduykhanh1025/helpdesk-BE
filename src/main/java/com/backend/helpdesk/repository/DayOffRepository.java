@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface DayOffRepository extends JpaRepository<DayOff,Integer> {
 
+    DayOff findById(int id);
+
     List<DayOff> findByStatus(Status status);
 
     List<DayOff> findByUserEntity(UserEntity userEntity);

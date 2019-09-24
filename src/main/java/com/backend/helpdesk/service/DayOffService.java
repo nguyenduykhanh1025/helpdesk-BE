@@ -113,9 +113,12 @@ public class DayOffService {
     }
 
     public DayOff addDayOff(DayOffDTO dayOffDTO){
+        //number of day off register in request
         float numberOfDayOff=CommonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(),dayOffDTO.getDayEndOff());
         LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearStart = localDateStart.getYear();
+
+        //number of day off remaining this year
         float numberOfDayOffRemainingThisYear=getNumberDayOffByUserRemaining(dayOffDTO.getUserEntity(),yearStart);
         if(numberOfDayOff> numberOfDayOffRemainingThisYear){
             throw new BadRequestException("The number of days left is not enough!");
@@ -129,6 +132,14 @@ public class DayOffService {
         dayOffDTO.setCreateAt(date);
         dayOffDTO.setStatus(1);
         return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
+    }
+
+    public void deleteDayOff(int id){
+        DayOff dayOff=dayOffRepository.findById(id);
+        if(dayOff==null){
+            throw new NotFoundException("Day off not found!");
+        }
+        dayOffRepository.delete(dayOff);
     }
 
 }
