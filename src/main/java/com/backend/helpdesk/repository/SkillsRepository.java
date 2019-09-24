@@ -20,5 +20,5 @@ public interface SkillsRepository extends JpaRepository<SkillsEntity, Integer> {
             nativeQuery = true
     )
     List<SkillsEntity> getSkillFollowValueSearch(@Param("valueSearch") String valueSearch, Pageable pageable);
-    
+
 }

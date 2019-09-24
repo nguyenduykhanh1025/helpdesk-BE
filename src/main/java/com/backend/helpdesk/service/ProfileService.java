@@ -44,7 +44,6 @@ public class ProfileService {
         }
         UserEntity userEntity = userEntityOpt.get();
 
-        System.out.println(userEntity.getEmail() + " " + profile.getEmail());
         // check for email from client is exactly
         if (!userEntity.getEmail().equals(profile.getEmail())) {
             throw new EmailUserIsNotMatch();
@@ -53,6 +52,9 @@ public class ProfileService {
 
         // add password default
         resultUserEntity.setPassword(userEntity.getPassword());
+
+        // add avatar default
+        resultUserEntity.setAvatar(userEntity.getAvatar());
 
         userRepository.save(resultUserEntity);
     }
@@ -68,18 +70,18 @@ public class ProfileService {
         userRepository.save(userEntity);
     }
 
-    public Profile getProfileFollowIdUser(int idUser){
+    public Profile getProfileFollowIdUser(int idUser) {
         Optional<UserEntity> userEntityOpt = userRepository.findById(idUser);
-        if(userEntityOpt.isPresent()){
+        if (userEntityOpt.isPresent()) {
             return userEntityToProfile.convert(userEntityOpt.get());
         }
         throw new UserNotFoundException();
     }
 
-    public List<Profile> searchAllUserFollowKeyWord(String keyword){
+    public List<Profile> searchAllUserFollowKeyWord(String keyword) {
         List<Profile> profiles = new ArrayList<>();
 
-        for(UserEntity userEntity : userRepository.findAllUserByKeyword(keyword)){
+        for (UserEntity userEntity : userRepository.findAllUserByKeyword(keyword)) {
             profiles.add(userEntityToProfile.convert(userEntity));
         }
         return profiles;

@@ -35,9 +35,12 @@ public class UserEntity {
 
     private Date startingDay;
 
+    @Column(nullable = false)
+    private boolean enable = false;
+
     @Lob
-    @Column(name="avatar")
-    @Type(type="org.hibernate.type.BinaryType")
+    @Column(name = "avatar")
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] avatar;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -168,5 +171,13 @@ public class UserEntity {
 
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }
