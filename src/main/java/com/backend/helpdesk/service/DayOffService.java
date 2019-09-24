@@ -14,11 +14,14 @@ import com.backend.helpdesk.repository.DayOffRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.PageRanges;
+import java.awt.print.Pageable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -104,28 +107,28 @@ public class DayOffService {
         return dayOffDayOffDTOConverter.convert(dayOffs);
     }
 
-    public float getNumberDayOffByUserRemaining(int id,int year){
+    public float getNumberDayOffByUserRemaining(int id, int year) {
         UserEntity userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
-        return getNumberOfDayOffByUser(id,year)-getNumberOfDayOffUsed(id,year);
+        return getNumberOfDayOffByUser(id, year) - getNumberOfDayOffUsed(id, year);
     }
 
-    public DayOff addDayOff(DayOffDTO dayOffDTO){
+    public DayOff addDayOff(DayOffDTO dayOffDTO) {
         //number of day off register in request
-        float numberOfDayOff=CommonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(),dayOffDTO.getDayEndOff());
+        float numberOfDayOff = CommonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(), dayOffDTO.getDayEndOff());
         LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearStart = localDateStart.getYear();
 
         //number of day off remaining this year
-        float numberOfDayOffRemainingThisYear=getNumberDayOffByUserRemaining(dayOffDTO.getUserEntity(),yearStart);
-        if(numberOfDayOff> numberOfDayOffRemainingThisYear){
+        float numberOfDayOffRemainingThisYear = getNumberDayOffByUserRemaining(dayOffDTO.getUserEntity(), yearStart);
+        if (numberOfDayOff > numberOfDayOffRemainingThisYear) {
             throw new BadRequestException("The number of days left is not enough!");
         }
         LocalDate localDateEnd = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearEnd = localDateStart.getYear();
-        if(yearStart!=yearEnd&&yearEnd!=Calendar.getInstance().get(Calendar.YEAR)){
+        if (yearStart != yearEnd && yearEnd != Calendar.getInstance().get(Calendar.YEAR)) {
             throw new BadRequestException("Please register day off this year!");
         }
         Date date = new Date(System.currentTimeMillis());
@@ -134,12 +137,15 @@ public class DayOffService {
         return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
     }
 
-    public void deleteDayOff(int id){
-        DayOff dayOff=dayOffRepository.findById(id);
-        if(dayOff==null){
+    public void deleteDayOff(int id) {
+        DayOff dayOff = dayOffRepository.findById(id);
+        if (dayOff == null) {
             throw new NotFoundException("Day off not found!");
         }
         dayOffRepository.delete(dayOff);
     }
 
+    public List<DayOffDTO> searchDayOff(String content) {
+        return dayOffDayOffDTOConverter.convert(dayOffRepository.searchDayOff(content));
+    }
 }

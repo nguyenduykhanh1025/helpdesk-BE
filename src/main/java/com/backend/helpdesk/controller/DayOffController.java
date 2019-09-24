@@ -71,4 +71,10 @@ public class DayOffController {
         dayOffService.deleteDayOff(id);
     }
 
+    @Secured("ROLE_EMPLOYEES")
+    @GetMapping("/search")
+    public List<DayOffDTO> searchDayOff(@RequestParam(value = "content", required = false) String content){
+        return dayOffService.searchDayOff(content);
+    }
+
 }
