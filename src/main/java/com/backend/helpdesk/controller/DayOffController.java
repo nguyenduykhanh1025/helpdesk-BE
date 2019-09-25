@@ -37,44 +37,45 @@ public class DayOffController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping("/the_number_of_day_off_by_user/{id}")
-    public long getNumberOfDayOffByUser(@PathVariable("id") int id,@RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getNumberOfDayOffByUser(id,year);
+    public long getNumberOfDayOffByUser(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getNumberOfDayOffByUser(id, year);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping("user_of_year/{id}")
     public List<DayOffDTO> getListDayOffUsed(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getListDayOffUsed(id,year);
+        return dayOffService.getListDayOffUsed(id, year);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping("/the_number_of_day_off_by_user_used/{id}")
     public float getNumberOfDayOffUsed(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getNumberOfDayOffUsed(id,year);
+        return dayOffService.getNumberOfDayOffUsed(id, year);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping("/the_number_of_day_off_remaining_user/{id}")
     public float getNumberDayOffByUserRemaining(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getNumberDayOffByUserRemaining(id,year);
+        return dayOffService.getNumberDayOffByUserRemaining(id, year);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @PostMapping("/create")
-    public DayOff addDayOff(@Valid @RequestBody DayOffDTO dayOffDTO){
+    public DayOff addDayOff(@Valid @RequestBody DayOffDTO dayOffDTO) {
         return dayOffService.addDayOff(dayOffDTO);
     }
 
     @Secured("ROLE_EMPLOYEES")
     @DeleteMapping("/{id}")
-    public void deleteDayOff(@PathVariable("id") int id){
+    public void deleteDayOff(@PathVariable("id") int id) {
         dayOffService.deleteDayOff(id);
     }
 
     @Secured("ROLE_EMPLOYEES")
-    @GetMapping("/search")
-    public List<DayOffDTO> searchDayOff(@RequestParam(value = "content", required = false) String content){
-        return dayOffService.searchDayOff(content);
+    @GetMapping("/pagination")
+    public List<DayOffDTO> pagination(@RequestParam(value = "sizeList", required = false) int sizeList,
+                                      @RequestParam(value = "indexPage", required = false) int indexPage,
+                                      @RequestParam(value = "content", required = false) String content) {
+        return dayOffService.pagination(sizeList, indexPage, content);
     }
-
 }

@@ -3,7 +3,6 @@ package com.backend.helpdesk.service;
 import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.converter.Converter;
-import com.backend.helpdesk.converter.DayOffToDayOffDTOConverter;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
@@ -15,16 +14,9 @@ import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.PageRanges;
-import java.awt.print.Pageable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -145,7 +137,15 @@ public class DayOffService {
         dayOffRepository.delete(dayOff);
     }
 
-    public List<DayOffDTO> searchDayOff(String content) {
-        return dayOffDayOffDTOConverter.convert(dayOffRepository.searchDayOff(content));
+    public List<DayOffDTO> pagination(int sizeList, int indexPage, String valueSearch) {
+        if(indexPage<1){
+            throw new BadRequestException("Page size must not be less than one");
+        }
+        List<DayOffDTO> dayOffDTOS = new ArrayList<>();
+        Pageable pageable = PageRequest.of(sizeList, indexPage);
+        for (DayOff dayOff : dayOffRepository.searchDayOff(valueSearch, pageable)) {
+            dayOffDTOS.add(dayOffDayOffDTOConverter.convert(dayOff));
+        }
+        return dayOffDTOS;
     }
 }
