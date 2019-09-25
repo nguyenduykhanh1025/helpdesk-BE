@@ -1,7 +1,5 @@
 package com.backend.helpdesk.controller;
 
-
-import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
