@@ -11,11 +11,4 @@ public class Constants {
     public static final int SORT_BY_NAME = 1;
     public static final int SORT_BY_NAME_DESC = 2;
 
-    // const sort follow user
-    public static final int SORT_BY_EMAIL = 1;
-    public static final int SORT_BY_AGE = 2;
-    public static final int SORT_BY_STARTING_DAY = 3;
-    public static final int SORT_BY_FIRST_NAME = 4;
-    public static final int SORT_BY_LAST_NAME = 5;
-
 }
