@@ -54,24 +54,15 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public List<Profile> getListItem(int sizeList, int indexPage, String valueSearch, int keySort) {
-        Pageable sortedPage = getPageableSort(keySort, indexPage, sizeList);
+    public List<Profile> getListItem(int sizeList, int indexPage, String valueSearch, String valueSort) {
+        Pageable sortedPage = getPageableSort(valueSort, indexPage, sizeList);
         return userEntityToProfile.convert(userRepository.findAllUserByKeywordFollowPageable(valueSearch, sortedPage));
     }
 
-    public Pageable getPageableSort(int keySort, int indexPage, int sizeList) {
-        if (keySort == SORT_BY_EMAIL) {
-            return PageRequest.of(indexPage, sizeList, Sort.by("email"));
-        } else if (keySort == SORT_BY_AGE) {
-            return PageRequest.of(indexPage, sizeList, Sort.by("age"));
-        } else if (keySort == SORT_BY_STARTING_DAY) {
-            return PageRequest.of(indexPage, sizeList, Sort.by("startingDay"));
-        } else if (keySort == SORT_BY_FIRST_NAME) {
-            return PageRequest.of(indexPage, sizeList, Sort.by("firstName"));
-        } else if (keySort == SORT_BY_LAST_NAME) {
-            return PageRequest.of(indexPage, sizeList, Sort.by("lastName"));
-        } else {
-            return PageRequest.of(indexPage, sizeList, Sort.by("id"));
+    public Pageable getPageableSort(String valueSort, int indexPage, int sizeList) {
+        if (valueSort.equals("") || valueSort == null) {
+            valueSort = "id";
         }
+        return PageRequest.of(indexPage, sizeList, Sort.by(valueSort));
     }
 }

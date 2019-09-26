@@ -8,8 +8,6 @@ import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
 import com.backend.helpdesk.repository.RoleRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.googleapis.auth.oauth2.GooglePublicKeysManager;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -23,9 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.security.GeneralSecurityException;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,21 +43,24 @@ public class AuthenticationService {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-    public String getEmailFromTokenUser(String tokenGoogle) throws IOException {
-        final GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, tokenGoogle);
-        final GooglePublicKeysManager manager = new GooglePublicKeysManager.Builder(transport, jsonFactory).build();
-        final GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(manager).setAudience(Arrays.asList("65915084404-pmafgo4444jbsbfn2mp53oigm0qm9lue.apps.googleusercontent.com")).build();
+    public String getEmailFromTokenUser(String tokenGoogle) throws IOException, GeneralSecurityException {
 
+        GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, tokenGoogle);
+        System.out.println(idToken);
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
-            return payload.getEmail();
+
+            String email = payload.getEmail();
+
+            checkForUserRegister(email,
+                    (String) payload.get("family_name"),
+                    (String) payload.get("given_name"));
+            return email;
         }
         return null;
     }
 
     public ResponseEntity<String> generateToken(String email) {
-
-        checkForUserResister(email);
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -74,11 +74,11 @@ public class AuthenticationService {
         return ResponseEntity.ok(token);
     }
 
-    public void checkForUserResister(String email) {
+    public void checkForUserRegister(String email, String firstName, String lastName) {
 
         if (CommonMethods.isEmailNovaHub(email)) {
             if (userRepository.findByEmail(email) == null) {
-                saveNewAccount(email);
+                saveNewAccount(email, firstName, lastName);
             }
         } else {
             throw new EmailUserIsNotMatch();
@@ -86,14 +86,22 @@ public class AuthenticationService {
 
     }
 
-    public void saveNewAccount(String email) {
+    public void saveNewAccount(String email, String firstName, String lastName) {
 
         UserEntity userEntity = new UserEntity();
 
         userEntity.setEmail(email);
         userEntity.setPassword(new BCryptPasswordEncoder().encode(email));
-        userEntity.setFirstName("default");
-        userEntity.setLastName("default");
+
+        if (firstName.equals("") || firstName == null) {
+            userEntity.setFirstName("default");
+        }
+        userEntity.setFirstName(firstName);
+
+        if (lastName.equals("") || lastName == null) {
+            userEntity.setLastName("default");
+        }
+        userEntity.setLastName(lastName);
 
         // set role default
         RoleEntity roleEntity = roleRepository.findByName("ROLE_EMPLOYEES");

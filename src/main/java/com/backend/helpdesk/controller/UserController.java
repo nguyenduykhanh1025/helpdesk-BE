@@ -50,7 +50,7 @@ public class UserController {
     public List<Profile> getListItem(@RequestParam(name = "sizeList") int sizeList,
                                      @RequestParam(name = "indexPage") int indexPage,
                                      @RequestParam(name = "valueSearch") String valueSearch,
-                                     @RequestParam(name = "keySort") int keySort) {
-        return userService.getListItem(sizeList, indexPage, valueSearch, keySort);
+                                     @RequestParam(name = "keySort") String valueSort) {
+        return userService.getListItem(sizeList, indexPage, valueSearch, valueSort);
     }
 }
