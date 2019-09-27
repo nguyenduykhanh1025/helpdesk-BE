@@ -8,8 +8,6 @@ import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
 import com.backend.helpdesk.repository.RoleRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
