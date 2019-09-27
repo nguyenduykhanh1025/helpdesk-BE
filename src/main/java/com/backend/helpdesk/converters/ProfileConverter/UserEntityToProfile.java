@@ -44,6 +44,7 @@ public class UserEntityToProfile extends Converter<UserEntity, Profile> {
         }
         profile.setEnable(source.isEnable());
 
+
         return profile;
     }
 }
