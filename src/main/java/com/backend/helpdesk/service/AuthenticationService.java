@@ -92,15 +92,7 @@ public class AuthenticationService {
 
         userEntity.setEmail(email);
         userEntity.setPassword(new BCryptPasswordEncoder().encode(email));
-
-        if (firstName.equals("") || firstName == null) {
-            userEntity.setFirstName("default");
-        }
         userEntity.setFirstName(firstName);
-
-        if (lastName.equals("") || lastName == null) {
-            userEntity.setLastName("default");
-        }
         userEntity.setLastName(lastName);
 
         // set role default
