@@ -28,7 +28,6 @@ import java.util.Set;
 @Service
 public class AuthenticationService {
 
-    private static final HttpTransport transport = new NetHttpTransport();
     private static final JacksonFactory jsonFactory = new JacksonFactory();
 
     @Autowired
@@ -46,7 +45,6 @@ public class AuthenticationService {
     public String getEmailFromTokenUser(String tokenGoogle) throws IOException, GeneralSecurityException {
 
         GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, tokenGoogle);
-        System.out.println(idToken);
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
 
