@@ -23,7 +23,6 @@ public class ProfileController {
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
     public Profile getProfile() {
-        System.out.println("COCOCO");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return profileService.getProfile(auth.getName());
     }
