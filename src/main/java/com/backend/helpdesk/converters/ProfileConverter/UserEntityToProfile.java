@@ -39,9 +39,11 @@ public class UserEntityToProfile extends Converter<UserEntity, Profile> {
         profile.setSkills(listSkills);
 
         // client read image base 64
-        if (source.getAvatar() != null) {
+        if(source.getAvatar() != null){
             profile.setAvatarBase64(new String(Base64.getEncoder().encode(source.getAvatar())));
         }
+        profile.setEnable(source.isEnable());
+
 
         return profile;
     }

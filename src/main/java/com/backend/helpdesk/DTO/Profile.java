@@ -2,13 +2,13 @@ package com.backend.helpdesk.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 public class Profile {
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     private int id = 0;
 
     @NotBlank
@@ -22,29 +22,27 @@ public class Profile {
     @NotBlank
     private String lastName;
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     private int age;
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     private Date birthday;
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     private boolean sex;
 
     @NotEmpty
     @NotBlank
     private String address;
 
-    @NotEmpty
-    @NotBlank
+    @NotNull
     private Date startingDay;
 
     private String avatarBase64;
 
     private List<Skills> skills;
+
+    private boolean enable;
 
     public Profile() {
     }
@@ -135,5 +133,13 @@ public class Profile {
 
     public void setAvatarBase64(String avatarBase64) {
         this.avatarBase64 = avatarBase64;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

@@ -1,8 +1,6 @@
 package com.backend.helpdesk.configurations;
 
-import com.backend.helpdesk.entity.CategoriesEntity;
 import com.backend.helpdesk.entity.RoleEntity;
-import com.backend.helpdesk.entity.SkillsEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.CategoriesRepository;
 import com.backend.helpdesk.repository.RoleRepository;
@@ -60,7 +58,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-
         addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES", "ROLE_ADMIN", "ROLE_SECRETARY");
         if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()

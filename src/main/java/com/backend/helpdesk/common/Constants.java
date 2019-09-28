@@ -1,7 +1,5 @@
 package com.backend.helpdesk.common;
 
-import java.util.HashMap;
-
 public class Constants {
 
     public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 30 * 24 * 60 * 60;
