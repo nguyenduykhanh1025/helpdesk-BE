@@ -9,7 +9,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id = 0;
+    private int id;
 
     @Column(nullable = false)
     private String email;

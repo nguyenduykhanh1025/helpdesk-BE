@@ -1,6 +1,7 @@
 package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.ProblemDTO;
+import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.common.Email;
 import com.backend.helpdesk.controller.EmailController;
 import com.backend.helpdesk.converters.problem.ConvertProblemDTOToProblem;
@@ -73,7 +74,14 @@ public class ProblemService {
         return convertProblemToProblemDTO.convert(result);
     }
 
-    public ProblemDTO postProlem(ProblemDTO problemDTO){
+    public ProblemDTO addProblem(ProblemDTO problemDTO){
+        Email email = new Email();
+        List<String> emails = new ArrayList<>();
+        emails.add(Constants.MY_EMAIL);
+        email.setSendToEmail(emails);
+        email.setSubject(problemTypeRepository.findById(problemDTO.getIdProblemType()).get().getName());
+        email.setText(problemDTO.getDescription());
+
         problemDTO.setId(0);
         problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
         return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
@@ -93,25 +101,22 @@ public class ProblemService {
 
         if (isAdmin){
             Email email = new Email();
-            email.setSendToEmail(userRepository.findById(problemDTO.getIdUser()).getEmail());
-            email.setSubject(problemTypeRepository.findById(problemDTO.getIdProblemType()).getName());
-            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_ACCESS").getId()){
-                email.setText("ACCESS");
-            }
-            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_DECLINE").getId()){
-                email.setText("DECLINE");
-            }
+            List<String> emails = new ArrayList<>();
+            emails.add(userRepository.findById(problemDTO.getIdUser()).get().getEmail());
+            email.setSendToEmail(emails);
+            email.setSubject(problemTypeRepository.findById(problemDTO.getIdProblemType()).get().getName());
+            email.setText(statusRepository.findById(problemDTO.getIdStatus()).get().getName());
             emailController.sendEmail(email);
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
         }
         else {
-            if(problemDTO.getIdStatus()==statusRepository.findByName("STATUS_ACCESS").getId())
-                problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
+            if(problemDTO.getIdStatus()==statusRepository.findByName("APPROVED").getId())
+                problemDTO.setIdStatus(statusRepository.findByName("WAITING").getId());
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
         }
     }
 
-    public void delProblem(@RequestParam int id){
+    public void removeProblem(@RequestParam int id){
         problemRepository.deleteById(id);
     }
 

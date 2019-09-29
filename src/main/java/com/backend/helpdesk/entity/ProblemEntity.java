@@ -14,6 +14,7 @@ import java.util.Date;
 public class ProblemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonAlias("id")
     private int id;
 
     @JsonAlias("id_problem_type")

@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface ProblemTypeRepository extends JpaRepository<ProblemType, Integer> {
     List<ProblemType> findByName(String name);
-    ProblemType findById(int id);
 }

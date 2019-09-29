@@ -18,12 +18,14 @@ public class EmailController {
 
     @PostMapping
     public void sendEmail(@RequestBody Email email){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        for(String sendToEmail : email.getSendToEmail()) {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        mailMessage.setTo(email.getSendToEmail());
-        mailMessage.setSubject(email.getSubject());
-        mailMessage.setText(email.getText());
+            mailMessage.setTo(sendToEmail);
+            mailMessage.setSubject(email.getSubject());
+            mailMessage.setText(email.getText());
 
-        mailSender.send(mailMessage);
+            mailSender.send(mailMessage);
+        }
     }
 }

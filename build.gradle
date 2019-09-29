@@ -16,6 +16,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// https://mvnrepository.com/artifact/org.springframework/spring-web
+	compile group: 'org.springframework', name: 'spring-web', version: '4.2.5.RELEASE'
 
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
@@ -29,18 +31,21 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compile group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
 
-
 	// https://mvnrepository.com/artifact/org.postgresql/postgresql
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 
 	implementation "com.google.api-client:google-api-client:1.22.0"
 
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
-	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-mail')
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-context-support
 	compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.9.RELEASE'
 
+	// https://mvnrepository.com/artifact/javax.servlet/servlet-api
+	providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.2.5.RELEASE'
 
 }

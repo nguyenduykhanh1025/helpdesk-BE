@@ -12,9 +12,9 @@ public class ConvertProblemToProblemDTO extends Converter<ProblemEntity, Problem
         ProblemDTO problemDTO = new ProblemDTO();
 
         problemDTO.setId(problemEntity.getId());
-        problemDTO.setIdUser(problemEntity.getIdUser());
-        problemDTO.setIdProblemType(problemEntity.getIdProblemType());
-        problemDTO.setIdStatus(problemEntity.getIdStatus());
+        problemDTO.setIdUser(problemEntity.getUser().getId());
+        problemDTO.setIdProblemType(problemEntity.getProblemType().getId());
+        problemDTO.setIdStatus(problemEntity.getStatus().getId());
         problemDTO.setCreateAt(problemEntity.getCreateAt());
         problemDTO.setDayRequest(problemEntity.getDayRequest());
         problemDTO.setDescription(problemEntity.getDescription());

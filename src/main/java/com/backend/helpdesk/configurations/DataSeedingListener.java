@@ -67,9 +67,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
 
-        addStatusIfMissing("STATUS_ACCESS");
-        addStatusIfMissing("STATUS_DECLINE");
-        addStatusIfMissing("STATUS_WAITING");
+        addStatusIfMissing("APPROVED");
+        addStatusIfMissing("DENIED");
+        addStatusIfMissing("WAITING");
 
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()

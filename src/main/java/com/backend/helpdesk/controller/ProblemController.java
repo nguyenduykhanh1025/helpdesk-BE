@@ -26,8 +26,8 @@ public class ProblemController {
     }
 
     @PostMapping
-    public ProblemDTO postProlem(@RequestBody @Valid ProblemDTO problemDTO){
-        return problemService.postProlem(problemDTO);
+    public ProblemDTO addProblem(@RequestBody @Valid ProblemDTO problemDTO){
+        return problemService.addProblem(problemDTO);
     }
 
     @PutMapping
@@ -36,7 +36,7 @@ public class ProblemController {
     }
 
     @DeleteMapping
-    public void delProblem(@RequestParam int id){
-        problemService.delProblem(id);
+    public void removeProblem(@RequestParam int id){
+        problemService.removeProblem(id);
     }
 }
