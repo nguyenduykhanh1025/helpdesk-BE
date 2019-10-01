@@ -1,7 +1,7 @@
 package com.backend.helpdesk.converter;
 
 import com.backend.helpdesk.entity.DayOff;
-import com.backend.helpdesk.entityDTO.DayOffDTO;
+import com.backend.helpdesk.DTO.DayOffDTO;
 import com.backend.helpdesk.repository.DayOffTypeRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
@@ -28,7 +28,7 @@ public class DayOffDtoToDayOffConverter extends Converter<DayOffDTO, DayOff> {
         dayOff.setDayStartOff(source.getDayStartOff());
         dayOff.setDayEndOff(source.getDayEndOff());
         dayOff.setDescription(source.getDescription());
-        dayOff.setUserEntity(userRepository.findById(source.getUserEntity()));
+        dayOff.setUserEntity(userRepository.findById(source.getUserEntity()).get());
         dayOff.setStatus(statusRepository.findById(source.getStatus()));
         dayOff.setDayOffType(dayOffTypeRepository.findById(source.getDayOffType()));
         return dayOff;

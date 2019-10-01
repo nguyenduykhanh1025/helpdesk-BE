@@ -6,12 +6,13 @@ import com.backend.helpdesk.converter.Converter;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
-import com.backend.helpdesk.entityDTO.DayOffDTO;
+import com.backend.helpdesk.DTO.DayOffDTO;
 import com.backend.helpdesk.exception.UserException.BadRequestException;
 import com.backend.helpdesk.exception.UserException.NotFoundException;
 import com.backend.helpdesk.repository.DayOffRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
+import com.backend.helpdesk.respone.NumberOfDayOff;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -56,11 +57,14 @@ public class DayOffService {
     }
 
     public long getNumberOfDayOffByUser(int id, int year) {
-        UserEntity userEntity = userRepository.findById(id);
+        Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
-        Date startingDay = userEntity.getStartingDay();
+        Date startingDay = userEntity.get().getStartingDay();
+        if(startingDay==null){
+            throw new BadRequestException("Incomplete information");
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startingDay);
         int startingYear = calendar.get(Calendar.YEAR);
@@ -73,7 +77,7 @@ public class DayOffService {
     }
 
     public float getNumberOfDayOffUsed(int id, int year) {
-        UserEntity userEntity = userRepository.findById(id);
+        Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
@@ -87,24 +91,31 @@ public class DayOffService {
     }
 
     public List<DayOffDTO> getListDayOffUsed(int id, Integer year) {
-        UserEntity userEntity = userRepository.findById(id);
+        Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
             Status status=statusRepository.findByName("approved");
-            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity,status));
+            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity.get(),status));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         return dayOffDayOffDTOConverter.convert(dayOffs);
     }
 
     public float getNumberDayOffByUserRemaining(int id, int year) {
-        UserEntity userEntity = userRepository.findById(id);
+        Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
         }
         return getNumberOfDayOffByUser(id, year) - getNumberOfDayOffUsed(id, year);
+    }
+
+    public NumberOfDayOff getNumberOffDayOff(int id,int year){
+        NumberOfDayOff numberOfDayOff=new NumberOfDayOff();
+        numberOfDayOff.setUsed(getNumberOfDayOffUsed(id, year));
+        numberOfDayOff.setRemaining(getNumberDayOffByUserRemaining(id, year));
+        return numberOfDayOff;
     }
 
     public DayOff addDayOff(DayOffDTO dayOffDTO) {

@@ -1,7 +1,8 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.entity.DayOff;
-import com.backend.helpdesk.entityDTO.DayOffDTO;
+import com.backend.helpdesk.DTO.DayOffDTO;
+import com.backend.helpdesk.respone.NumberOfDayOff;
 import com.backend.helpdesk.service.DayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -43,15 +44,9 @@ public class DayOffController {
     }
 
     @Secured("ROLE_EMPLOYEES")
-    @GetMapping("/the_number_of_day_off_by_user_used/{id}")
-    public float getNumberOfDayOffUsed(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getNumberOfDayOffUsed(id, year);
-    }
-
-    @Secured("ROLE_EMPLOYEES")
-    @GetMapping("/the_number_of_day_off_remaining_user/{id}")
-    public float getNumberDayOffByUserRemaining(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
-        return dayOffService.getNumberDayOffByUserRemaining(id, year);
+    @GetMapping("/number_of_day_off/{id}")
+    public NumberOfDayOff getNumberDayOffByUser(@PathVariable("id") int id, @RequestParam(value = "year", required = false) int year) {
+        return dayOffService.getNumberOffDayOff(id, year);
     }
 
     @Secured("ROLE_EMPLOYEES")
