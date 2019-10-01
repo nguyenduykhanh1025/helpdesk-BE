@@ -36,6 +36,9 @@ public class AuthenticationService {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
+    @Autowired
+    private CommonMethods commonMethods;
+
     public String getEmailFromTokenUser(String tokenGoogle) throws IOException {
         final GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, tokenGoogle);
         final GooglePublicKeysManager manager = new GooglePublicKeysManager.Builder(transport, jsonFactory).build();
@@ -51,7 +54,7 @@ public class AuthenticationService {
 
     public ResponseEntity<String> generateToken(String email) {
 
-        if (CommonMethods.isEmailNovaHub(email)) {
+        if (commonMethods.isEmailNovaHub(email)) {
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             email,

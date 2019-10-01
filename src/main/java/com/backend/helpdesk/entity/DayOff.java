@@ -23,7 +23,7 @@ public class DayOff {
     @NonNull
     private Date dayStartOff;
 
-    @JsonAlias("number_of_day_off")
+    @JsonAlias("day_end_off")
     @Column(nullable = false)
     @NonNull
     private Date dayEndOff;

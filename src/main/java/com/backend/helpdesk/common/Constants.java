@@ -7,7 +7,7 @@ public class Constants {
     public static final String HEADER_STRING = "Authorization";
     public static final String AUTHORITIES_KEY = "scopes";
     public static final int DAYOFFBYRULE=15;
-    public static final String SUBJECT_EMAIL="SABBATICAL LEAVE";
-    public static final String MY_EMAIL = "nhinguyen@novahub.vn";
-    public static final String MY_PASSWORD="nhinguyen12345";
+    public static final String PENDING="pending";
+    public static final String APPROVED="approved";
+    public static final String REJECTED="rejected";
 }

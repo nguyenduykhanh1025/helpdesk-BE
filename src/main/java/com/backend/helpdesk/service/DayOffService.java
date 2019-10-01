@@ -12,6 +12,7 @@ import com.backend.helpdesk.exception.UserException.NotFoundException;
 import com.backend.helpdesk.repository.DayOffRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +40,9 @@ public class DayOffService {
     @Autowired
     private Converter<DayOffDTO, DayOff> dayOffDTODayOffConverter;
 
+    @Autowired
+    private CommonMethods commonMethods;
+
     public List<DayOff> getAllDayOff() {
         return dayOffRepository.findAll();
     }
@@ -49,14 +53,6 @@ public class DayOffService {
             throw new NotFoundException("Day off not found!");
         }
         return dayOffRepository.findByStatus(status);
-    }
-
-    public List<DayOff> getDayOffByUser(int id) {
-        UserEntity userEntity = userRepository.findById(id);
-        if (userEntity == null) {
-            throw new NotFoundException("Day off not found!");
-        }
-        return dayOffRepository.findByUserEntity(userEntity);
     }
 
     public long getNumberOfDayOffByUser(int id, int year) {
@@ -84,16 +80,20 @@ public class DayOffService {
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         float result = 0;
         for (DayOff dayOff : dayOffs) {
-            result += CommonMethods.calculateDaysBetweenTwoDate(dayOff.getDayStartOff(), dayOff.getDayEndOff());
+            result += commonMethods.calculateDaysBetweenTwoDate(dayOff.getDayStartOff(), dayOff.getDayEndOff());
         }
         int a = 0;
         return result;
     }
 
-    public List<DayOffDTO> getListDayOffUsed(int id, int year) {
+    public List<DayOffDTO> getListDayOffUsed(int id, Integer year) {
         UserEntity userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new NotFoundException("User not found!");
+        }
+        if(year==null){
+            Status status=statusRepository.findByName("approved");
+            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity,status));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         return dayOffDayOffDTOConverter.convert(dayOffs);
@@ -109,7 +109,7 @@ public class DayOffService {
 
     public DayOff addDayOff(DayOffDTO dayOffDTO) {
         //number of day off register in request
-        float numberOfDayOff = CommonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(), dayOffDTO.getDayEndOff());
+        float numberOfDayOff = commonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(), dayOffDTO.getDayEndOff());
         LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearStart = localDateStart.getYear();
 
@@ -147,5 +147,25 @@ public class DayOffService {
             dayOffDTOS.add(dayOffDayOffDTOConverter.convert(dayOff));
         }
         return dayOffDTOS;
+    }
+
+    public DayOff acceptDayOff(int id){
+        DayOff dayOff=dayOffRepository.findById(id);
+        if(dayOff==null){
+            throw new NotFoundException("Day off not found");
+        }
+        Status status=statusRepository.findByName(Constants.APPROVED);
+        dayOff.setStatus(status);
+        return dayOffRepository.save(dayOff);
+    }
+
+    public DayOff rejectedDayOff(int id){
+        DayOff dayOff=dayOffRepository.findById(id);
+        if(dayOff==null){
+            throw new NotFoundException("Day off not found");
+        }
+        Status status=statusRepository.findByName(Constants.REJECTED);
+        dayOff.setStatus(status);
+        return dayOffRepository.save(dayOff);
     }
 }

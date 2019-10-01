@@ -17,7 +17,7 @@ public interface DayOffRepository extends JpaRepository<DayOff,Integer> {
 
     List<DayOff> findByStatus(Status status);
 
-    List<DayOff> findByUserEntity(UserEntity userEntity);
+    List<DayOff> findByUserEntityAndStatus(UserEntity userEntity,Status status);
 
     @Query(value = "SELECT * FROM day_off where EXTRACT(YEAR FROM day_start_off) = ?1 and id_user=?2 and id_status=2",nativeQuery = true)
     List<DayOff> getDayOffByYear(int year,int idUser);
