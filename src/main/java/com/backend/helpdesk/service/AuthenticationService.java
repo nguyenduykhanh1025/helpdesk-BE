@@ -40,6 +40,9 @@ public class AuthenticationService {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
+    @Autowired
+    private CommonMethods commonMethods;
+
     public String getEmailFromTokenUser(String tokenGoogle) throws IOException, GeneralSecurityException {
 
         GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, tokenGoogle);
@@ -72,7 +75,7 @@ public class AuthenticationService {
 
     public void checkForUserRegister(String email, String firstName, String lastName) {
 
-        if (CommonMethods.isEmailNovaHub(email)) {
+        if (commonMethods.isEmailNovaHub(email)) {
             if (userRepository.findByEmail(email) == null) {
                 saveNewAccount(email, firstName, lastName);
             }
