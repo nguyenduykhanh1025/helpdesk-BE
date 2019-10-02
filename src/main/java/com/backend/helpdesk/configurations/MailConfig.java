@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Properties;
 
@@ -20,8 +19,6 @@ public class MailConfig {
 
         mailSender.setUsername(Constants.MY_EMAIL);
         mailSender.setPassword(Constants.MY_PASSWORD);
-
-        String s = new BCryptPasswordEncoder().encode(Constants.MY_PASSWORD);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

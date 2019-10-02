@@ -83,7 +83,7 @@ public class ProblemService {
         email.setText(problemDTO.getDescription());
 
         problemDTO.setId(0);
-        problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").getId());
+        problemDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").get().getId());
         return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
     }
 
@@ -92,7 +92,7 @@ public class ProblemService {
 
         boolean isAdmin = false;
 
-        for(RoleEntity role: userRepository.findByEmail(username).getRoleEntities()){
+        for(RoleEntity role: userRepository.findByEmail(username).get().getRoleEntities()){
             if(role.getName()=="ROLE_ADMIN"){
                 isAdmin=true;
                 break;
@@ -110,8 +110,8 @@ public class ProblemService {
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
         }
         else {
-            if(problemDTO.getIdStatus()==statusRepository.findByName("APPROVED").getId())
-                problemDTO.setIdStatus(statusRepository.findByName("WAITING").getId());
+            if(problemDTO.getIdStatus()==statusRepository.findByName("APPROVED").get().getId())
+                problemDTO.setIdStatus(statusRepository.findByName("WAITING").get().getId());
             return convertProblemToProblemDTO.convert(problemRepository.save(convertProblemDTOToProblem.convert(problemDTO)));
         }
     }

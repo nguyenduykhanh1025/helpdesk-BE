@@ -9,13 +9,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static com.backend.helpdesk.common.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static com.backend.helpdesk.common.Constants.AUTHORITIES_KEY;
 

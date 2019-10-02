@@ -32,18 +32,18 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     private StatusRepository statusRepository;
 
     private void addRoleIfMissing(String name){
-        if (roleRepository.findByName(name) == null) {
+        if (!roleRepository.findByName(name).isPresent()) {
             roleRepository.save(new RoleEntity(name));
         }
     }
 
     private void addUserIfMissing(String username, String password, String... roles) {
-        if (userRepository.findByEmail(username) == null) {
+        if (!userRepository.findByEmail(username).isPresent()) {
             UserEntity user = new UserEntity(username, new BCryptPasswordEncoder().encode(password), "f", "l");
             user.setRoleEntities(new HashSet<>());
 
             for (String role : roles) {
-                user.getRoleEntities().add(roleRepository.findByName(role));
+                user.getRoleEntities().add(roleRepository.findByName(role).get());
             }
 
             userRepository.save(user);
@@ -51,7 +51,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     }
 
     private void addStatusIfMissing(String name){
-        if(statusRepository.findByName(name) == null){
+        if(!statusRepository.findByName(name).isPresent()){
             statusRepository.save(new Status(name));
         }
     }

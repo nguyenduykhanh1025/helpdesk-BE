@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+@Component("userDetail")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity user = userRepository.findByEmail(email);
+        UserEntity user = userRepository.findByEmail(email).get();
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

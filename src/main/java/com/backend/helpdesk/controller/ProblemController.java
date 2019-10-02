@@ -1,10 +1,8 @@
 package com.backend.helpdesk.controller;
-
 import com.backend.helpdesk.DTO.ProblemDTO;
 import com.backend.helpdesk.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
