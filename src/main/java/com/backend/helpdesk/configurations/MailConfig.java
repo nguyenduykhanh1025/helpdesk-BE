@@ -1,6 +1,5 @@
 package com.backend.helpdesk.configurations;
 
-import com.backend.helpdesk.common.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,9 +15,6 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-
-        mailSender.setUsername(Constants.MY_EMAIL);
-        mailSender.setPassword(Constants.MY_PASSWORD);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

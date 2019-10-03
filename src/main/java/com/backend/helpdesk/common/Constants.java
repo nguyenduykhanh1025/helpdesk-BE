@@ -8,5 +8,4 @@ public class Constants {
     public static final String AUTHORITIES_KEY = "scopes";
 
     public static final String MY_EMAIL = "datnguyen@novahub.vn";
-    public static final String MY_PASSWORD="Dat15042018";
 }
