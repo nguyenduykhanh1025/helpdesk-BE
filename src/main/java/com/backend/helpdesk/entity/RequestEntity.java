@@ -8,9 +8,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity(name = "problems")
+@Entity(name = "=requests")
 @NoArgsConstructor
-public class ProblemEntity {
+public class RequestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonAlias("id")
@@ -18,7 +18,7 @@ public class ProblemEntity {
 
     @JsonAlias("id_problem_type")
     @ManyToOne(cascade = CascadeType.ALL)
-    private ProblemType problemType;
+    private RequestType requestType;
 
     @JsonAlias("id_status")
     @ManyToOne(cascade = CascadeType.ALL)

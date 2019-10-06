@@ -9,9 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
-@Entity(name="problem_types")
+@Entity(name="request_types")
 @NoArgsConstructor
-public class ProblemType {
+public class RequestType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

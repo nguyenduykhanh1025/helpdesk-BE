@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-public class ProblemDTO {
+public class RequestDTO {
 
     private int id;
 
