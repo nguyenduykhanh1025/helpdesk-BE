@@ -3,11 +3,13 @@ import com.backend.helpdesk.DTO.RequestDTO;
 import com.backend.helpdesk.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/requests")
+@CrossOrigin(origins = "http://localhost:4200")
 public class RequestController {
 
     @Autowired

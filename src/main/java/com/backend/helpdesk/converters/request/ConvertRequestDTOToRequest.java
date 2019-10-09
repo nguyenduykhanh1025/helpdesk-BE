@@ -29,7 +29,6 @@ public class ConvertRequestDTOToRequest extends Converter<RequestDTO, RequestEnt
         requestEntity.setUser(userRepository.findById(requestDTO.getIdUser()).get());
         requestEntity.setRequestType(requestTypeRepository.findById(requestDTO.getIdRequestType()).get());
         requestEntity.setStatus(statusRepository.findById(requestDTO.getIdStatus()).get());
-        requestEntity.setCreateAt(requestDTO.getCreateAt());
         requestEntity.setDayRequest(requestDTO.getDayRequest());
         requestEntity.setDescription(requestDTO.getDescription());
 
