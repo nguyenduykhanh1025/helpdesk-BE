@@ -30,5 +30,7 @@ public class RequestEntity {
 
     private Date dayRequest;
 
+    private Date createAt;
+
     private String description; //Tổ chức party thì phải thêm địa chỉ
 }

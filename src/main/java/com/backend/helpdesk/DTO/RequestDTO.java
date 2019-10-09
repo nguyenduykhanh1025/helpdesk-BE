@@ -22,6 +22,8 @@ public class RequestDTO {
     @NotNull
     private Date dayRequest;
 
+    private Date createAt;
+
     @NotBlank
     private String description;
 }
