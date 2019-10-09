@@ -82,7 +82,7 @@ public class RequestService {
         email.setText(requestDTO.getDescription());
 
         requestDTO.setId(0);
-        requestDTO.setIdStatus(statusRepository.findByName("STATUS_WAITING").get().getId());
+        requestDTO.setIdStatus(statusRepository.findByName("WAITING").get().getId());
         return convertRequestToRequestDTO.convert(requestRepository.save(convertRequestDTOToRequest.convert(requestDTO)));
     }
 
