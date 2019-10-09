@@ -76,7 +76,7 @@ public class RequestService {
     public RequestDTO addRequest(RequestDTO requestDTO){
         Email email = new Email();
         List<String> emails = new ArrayList<>();
-        emails.add("${spring.mail.username}"); //đoạn này cần sửa
+        emails.add("${spring.mail.username}");
         email.setSendToEmail(emails);
         email.setSubject(requestTypeRepository.findById(requestDTO.getIdRequestType()).get().getName());
         email.setText(requestDTO.getDescription());
