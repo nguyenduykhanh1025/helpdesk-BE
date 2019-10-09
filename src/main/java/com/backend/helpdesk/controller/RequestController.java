@@ -14,27 +14,27 @@ public class RequestController {
     private RequestService requestService;
 
     @GetMapping
-    public List<RequestDTO> getAllProblem(){
-        return requestService.getAllProblem();
+    public List<RequestDTO> getAllRequest(){
+        return requestService.getAllRequest();
     }
 
     @GetMapping("/pagination-and-search")
-    public List<RequestDTO> searchProblemAndPagination(@RequestParam int page, @RequestParam int items, @RequestParam String sortBy, @RequestParam String search){
-        return requestService.searchProblemAndPagination(page,items,sortBy,search);
+    public List<RequestDTO> searchRequestAndPagination(@RequestParam int page, @RequestParam int items, @RequestParam String sortBy, @RequestParam String search){
+        return requestService.searchRequestAndPagination(page,items,sortBy,search);
     }
 
     @PostMapping
-    public RequestDTO addProblem(@RequestBody @Valid RequestDTO requestDTO){
-        return requestService.addProblem(requestDTO);
+    public RequestDTO addRequest(@RequestBody @Valid RequestDTO requestDTO){
+        return requestService.addRequest(requestDTO);
     }
 
     @PutMapping
-    public RequestDTO putProblem(@RequestBody @Valid RequestDTO requestDTO){
-        return requestService.putProblem(requestDTO);
+    public RequestDTO putRequest(@RequestBody @Valid RequestDTO requestDTO){
+        return requestService.putRequest(requestDTO);
     }
 
     @DeleteMapping
-    public void removeProblem(@RequestParam int id){
-        requestService.removeProblem(id);
+    public void removeRequest(@RequestParam int id){
+        requestService.removeRequest(id);
     }
 }

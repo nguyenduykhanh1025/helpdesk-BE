@@ -1,11 +1,10 @@
 package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.RequestDTO;
-import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.common.Email;
 import com.backend.helpdesk.controller.EmailController;
-import com.backend.helpdesk.converters.problem.ConvertRequestDTOToRequest;
-import com.backend.helpdesk.converters.problem.ConvertRequestToRequestDTO;
+import com.backend.helpdesk.converters.request.ConvertRequestDTOToRequest;
+import com.backend.helpdesk.converters.request.ConvertRequestToRequestDTO;
 import com.backend.helpdesk.entity.RequestEntity;
 import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.repository.RequestRepository;
@@ -44,42 +43,42 @@ public class RequestService {
     @Autowired
     private EmailController emailController;
 
-    public List<RequestDTO> getAllProblem(){
+    public List<RequestDTO> getAllRequest(){
         return convertRequestToRequestDTO.convert(requestRepository.findAll());
     }
 
-    public List<RequestDTO> searchProblemAndPagination(int page, int items, String sortBy, String search){
+    public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search){
 
-        List<RequestEntity> problemEntities =  this.search(search);
+        List<RequestEntity> requestEntities =  this.search(search);
 
         List<RequestEntity> result = new ArrayList<>();
 
         if(sortBy.equals("Email")){
-            this.sortByEmail(problemEntities);
+            this.sortByEmail(requestEntities);
         }
         if(sortBy.equals("Status")){
-            this.sortByStatus(problemEntities);
+            this.sortByStatus(requestEntities);
         }
-        if(sortBy.equals("Problem Type")){
-            this.sortByProblemType(problemEntities);
+        if(sortBy.equals("Request Type")){
+            this.sortByRequestType(requestEntities);
         }
 
         int n = (page+1)*items;
-        if(n<problemEntities.size()) n= problemEntities.size();
+        if(n<requestEntities.size()) n= requestEntities.size();
 
         for(int i=page*items; i<n; i++){
-            result.add(problemEntities.get(i));
+            result.add(requestEntities.get(i));
         }
 
         return convertRequestToRequestDTO.convert(result);
     }
 
-    public RequestDTO addProblem(RequestDTO requestDTO){
+    public RequestDTO addRequest(RequestDTO requestDTO){
         Email email = new Email();
         List<String> emails = new ArrayList<>();
-        emails.add(Constants.MY_EMAIL);
+        emails.add("${spring.mail.username}"); //đoạn này cần sửa
         email.setSendToEmail(emails);
-        email.setSubject(requestTypeRepository.findById(requestDTO.getIdProblemType()).get().getName());
+        email.setSubject(requestTypeRepository.findById(requestDTO.getIdRequestType()).get().getName());
         email.setText(requestDTO.getDescription());
 
         requestDTO.setId(0);
@@ -87,7 +86,7 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(requestRepository.save(convertRequestDTOToRequest.convert(requestDTO)));
     }
 
-    public RequestDTO putProblem(RequestDTO requestDTO){
+    public RequestDTO putRequest(RequestDTO requestDTO){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         boolean isAdmin = false;
@@ -104,7 +103,7 @@ public class RequestService {
             List<String> emails = new ArrayList<>();
             emails.add(userRepository.findById(requestDTO.getIdUser()).get().getEmail());
             email.setSendToEmail(emails);
-            email.setSubject(requestTypeRepository.findById(requestDTO.getIdProblemType()).get().getName());
+            email.setSubject(requestTypeRepository.findById(requestDTO.getIdRequestType()).get().getName());
             email.setText(statusRepository.findById(requestDTO.getIdStatus()).get().getName());
             emailController.sendEmail(email);
             return convertRequestToRequestDTO.convert(requestRepository.save(convertRequestDTOToRequest.convert(requestDTO)));
@@ -116,21 +115,21 @@ public class RequestService {
         }
     }
 
-    public void removeProblem(@RequestParam int id){
+    public void removeRequest(@RequestParam int id){
         requestRepository.deleteById(id);
     }
 
     private List<RequestEntity> search(String keySearch){
         if(keySearch.equals("")) return requestRepository.findAll();
 
-        List<RequestEntity> problemEntitiesByProblemType = requestRepository.findByRequestTypeName(keySearch);
-        List<RequestEntity> problemEntitiesByUser = requestRepository.findByUserEmail(keySearch);
-        List<RequestEntity> problemEntitiesByStatus = requestRepository.findByStatusName(keySearch);
+        List<RequestEntity> RequestEntitiesByRequestType = requestRepository.findByRequestTypeName(keySearch);
+        List<RequestEntity> RequestEntitiesByUser = requestRepository.findByUserEmail(keySearch);
+        List<RequestEntity> RequestEntitiesByStatus = requestRepository.findByStatusName(keySearch);
 
         List<RequestEntity> results = new ArrayList<>();
-        results.addAll(problemEntitiesByProblemType);
+        results.addAll(RequestEntitiesByRequestType);
 
-        for(RequestEntity requestEntityByUser : problemEntitiesByUser){
+        for(RequestEntity requestEntityByUser : RequestEntitiesByUser){
             Boolean add = true;
             for(RequestEntity result : results){
                 if(requestEntityByUser.getId() == result.getId()){
@@ -143,7 +142,7 @@ public class RequestService {
             }
         }
 
-        for(RequestEntity requestEntityByStatus : problemEntitiesByStatus){
+        for(RequestEntity requestEntityByStatus : RequestEntitiesByStatus){
             Boolean add = true;
             for(RequestEntity result : results){
                 if(requestEntityByStatus.getId() == result.getId()){
@@ -183,7 +182,7 @@ public class RequestService {
         }
     }
 
-    private void sortByProblemType(List<RequestEntity> requestEntities){
+    private void sortByRequestType(List<RequestEntity> requestEntities){
         for(int i = 0; i< requestEntities.size()-1; i++){
             for(int j = i+1; j< requestEntities.size(); j++){
                 if(requestEntities.get(i).getRequestType().getName().compareTo(requestEntities.get(j).getRequestType().getName())>0){

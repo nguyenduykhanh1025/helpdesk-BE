@@ -1,4 +1,4 @@
-package com.backend.helpdesk.converters.problem;
+package com.backend.helpdesk.converters.request;
 
 import com.backend.helpdesk.DTO.RequestDTO;
 import com.backend.helpdesk.converters.bases.Converter;
@@ -27,7 +27,7 @@ public class ConvertRequestDTOToRequest extends Converter<RequestDTO, RequestEnt
 
         requestEntity.setId(requestDTO.getId());
         requestEntity.setUser(userRepository.findById(requestDTO.getIdUser()).get());
-        requestEntity.setRequestType(requestTypeRepository.findById(requestDTO.getIdProblemType()).get());
+        requestEntity.setRequestType(requestTypeRepository.findById(requestDTO.getIdRequestType()).get());
         requestEntity.setStatus(statusRepository.findById(requestDTO.getIdStatus()).get());
         requestEntity.setCreateAt(requestDTO.getCreateAt());
         requestEntity.setDayRequest(requestDTO.getDayRequest());

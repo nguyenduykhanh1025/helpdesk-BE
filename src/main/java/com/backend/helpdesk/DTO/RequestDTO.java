@@ -12,7 +12,7 @@ public class RequestDTO {
     private int id;
 
     @NotNull
-    private int idProblemType;
+    private int idRequestType;
 
     @NotNull
     private int idUser;

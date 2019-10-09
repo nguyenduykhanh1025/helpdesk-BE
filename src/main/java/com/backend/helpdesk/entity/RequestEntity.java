@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity(name = "=requests")
+@Entity(name = "requests")
 @NoArgsConstructor
 public class RequestEntity {
     @Id
@@ -16,7 +16,7 @@ public class RequestEntity {
     @JsonAlias("id")
     private int id;
 
-    @JsonAlias("id_problem_type")
+    @JsonAlias("id_request_type")
     @ManyToOne(cascade = CascadeType.ALL)
     private RequestType requestType;
 
