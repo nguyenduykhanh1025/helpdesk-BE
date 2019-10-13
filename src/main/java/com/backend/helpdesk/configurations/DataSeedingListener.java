@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Configuration
@@ -59,7 +60,16 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-        //addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES", "ROLE_ADMIN", "ROLE_SECRETARY");
+        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES");
+
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        roleEntities.add(roleRepository.findByName("ROLE_ADMIN"));
+        roleEntities.add(roleRepository.findByName("ROLE_SECRETARY"));
+        roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES"));
+        UserEntity userEntity = userRepository.findByEmail("minhhuynh@novahub.vn");
+        userEntity.setRoleEntities(roleEntities);
+        userRepository.save(userEntity);
+
         if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
