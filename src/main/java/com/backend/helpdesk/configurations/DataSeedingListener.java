@@ -1,6 +1,7 @@
 package com.backend.helpdesk.configurations;
 
 import com.backend.helpdesk.entity.RoleEntity;
+import com.backend.helpdesk.entity.SkillsEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.CategoriesRepository;
 import com.backend.helpdesk.repository.RoleRepository;

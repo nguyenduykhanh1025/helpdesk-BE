@@ -10,6 +10,7 @@ public class Constants {
     public static final String PENDING="pending";
     public static final String APPROVED="approved";
     public static final String REJECTED="rejected";
+    public static final Integer PERSONAL=0;
 
     // const sort follow skill
     public static final int SORT_BY_NAME = 1;

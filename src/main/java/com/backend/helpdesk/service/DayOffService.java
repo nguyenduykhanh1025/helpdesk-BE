@@ -17,6 +17,8 @@ import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,6 +45,13 @@ public class DayOffService {
 
     @Autowired
     private CommonMethods commonMethods;
+
+    public int getUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email=authentication.getName();
+        UserEntity userEntity=userRepository.findByEmail(email);
+        return userEntity.getId();
+    }
 
     public List<DayOff> getAllDayOff() {
         return dayOffRepository.findAll();
@@ -135,6 +144,7 @@ public class DayOffService {
             throw new BadRequestException("Please register day off this year!");
         }
         Date date = new Date(System.currentTimeMillis());
+        dayOffDTO.setUserEntity(getUserId());
         dayOffDTO.setCreateAt(date);
         dayOffDTO.setStatus(1);
         return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
