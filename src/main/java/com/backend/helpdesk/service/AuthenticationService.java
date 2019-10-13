@@ -105,4 +105,6 @@ public class AuthenticationService {
         userEntity.setRoleEntities(roleEntities);
         userRepository.save(userEntity);
     }
+
+
 }
