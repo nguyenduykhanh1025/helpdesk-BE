@@ -52,4 +52,9 @@ public class SkillsController {
     public List<Skills> getSkillFollowIdCategories(@RequestParam int idCategories) {
         return skillsService.getSkillFollowIdCategories(idCategories);
     }
+
+    @GetMapping("/user")
+    public List<Skills> getSkillFollowUser(@RequestParam int idUser){
+        return skillsService.getSkillFollowIdUser(idUser);
+    }
 }
