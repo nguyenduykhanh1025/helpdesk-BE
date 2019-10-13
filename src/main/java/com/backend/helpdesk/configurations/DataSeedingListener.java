@@ -1,6 +1,7 @@
 package com.backend.helpdesk.configurations;
 
 import com.backend.helpdesk.entity.RoleEntity;
+import com.backend.helpdesk.entity.SkillsEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.CategoriesRepository;
 import com.backend.helpdesk.repository.RoleRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Configuration
@@ -59,7 +61,16 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES", "ROLE_ADMIN", "ROLE_SECRETARY");
+        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES");
+
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        roleEntities.add(roleRepository.findByName("ROLE_ADMIN"));
+        roleEntities.add(roleRepository.findByName("ROLE_SECRETARY"));
+        roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES"));
+        UserEntity userEntity = userRepository.findByEmail("minhhuynh@novahub.vn");
+        userEntity.setRoleEntities(roleEntities);
+        userRepository.save(userEntity);
+
         if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")

@@ -1,5 +1,6 @@
 package com.backend.helpdesk.service;
 
+import com.backend.helpdesk.DTO.Token;
 import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.configurations.TokenProvider;
 import com.backend.helpdesk.entity.RoleEntity;
@@ -59,7 +60,7 @@ public class AuthenticationService {
         return null;
     }
 
-    public ResponseEntity<String> generateToken(String email) {
+    public ResponseEntity<Token> generateToken(String email) {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -70,7 +71,7 @@ public class AuthenticationService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new Token(token));
     }
 
     public void checkForUserRegister(String email, String firstName, String lastName) {
