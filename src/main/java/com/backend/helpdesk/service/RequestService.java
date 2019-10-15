@@ -54,13 +54,16 @@ public class RequestService {
         List<RequestEntity> result = new ArrayList<>();
 
         if(sortBy.equals("Email")){
-            this.sortByEmail(requestEntities);
+            requestEntities.clear();
+            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
         }
         if(sortBy.equals("Status")){
-            this.sortByStatus(requestEntities);
+            requestEntities.clear();
+            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
         }
         if(sortBy.equals("Request Type")){
-            this.sortByRequestType(requestEntities);
+            requestEntities.clear();
+            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
         }
 
         int n = (page+1)*items;
@@ -156,41 +159,5 @@ public class RequestService {
         }
 
         return results;
-    }
-
-    private void sortByEmail(List<RequestEntity> requestEntities){
-        for(int i = 0; i< requestEntities.size()-1; i++){
-            for(int j = i+1; j< requestEntities.size(); j++){
-                if(requestEntities.get(i).getUser().getEmail().compareTo(requestEntities.get(j).getUser().getEmail())>0){
-                    RequestEntity swap = requestEntities.get(i);
-                    requestEntities.set(i, requestEntities.get(j));
-                    requestEntities.set(j,swap);
-                }
-            }
-        }
-    }
-
-    private void sortByStatus(List<RequestEntity> requestEntities){
-        for(int i = 0; i< requestEntities.size()-1; i++){
-            for(int j = i+1; j< requestEntities.size(); j++){
-                if(requestEntities.get(i).getStatus().getName().compareTo(requestEntities.get(j).getStatus().getName())>0){
-                    RequestEntity swap = requestEntities.get(i);
-                    requestEntities.set(i, requestEntities.get(j));
-                    requestEntities.set(j,swap);
-                }
-            }
-        }
-    }
-
-    private void sortByRequestType(List<RequestEntity> requestEntities){
-        for(int i = 0; i< requestEntities.size()-1; i++){
-            for(int j = i+1; j< requestEntities.size(); j++){
-                if(requestEntities.get(i).getRequestType().getName().compareTo(requestEntities.get(j).getRequestType().getName())>0){
-                    RequestEntity swap = requestEntities.get(i);
-                    requestEntities.set(i, requestEntities.get(j));
-                    requestEntities.set(j,swap);
-                }
-            }
-        }
     }
 }
