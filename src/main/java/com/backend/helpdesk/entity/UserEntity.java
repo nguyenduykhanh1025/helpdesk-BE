@@ -2,10 +2,12 @@ package com.backend.helpdesk.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
+
 
 @Data
 @Entity(name="users")
@@ -25,7 +27,6 @@ public class UserEntity {
     @Column
     private String firstName;
 
-    @Column
     private String lastName;
 
     private int age;
@@ -38,6 +39,14 @@ public class UserEntity {
 
     private Date startingDay;
 
+    @Column(nullable = false)
+    private boolean enable;
+
+    @Lob
+    @Column(name = "avatar")
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] avatar;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -46,10 +55,19 @@ public class UserEntity {
     )
     private Set<RoleEntity> roleEntities;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_skills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<SkillsEntity> skillsEntities;
+
     public UserEntity(String email, String password, String firstName, String lastName) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.enable = true;
     }
 }

@@ -3,9 +3,7 @@ package com.backend.helpdesk.configurations;
 import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
-import com.backend.helpdesk.repository.RoleRepository;
-import com.backend.helpdesk.repository.StatusRepository;
-import com.backend.helpdesk.repository.UserRepository;
+import com.backend.helpdesk.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,13 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private StatusRepository statusRepository;
 
-    private void addRoleIfMissing(String name){
+    @Autowired
+    private CategoriesRepository categoriesRepository;
+    
+    @Autowired
+    private SkillsRepository skillsRepository;
+
+    private void addRoleIfMissing(String name) {
         if (!roleRepository.findByName(name).isPresent()) {
             roleRepository.save(new RoleEntity(name));
         }
@@ -62,6 +66,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
+        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES");
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
@@ -79,7 +84,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             System.out.println("Use this jwt key:");
             System.out.println("jwt-key=" + jws);
         }
+
     }
+
     @Value("${jwt-key}")
     private String signingKey;
 }
