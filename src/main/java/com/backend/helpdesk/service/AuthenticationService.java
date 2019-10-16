@@ -96,7 +96,7 @@ public class AuthenticationService {
         userEntity.setLastName(lastName);
 
         // set role default
-        RoleEntity roleEntity = roleRepository.findByName("ROLE_EMPLOYEES");
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_EMPLOYEES").get();
         Set<RoleEntity> roleEntities = new HashSet<RoleEntity>() {
             {
                 add(roleEntity);

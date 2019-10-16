@@ -9,16 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
-@Entity
+@Entity(name="request_types")
 @NoArgsConstructor
-public class Status {
+public class RequestType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private String name;
-
-    public Status(String name){
-        this.name = name;
-    }
 }

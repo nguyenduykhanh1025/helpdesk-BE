@@ -4,7 +4,6 @@ import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity user = userRepository.findByEmail(email);
+        UserEntity user = userRepository.findByEmail(email).get();
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

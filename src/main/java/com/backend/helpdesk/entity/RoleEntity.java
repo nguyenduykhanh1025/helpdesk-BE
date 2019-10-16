@@ -1,6 +1,9 @@
 package com.backend.helpdesk.entity;
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity(name="roles")
 public class RoleEntity {
     @Id

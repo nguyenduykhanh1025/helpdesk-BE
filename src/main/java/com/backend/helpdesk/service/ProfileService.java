@@ -33,7 +33,7 @@ public class ProfileService {
             throw new UserNotFoundException();
         }
 
-        return userEntityToProfile.convert(userRepository.findByEmail(emailUser));
+        return userEntityToProfile.convert(userRepository.findByEmail(emailUser).get());
     }
 
     public void editProfile(Profile profile) {
@@ -64,7 +64,7 @@ public class ProfileService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
 
-        UserEntity userEntity = userRepository.findByEmail(currentPrincipalName);
+        UserEntity userEntity = userRepository.findByEmail(currentPrincipalName).get();
         userEntity.setAvatar(avatar);
 
         userRepository.save(userEntity);
