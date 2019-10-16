@@ -8,8 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<UserEntity, Integer>{
-    UserEntity findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
     @Query(
             value = "SELECT * FROM users\n" +

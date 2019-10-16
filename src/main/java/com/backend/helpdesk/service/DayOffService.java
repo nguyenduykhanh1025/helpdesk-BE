@@ -1,19 +1,18 @@
 package com.backend.helpdesk.service;
 
+import com.backend.helpdesk.DTO.DayOffDTO;
 import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.converter.Converter;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
-import com.backend.helpdesk.DTO.DayOffDTO;
 import com.backend.helpdesk.exception.UserException.BadRequestException;
 import com.backend.helpdesk.exception.UserException.NotFoundException;
 import com.backend.helpdesk.repository.DayOffRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import com.backend.helpdesk.respone.NumberOfDayOff;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +48,7 @@ public class DayOffService {
     public int getUserId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email=authentication.getName();
-        UserEntity userEntity=userRepository.findByEmail(email);
+        UserEntity userEntity=userRepository.findByEmail(email).get();
         return userEntity.getId();
     }
 
@@ -58,7 +57,7 @@ public class DayOffService {
     }
 
     public List<DayOff> getDayOffsByStatus(String enable) {
-        Status status = statusRepository.findByName(enable);
+        Status status = statusRepository.findByName(enable).get();
         if (status == null) {
             throw new NotFoundException("Day off not found!");
         }
@@ -105,7 +104,7 @@ public class DayOffService {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
-            Status status=statusRepository.findByName("approved");
+            Status status=statusRepository.findByName("approved").get();
             return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity.get(),status));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
@@ -175,7 +174,7 @@ public class DayOffService {
         if(dayOff==null){
             throw new NotFoundException("Day off not found");
         }
-        Status status=statusRepository.findByName(Constants.APPROVED);
+        Status status=statusRepository.findByName(Constants.APPROVED).get();
         dayOff.setStatus(status);
         return dayOffRepository.save(dayOff);
     }
@@ -185,7 +184,7 @@ public class DayOffService {
         if(dayOff==null){
             throw new NotFoundException("Day off not found");
         }
-        Status status=statusRepository.findByName(Constants.REJECTED);
+        Status status=statusRepository.findByName(Constants.REJECTED).get();
         dayOff.setStatus(status);
         return dayOffRepository.save(dayOff);
     }
