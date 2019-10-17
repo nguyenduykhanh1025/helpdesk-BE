@@ -29,7 +29,7 @@ public class Profile {
     private Date birthday;
 
     @NotNull
-    private boolean sex;
+    private String sex;
 
     @NotEmpty
     @NotBlank
@@ -95,11 +95,11 @@ public class Profile {
         this.birthday = birthday;
     }
 
-    public boolean isSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
