@@ -33,7 +33,7 @@ public class UserEntity {
 
     private Date birthday;
 
-    private String sex = "men";
+    private String sex;
 
     private String address;
 
