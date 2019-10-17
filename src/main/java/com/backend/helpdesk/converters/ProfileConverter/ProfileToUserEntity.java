@@ -36,7 +36,7 @@ public class ProfileToUserEntity extends Converter<Profile, UserEntity> {
         userEntity.setEmail(source.getEmail());
         userEntity.setFirstName(source.getFirstName());
         userEntity.setLastName(source.getLastName());
-        userEntity.setSex(source.isSex());
+        userEntity.setSex(source.getSex());
         userEntity.setStartingDay(source.getStartingDay());
 
         if (source.getSkills() != null) {

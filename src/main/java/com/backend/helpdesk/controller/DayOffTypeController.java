@@ -16,7 +16,7 @@ public class DayOffTypeController {
     @Autowired
     private DayOffTypeService dayOffTypeService;
 
-    @Secured("ROLE_ADMIN")
+    @Secured("ROLE_EMPLOYEES")
     @GetMapping
     public List<DayOffType> getAllDayOffType(){
         return dayOffTypeService.getAllDayOffType();
