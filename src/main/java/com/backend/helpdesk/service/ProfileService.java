@@ -56,6 +56,9 @@ public class ProfileService {
         // add avatar default
         resultUserEntity.setAvatar(userEntity.getAvatar());
 
+        // add role default
+        resultUserEntity.setRoleEntities(userEntity.getRoleEntities());
+
         userRepository.save(resultUserEntity);
     }
 
