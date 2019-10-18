@@ -74,7 +74,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail("khanhnguyen@novahub.vn");
-        userEntity.setPassword("khanhnguyen@novahub.vn");
+        userEntity.setPassword(new BCryptPasswordEncoder().encode("khanhnguyen@novahub.vn"));
+        userEntity.setFirstName("khanh");
+        userEntity.setLastName("nguyen");
         userEntity.setRoleEntities(roleEntities);
         userRepository.save(userEntity);
 
