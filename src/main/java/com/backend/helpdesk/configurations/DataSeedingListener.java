@@ -67,13 +67,16 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES");
 
         Set<RoleEntity> roleEntities = new HashSet<>();
         roleEntities.add(roleRepository.findByName("ROLE_ADMIN").get());
         roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
         roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
-        UserEntity userEntity = userRepository.findByEmail("minhhuynh@novahub.vn").get();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("khanhnguyen@novahub.vn");
+        userEntity.setPassword(new BCryptPasswordEncoder().encode("khanhnguyen@novahub.vn"));
+        userEntity.setFirstName("khanh");
+        userEntity.setLastName("nguyen");
         userEntity.setRoleEntities(roleEntities);
         userRepository.save(userEntity);
 
