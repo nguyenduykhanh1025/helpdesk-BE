@@ -52,21 +52,21 @@ public class DayOffService {
         return userEntity.getId();
     }
 
-    public List<DayOff> getAllDayOff() {
-        return dayOffRepository.findAll();
+    public List<DayOffDTO> getAllDayOff() {
+        return dayOffDayOffDTOConverter.convert(dayOffRepository.findAll());
     }
 
-    public List<DayOff> getDayOffsByStatus(String enable) {
+    public List<DayOffDTO> getDayOffsByStatus(String enable) {
         Status status = statusRepository.findByName(enable).get();
         if (status == null) {
             throw new NotFoundException("Day off not found!");
         }
-        return dayOffRepository.findByStatus(status);
+        return dayOffDayOffDTOConverter.convert(dayOffRepository.findByStatus(status));
     }
 
     public long getNumberOfDayOffByUser(int id, int year) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity == null) {
+        if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
         Date startingDay = userEntity.get().getStartingDay();
@@ -86,7 +86,7 @@ public class DayOffService {
 
     public float getNumberOfDayOffUsed(int id, int year) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity == null) {
+        if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
@@ -100,7 +100,7 @@ public class DayOffService {
 
     public List<DayOffDTO> getListDayOffUsed(int id, Integer year) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity == null) {
+        if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
@@ -113,7 +113,7 @@ public class DayOffService {
 
     public float getNumberDayOffByUserRemaining(int id, int year) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity == null) {
+        if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
         return getNumberOfDayOffByUser(id, year) - getNumberOfDayOffUsed(id, year);
@@ -150,11 +150,11 @@ public class DayOffService {
     }
 
     public void deleteDayOff(int id) {
-        DayOff dayOff = dayOffRepository.findById(id);
-        if (dayOff == null) {
-            throw new NotFoundException("Day off not found!");
+        Optional<DayOff> dayOff=dayOffRepository.findById(id);
+        if(!dayOff.isPresent()){
+            throw new NotFoundException("Day off not found");
         }
-        dayOffRepository.delete(dayOff);
+        dayOffRepository.delete(dayOff.get());
     }
 
     public List<DayOffDTO> pagination(int sizeList, int indexPage, String valueSearch) {
@@ -170,22 +170,22 @@ public class DayOffService {
     }
 
     public DayOff acceptDayOff(int id){
-        DayOff dayOff=dayOffRepository.findById(id);
-        if(dayOff==null){
+        Optional<DayOff> dayOff=dayOffRepository.findById(id);
+        if(!dayOff.isPresent()){
             throw new NotFoundException("Day off not found");
         }
         Status status=statusRepository.findByName(Constants.APPROVED).get();
-        dayOff.setStatus(status);
-        return dayOffRepository.save(dayOff);
+        dayOff.get().setStatus(status);
+        return dayOffRepository.save(dayOff.get());
     }
 
     public DayOff rejectedDayOff(int id){
-        DayOff dayOff=dayOffRepository.findById(id);
-        if(dayOff==null){
+        Optional<DayOff> dayOff=dayOffRepository.findById(id);
+        if(!dayOff.isPresent()){
             throw new NotFoundException("Day off not found");
         }
         Status status=statusRepository.findByName(Constants.REJECTED).get();
-        dayOff.setStatus(status);
-        return dayOffRepository.save(dayOff);
+        dayOff.get().setStatus(status);
+        return dayOffRepository.save(dayOff.get());
     }
 }

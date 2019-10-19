@@ -28,13 +28,13 @@ public class DayOffController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
-    public List<DayOff> getAllDayOffs() {
+    public List<DayOffDTO> getAllDayOffs() {
         return dayOffService.getAllDayOff();
     }
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping("enable")
-    public List<DayOff> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
+    public List<DayOffDTO> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
         return dayOffService.getDayOffsByStatus(enable);
     }
 
