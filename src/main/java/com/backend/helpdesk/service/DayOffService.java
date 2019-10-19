@@ -100,7 +100,7 @@ public class DayOffService {
 
     public List<DayOffDTO> getListDayOffUsed(int id, Integer year) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity == null) {
+        if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
