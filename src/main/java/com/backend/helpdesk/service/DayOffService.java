@@ -104,8 +104,8 @@ public class DayOffService {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
-            Status status=statusRepository.findByName("approved").get();
-            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity.get(),status));
+            Optional<Status> status=statusRepository.findByName(Constants.APPROVED);
+            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity.get(),status.get()));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         return dayOffDayOffDTOConverter.convert(dayOffs);
