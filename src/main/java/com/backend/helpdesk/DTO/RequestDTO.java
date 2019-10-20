@@ -12,12 +12,12 @@ public class RequestDTO {
     private int id;
 
     @NotNull
-    private int idRequestType;
+    private RequestTypeDTO requestType;
 
     @NotNull
-    private int idUser;
+    private Profile user;
 
-    private int idStatus;
+    private StatusDTO status;
 
     @NotNull
     private Date dayRequest;
