@@ -85,7 +85,6 @@ public class RequestService {
 
     public RequestDTO addRequest(RequestDTO requestDTO){
 
-        requestDTO.setId(0);
         requestDTO.setStatus(convertStatusToStatusDTO.convert(statusRepository.findByName("WAITING").get()));
         requestDTO.setCreateAt(new Date());
         RequestEntity request = requestRepository.save(convertRequestDTOToRequest.convert(requestDTO));
