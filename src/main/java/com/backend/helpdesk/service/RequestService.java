@@ -54,6 +54,10 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(requestRepository.findAll());
     }
 
+    public int getSize(){
+        return requestRepository.findAll().size();
+    }
+
     public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search){
 
         List<RequestEntity> requestEntities =  this.search(search);
