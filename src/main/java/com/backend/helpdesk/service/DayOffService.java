@@ -133,7 +133,7 @@ public class DayOffService {
         int yearStart = localDateStart.getYear();
 
         //number of day off remaining this year
-        float numberOfDayOffRemainingThisYear = getNumberDayOffByUserRemaining(dayOffDTO.getUserEntity(), yearStart);
+        float numberOfDayOffRemainingThisYear = getNumberDayOffByUserRemaining(getUserId(), yearStart);
         if (numberOfDayOff > numberOfDayOffRemainingThisYear) {
             throw new BadRequestException("The number of days left is not enough!");
         }
@@ -142,10 +142,16 @@ public class DayOffService {
         if (yearStart != yearEnd && yearEnd != Calendar.getInstance().get(Calendar.YEAR)) {
             throw new BadRequestException("Please register day off this year!");
         }
+        long dayStart=dayOffDTO.getDayStartOff().getTime();
+        long dayEnd=dayOffDTO.getDayEndOff().getTime();
+        if(dayStart>dayEnd){
+            throw new BadRequestException("Incorrect information");
+        }
         Date date = new Date(System.currentTimeMillis());
         dayOffDTO.setUserEntity(getUserId());
         dayOffDTO.setCreateAt(date);
-        dayOffDTO.setStatus(1);
+        dayOffDTO.setStatus(statusRepository.findByName(Constants.PENDING).get().getId());
+        int a=0;
         return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
     }
 
