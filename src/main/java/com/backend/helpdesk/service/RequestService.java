@@ -72,13 +72,17 @@ public class RequestService {
             requestEntities.clear();
             requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
         }
-        if(sortBy.equals("Request Type")){
+        if(sortBy.equals("Request Type")) {
             requestEntities.clear();
-            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
+            requestEntities = this.requestRepository.findByOrderByRequestTypeAsc();
+        }
+        if(sortBy.equals("Create At")){
+            requestEntities.clear();
+            requestEntities = this.requestRepository.findByOrderByCreateAtAsc();
         }
 
         int n = (page+1)*items;
-        if(n<requestEntities.size()) n= requestEntities.size();
+        if(n>requestEntities.size()) n= requestEntities.size();
 
         for(int i=page*items; i<n; i++){
             result.add(requestEntities.get(i));

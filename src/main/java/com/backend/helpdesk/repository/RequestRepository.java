@@ -10,6 +10,6 @@ public interface RequestRepository extends JpaRepository<RequestEntity, Integer>
     List<RequestEntity> findByUserEmail(String email);
     List<RequestEntity> findByStatusName(String statusName);
     List<RequestEntity> findByOrderByUserEmailAsc();
-    List<RequestEntity> findByOrderByStatusAsc();
     List<RequestEntity> findByOrderByRequestTypeAsc();
+    List<RequestEntity> findByOrderByCreateAtAsc();
 }
