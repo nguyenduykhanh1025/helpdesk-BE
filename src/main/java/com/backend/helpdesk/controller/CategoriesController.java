@@ -42,4 +42,10 @@ public class CategoriesController {
     public List<Categories> searchCategories(@RequestParam(name = "valueSearch") String valueSearch) {
         return categoriesService.searchCategories(valueSearch);
     }
+
+    @PutMapping
+    public void editCategories(@RequestBody @Validated Categories categories){
+        categoriesService.editCategories(categories);
+    }
+
 }
