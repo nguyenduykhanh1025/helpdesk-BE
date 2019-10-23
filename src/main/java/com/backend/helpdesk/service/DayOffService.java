@@ -165,6 +165,14 @@ public class DayOffService {
         if(!dayOffType.isPresent()){
             throw new NotFoundException("Day off type not found");
         }
+
+        Calendar calStart=Calendar.getInstance();
+        calStart.setTime(dayOffDTO.getDayStartOff());
+        Calendar calEnd=Calendar.getInstance();
+        calEnd.setTime(dayOffDTO.getDayEndOff());
+        if(!((calStart.get(Calendar.HOUR)==8 && calStart.get(Calendar.HOUR)==12 )||( calEnd.get(Calendar.HOUR)==12 && calEnd.get(Calendar.HOUR)==18))){
+            throw new BadRequestException("Wrong time format");
+        }
         Date date = new Date(System.currentTimeMillis());
         dayOffDTO.setUserEntity(userEntityProfileConverter.convert(userRepository.findById(getUserId()).get()));
         dayOffDTO.setCreateAt(date);
