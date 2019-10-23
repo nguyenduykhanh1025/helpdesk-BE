@@ -54,7 +54,13 @@ public class SkillsController {
     }
 
     @GetMapping("/user")
-    public List<Skills> getSkillFollowUser(@RequestParam int idUser){
+    public List<Skills> getSkillFollowUser(@RequestParam int idUser) {
         return skillsService.getSkillFollowIdUser(idUser);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @DeleteMapping("/{id}")
+    public void DeleteSkill(@PathVariable int id) {
+        this.skillsService.deleteSkill(id);
     }
 }

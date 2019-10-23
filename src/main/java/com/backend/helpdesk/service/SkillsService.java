@@ -138,4 +138,20 @@ public class SkillsService {
         }
         throw new UserNotFoundException();
     }
+
+    public void deleteSkill(int idSkill) {
+        Optional<SkillsEntity> skillsEntityOpt = skillsRepository.findById(idSkill);
+        if (skillsEntityOpt.isPresent()) {
+            SkillsEntity skillsEntity = skillsEntityOpt.get();
+            // delete skill in table user
+            for (UserEntity userEntity : skillsEntity.getUserEntities()) {
+                userEntity.getSkillsEntities().remove(skillsEntity);
+                userRepository.save(userEntity);
+            }
+            // delete skill in table skill
+            skillsRepository.delete(skillsEntity);
+        } else {
+            throw new SkillsNotFound();
+        }
+    }
 }
