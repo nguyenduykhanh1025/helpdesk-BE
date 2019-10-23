@@ -1,5 +1,6 @@
 package com.backend.helpdesk.DTO;
 
+import com.backend.helpdesk.entity.DayOffType;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,9 +17,9 @@ public class DayOffDTO {
 
     private String description;
 
-    int dayOffType;
+    DayOffTypeDTO dayOffType;
 
-    int userEntity;
+    Profile userEntity;
 
-    int status;
+    StatusDTO status;
 }

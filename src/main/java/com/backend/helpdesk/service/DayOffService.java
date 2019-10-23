@@ -1,18 +1,23 @@
 package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.DayOffDTO;
+import com.backend.helpdesk.DTO.Profile;
+import com.backend.helpdesk.DTO.StatusDTO;
 import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.common.Constants;
-import com.backend.helpdesk.converter.Converter;
+import com.backend.helpdesk.converters.bases.Converter;
 import com.backend.helpdesk.entity.DayOff;
+import com.backend.helpdesk.entity.DayOffType;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.exception.UserException.BadRequestException;
 import com.backend.helpdesk.exception.UserException.NotFoundException;
 import com.backend.helpdesk.repository.DayOffRepository;
+import com.backend.helpdesk.repository.DayOffTypeRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
-import com.backend.helpdesk.respone.NumberOfDayOff;
+import com.backend.helpdesk.response.NumberOfDayOff;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +46,15 @@ public class DayOffService {
 
     @Autowired
     private Converter<DayOffDTO, DayOff> dayOffDTODayOffConverter;
+
+    @Autowired
+    private Converter<UserEntity, Profile> userEntityProfileConverter;
+
+    @Autowired
+    private Converter<Status, StatusDTO> statusStatusDTOConverter;
+
+    @Autowired
+    private DayOffTypeRepository dayOffTypeRepository;
 
     @Autowired
     private CommonMethods commonMethods;
@@ -104,8 +118,7 @@ public class DayOffService {
             throw new NotFoundException("User not found!");
         }
         if(year==null){
-            Optional<Status> status=statusRepository.findByName(Constants.APPROVED);
-            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntityAndStatus(userEntity.get(),status.get()));
+            return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntity(userEntity.get()));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
         return dayOffDayOffDTOConverter.convert(dayOffs);
@@ -147,11 +160,23 @@ public class DayOffService {
         if(dayStart>dayEnd){
             throw new BadRequestException("Incorrect information");
         }
+
+        Optional<DayOffType> dayOffType=dayOffTypeRepository.findById(dayOffDTO.getDayOffType().getId());
+        if(!dayOffType.isPresent()){
+            throw new NotFoundException("Day off type not found");
+        }
+
+        Calendar calStart=Calendar.getInstance();
+        calStart.setTime(dayOffDTO.getDayStartOff());
+        Calendar calEnd=Calendar.getInstance();
+        calEnd.setTime(dayOffDTO.getDayEndOff());
+        if(!((calStart.get(Calendar.HOUR)==8 && calStart.get(Calendar.HOUR)==12 )||( calEnd.get(Calendar.HOUR)==12 && calEnd.get(Calendar.HOUR)==18))){
+            throw new BadRequestException("Wrong time format");
+        }
         Date date = new Date(System.currentTimeMillis());
-        dayOffDTO.setUserEntity(getUserId());
+        dayOffDTO.setUserEntity(userEntityProfileConverter.convert(userRepository.findById(getUserId()).get()));
         dayOffDTO.setCreateAt(date);
-        dayOffDTO.setStatus(statusRepository.findByName(Constants.PENDING).get().getId());
-        int a=0;
+        dayOffDTO.setStatus(statusStatusDTOConverter.convert(statusRepository.findByName(Constants.PENDING).get()));
         return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
     }
 

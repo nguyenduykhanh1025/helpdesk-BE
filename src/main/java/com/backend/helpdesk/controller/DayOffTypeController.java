@@ -1,5 +1,6 @@
 package com.backend.helpdesk.controller;
 
+import com.backend.helpdesk.DTO.DayOffTypeDTO;
 import com.backend.helpdesk.entity.DayOffType;
 import com.backend.helpdesk.service.DayOffTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +19,26 @@ public class DayOffTypeController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
-    public List<DayOffType> getAllDayOffType(){
+    public List<DayOffTypeDTO> getAllDayOffType(){
         return dayOffTypeService.getAllDayOffType();
     }
 
     @Secured("ROLE_ADMIN")
     @PostMapping
-    public DayOffType addDayOffType(@Valid @RequestBody DayOffType dayOffType){
-        return dayOffTypeService.addDayOffType(dayOffType);
+    public DayOffType addDayOffType(@Valid @RequestBody DayOffTypeDTO dayOffTypeDTO){
+        return dayOffTypeService.addDayOffType(dayOffTypeDTO);
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public void deleteDayOffType(@PathVariable("id") int id){
         dayOffTypeService.deleteDayOffType(id);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/{id}")
+    public DayOffType deleteDayOffType(@PathVariable("id") int id,@Valid @RequestBody DayOffTypeDTO dayOffTypeDTO){
+        return dayOffTypeService.editDayOffType(id,dayOffTypeDTO);
     }
 
 }
