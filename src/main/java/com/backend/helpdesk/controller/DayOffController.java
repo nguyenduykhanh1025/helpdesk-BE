@@ -3,11 +3,10 @@ package com.backend.helpdesk.controller;
 import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.DTO.DayOffDTO;
-import com.backend.helpdesk.respone.NumberOfDayOff;
+import com.backend.helpdesk.response.NumberOfDayOff;
 import com.backend.helpdesk.service.DayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

@@ -1,4 +1,4 @@
-package com.backend.helpdesk.respone;
+package com.backend.helpdesk.response;
 
 import lombok.Data;
 
