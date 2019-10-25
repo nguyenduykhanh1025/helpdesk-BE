@@ -16,7 +16,6 @@ public class CommonMethods {
 
     public boolean isEmailNovaHub(String email) {
         String query = "[a-z][a-z0-9_\\.]{5,32}@novahub.vn";
-
         return Pattern.matches(query, email);
     }
 
