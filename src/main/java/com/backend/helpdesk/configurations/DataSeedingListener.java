@@ -86,12 +86,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addStatusIfMissing("DENIED");
         addStatusIfMissing("WAITING");
 
-        addRequestTypeIfMissing("Ứng tiền lương");
-        addRequestTypeIfMissing("Xin cty sponsor tổ chức party");
-        addRequestTypeIfMissing("Xin lên trễ / về sớm ngày nào đó");
-        addRequestTypeIfMissing("Xin refund tiền bảo hiểm");
-        addRequestTypeIfMissing("Đăng ký ngày khám bệnh");
-
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")

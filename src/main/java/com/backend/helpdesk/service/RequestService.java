@@ -54,8 +54,8 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(requestRepository.findAll());
     }
 
-    public int getSize(){
-        return requestRepository.findAll().size();
+    public int getSize(String search){
+        return requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(search,search,search,search).size();
     }
 
     public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search){
@@ -66,19 +66,19 @@ public class RequestService {
 
         if(sortBy.equals("Email")){
             requestEntities.clear();
-            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
+            requestEntities = this.requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByUserEmailAsc(search,search,search,search);
         }
         if(sortBy.equals("Status")){
             requestEntities.clear();
-            requestEntities = this.requestRepository.findByOrderByUserEmailAsc();
+            requestEntities = this.requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByStatusNameAsc(search,search,search,search);
         }
         if(sortBy.equals("Request Type")) {
             requestEntities.clear();
-            requestEntities = this.requestRepository.findByOrderByRequestTypeAsc();
+            requestEntities = this.requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByRequestTypeNameAsc(search,search,search,search);
         }
         if(sortBy.equals("Create At")){
             requestEntities.clear();
-            requestEntities = this.requestRepository.findByOrderByCreateAtAsc();
+            requestEntities = this.requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByCreateAtAsc(search,search,search,search);
         }
 
         int n = (page+1)*items;

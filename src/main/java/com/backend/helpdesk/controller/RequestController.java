@@ -26,8 +26,8 @@ public class RequestController {
     }
 
     @GetMapping("/get-size")
-    public int getSize(){
-        return requestService.getSize();
+    public int getSize(@RequestParam String search){
+        return requestService.getSize(search);
     }
 
     @PostMapping
