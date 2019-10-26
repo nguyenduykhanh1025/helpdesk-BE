@@ -19,26 +19,32 @@ public class DayOffTypeController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
-    public List<DayOffTypeDTO> getAllDayOffType(){
+    public List<DayOffTypeDTO> getAllDayOffType() {
         return dayOffTypeService.getAllDayOffType();
+    }
+
+    @Secured("ROLE_EMPLOYEES")
+    @GetMapping("/{id}")
+    public DayOffTypeDTO getDayOffTypeById(@PathVariable("id") int id) {
+        return dayOffTypeService.getdayOffTypeById(id);
     }
 
     @Secured("ROLE_ADMIN")
     @PostMapping
-    public DayOffType addDayOffType(@Valid @RequestBody DayOffTypeDTO dayOffTypeDTO){
+    public DayOffType addDayOffType(@Valid @RequestBody DayOffTypeDTO dayOffTypeDTO) {
         return dayOffTypeService.addDayOffType(dayOffTypeDTO);
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public void deleteDayOffType(@PathVariable("id") int id){
+    public void deleteDayOffType(@PathVariable("id") int id) {
         dayOffTypeService.deleteDayOffType(id);
     }
 
     @Secured("ROLE_ADMIN")
     @PutMapping("/{id}")
-    public DayOffType deleteDayOffType(@PathVariable("id") int id,@Valid @RequestBody DayOffTypeDTO dayOffTypeDTO){
-        return dayOffTypeService.editDayOffType(id,dayOffTypeDTO);
+    public DayOffType deleteDayOffType(@PathVariable("id") int id, @Valid @RequestBody DayOffTypeDTO dayOffTypeDTO) {
+        return dayOffTypeService.editDayOffType(id, dayOffTypeDTO);
     }
 
 }
