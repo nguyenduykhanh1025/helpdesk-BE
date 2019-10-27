@@ -5,13 +5,19 @@ import com.backend.helpdesk.repository.RequestTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RequestTypeService {
     @Autowired
     private RequestTypeRepository requestTypeRepository;
 
-    public RequestType getNameRequestTypeById(int id){
+    public RequestType getRequestTypeById(int id){
         return requestTypeRepository.findById(id).get();
+    }
+
+    public List<RequestType> getAllRequestType(){
+        return requestTypeRepository.findAll();
     }
 
     public void addRequestType(String nameRequestType){
@@ -23,4 +29,6 @@ public class RequestTypeService {
     public void updateRequestType(RequestType requestType){
         requestTypeRepository.save(requestType);
     }
+
+    public void deleteRequestType(int id) { requestTypeRepository.deleteById(id);}
 }
