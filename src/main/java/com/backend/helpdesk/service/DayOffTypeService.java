@@ -30,8 +30,16 @@ public class DayOffTypeService {
         return dayOffTypeDayOffTypeDTOConverter.convert(dayOffTypeRepository.findAll());
     }
 
+    public DayOffTypeDTO getdayOffTypeById(int id) {
+        Optional<DayOffType> dayOffType = dayOffTypeRepository.findById(id);
+        if (!dayOffType.isPresent()) {
+            throw new BadRequestException("Day off type not found");
+        }
+        return dayOffTypeDayOffTypeDTOConverter.convert(dayOffType.get());
+    }
+
     public DayOffType addDayOffType(DayOffTypeDTO dayOffTypeDTO) {
-        Optional<DayOffType> dayOffType=dayOffTypeRepository.findByName(dayOffTypeDTO.getName());
+        Optional<DayOffType> dayOffType = dayOffTypeRepository.findByName(dayOffTypeDTO.getName());
         if (dayOffType.isPresent()) {
             throw new BadRequestException("Day off type is existed");
         }
@@ -39,7 +47,7 @@ public class DayOffTypeService {
     }
 
     public void deleteDayOffType(int id) {
-        Optional<DayOffType> dayOffType=dayOffTypeRepository.findById(id);
+        Optional<DayOffType> dayOffType = dayOffTypeRepository.findById(id);
         if (!dayOffType.isPresent()) {
             throw new NotFoundException("Day off type not found!");
         }
@@ -51,7 +59,7 @@ public class DayOffTypeService {
         if (!dayOffType.isPresent()) {
             throw new NotFoundException("day off type not found");
         }
-        Optional<DayOffType> dayOffType1=dayOffTypeRepository.findByName(dayOffTypeDTO.getName());
+        Optional<DayOffType> dayOffType1 = dayOffTypeRepository.findByName(dayOffTypeDTO.getName());
         if (dayOffType1.isPresent()) {
             throw new BadRequestException("Day off type is existed");
         }
