@@ -32,6 +32,12 @@ public class DayOffController {
     }
 
     @Secured("ROLE_EMPLOYEES")
+    @GetMapping("/{id}")
+    public DayOffDTO getDayOffById(@PathVariable("id") int id) {
+        return dayOffService.getDayOffById(id);
+    }
+
+    @Secured("ROLE_EMPLOYEES")
     @GetMapping("enable")
     public List<DayOffDTO> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
         return dayOffService.getDayOffsByStatus(enable);

@@ -59,10 +59,10 @@ public class DayOffService {
     @Autowired
     private CommonMethods commonMethods;
 
-    public int getUserId(){
+    public int getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email=authentication.getName();
-        UserEntity userEntity=userRepository.findByEmail(email).get();
+        String email = authentication.getName();
+        UserEntity userEntity = userRepository.findByEmail(email).get();
         return userEntity.getId();
     }
 
@@ -70,12 +70,20 @@ public class DayOffService {
         return dayOffDayOffDTOConverter.convert(dayOffRepository.findAll());
     }
 
-    public List<DayOffDTO> getDayOffsByStatus(String enable) {
-        Status status = statusRepository.findByName(enable).get();
-        if (status == null) {
-            throw new NotFoundException("Day off not found!");
+    public DayOffDTO getDayOffById(int id) {
+        Optional<DayOff> dayOff = dayOffRepository.findById(id);
+        if (!dayOff.isPresent()) {
+            throw new NotFoundException("Day off not found");
         }
-        return dayOffDayOffDTOConverter.convert(dayOffRepository.findByStatus(status));
+        return dayOffDayOffDTOConverter.convert(dayOff.get());
+    }
+
+    public List<DayOffDTO> getDayOffsByStatus(String enable) {
+        Optional<Status> status = statusRepository.findByName(enable);
+        if (!status.isPresent()) {
+            throw new NotFoundException("Status not found!");
+        }
+        return dayOffDayOffDTOConverter.convert(dayOffRepository.findByStatus(status.get()));
     }
 
     public long getNumberOfDayOffByUser(int id, int year) {
@@ -84,7 +92,7 @@ public class DayOffService {
             throw new NotFoundException("User not found!");
         }
         Date startingDay = userEntity.get().getStartingDay();
-        if(startingDay==null){
+        if (startingDay == null) {
             throw new BadRequestException("Incomplete information");
         }
         Calendar calendar = Calendar.getInstance();
@@ -117,7 +125,7 @@ public class DayOffService {
         if (!userEntity.isPresent()) {
             throw new NotFoundException("User not found!");
         }
-        if(year==null){
+        if (year == null) {
             return dayOffDayOffDTOConverter.convert(dayOffRepository.findByUserEntity(userEntity.get()));
         }
         List<DayOff> dayOffs = dayOffRepository.getDayOffByYear(year, id);
@@ -132,8 +140,8 @@ public class DayOffService {
         return getNumberOfDayOffByUser(id, year) - getNumberOfDayOffUsed(id, year);
     }
 
-    public NumberOfDayOff getNumberOffDayOff(int id,int year){
-        NumberOfDayOff numberOfDayOff=new NumberOfDayOff();
+    public NumberOfDayOff getNumberOffDayOff(int id, int year) {
+        NumberOfDayOff numberOfDayOff = new NumberOfDayOff();
         numberOfDayOff.setUsed(getNumberOfDayOffUsed(id, year));
         numberOfDayOff.setRemaining(getNumberDayOffByUserRemaining(id, year));
         return numberOfDayOff;
@@ -145,7 +153,7 @@ public class DayOffService {
         LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearStart = localDateStart.getYear();
 
-        System.out.println("asdasdasdadas: " +  getUserId());
+        System.out.println("asdasdasdadas: " + getUserId());
         //number of day off remaining this year
         float numberOfDayOffRemainingThisYear = getNumberDayOffByUserRemaining(getUserId(), yearStart);
         if (numberOfDayOff > numberOfDayOffRemainingThisYear) {
@@ -156,22 +164,22 @@ public class DayOffService {
         if (yearStart != yearEnd && yearEnd != Calendar.getInstance().get(Calendar.YEAR)) {
             throw new BadRequestException("Please register day off this year!");
         }
-        long dayStart=dayOffDTO.getDayStartOff().getTime();
-        long dayEnd=dayOffDTO.getDayEndOff().getTime();
-        if(dayStart>dayEnd){
+        long dayStart = dayOffDTO.getDayStartOff().getTime();
+        long dayEnd = dayOffDTO.getDayEndOff().getTime();
+        if (dayStart > dayEnd) {
             throw new BadRequestException("Incorrect information");
         }
 
-        Optional<DayOffType> dayOffType=dayOffTypeRepository.findById(dayOffDTO.getDayOffType().getId());
-        if(!dayOffType.isPresent()){
+        Optional<DayOffType> dayOffType = dayOffTypeRepository.findById(dayOffDTO.getDayOffType().getId());
+        if (!dayOffType.isPresent()) {
             throw new NotFoundException("Day off type not found");
         }
 
-        Calendar calStart=Calendar.getInstance();
+        Calendar calStart = Calendar.getInstance();
         calStart.setTime(dayOffDTO.getDayStartOff());
-        Calendar calEnd=Calendar.getInstance();
+        Calendar calEnd = Calendar.getInstance();
         calEnd.setTime(dayOffDTO.getDayEndOff());
-        if(!((calStart.get(Calendar.HOUR)==8 && calStart.get(Calendar.HOUR)==12 )||( calEnd.get(Calendar.HOUR)==12 && calEnd.get(Calendar.HOUR)==18))){
+        if (!((calStart.get(Calendar.HOUR) == 8 && calStart.get(Calendar.HOUR) == 12) || (calEnd.get(Calendar.HOUR) == 12 && calEnd.get(Calendar.HOUR) == 18))) {
             throw new BadRequestException("Wrong time format");
         }
         Date date = new Date(System.currentTimeMillis());
@@ -182,15 +190,15 @@ public class DayOffService {
     }
 
     public void deleteDayOff(int id) {
-        Optional<DayOff> dayOff=dayOffRepository.findById(id);
-        if(!dayOff.isPresent()){
+        Optional<DayOff> dayOff = dayOffRepository.findById(id);
+        if (!dayOff.isPresent()) {
             throw new NotFoundException("Day off not found");
         }
         dayOffRepository.delete(dayOff.get());
     }
 
     public List<DayOffDTO> pagination(int sizeList, int indexPage, String valueSearch) {
-        if(indexPage<1){
+        if (indexPage < 1) {
             throw new BadRequestException("Page size must not be less than one");
         }
         List<DayOffDTO> dayOffDTOS = new ArrayList<>();
@@ -201,22 +209,22 @@ public class DayOffService {
         return dayOffDTOS;
     }
 
-    public DayOff acceptDayOff(int id){
-        Optional<DayOff> dayOff=dayOffRepository.findById(id);
-        if(!dayOff.isPresent()){
+    public DayOff acceptDayOff(int id) {
+        Optional<DayOff> dayOff = dayOffRepository.findById(id);
+        if (!dayOff.isPresent()) {
             throw new NotFoundException("Day off not found");
         }
-        Status status=statusRepository.findByName(Constants.APPROVED).get();
+        Status status = statusRepository.findByName(Constants.APPROVED).get();
         dayOff.get().setStatus(status);
         return dayOffRepository.save(dayOff.get());
     }
 
-    public DayOff rejectedDayOff(int id){
-        Optional<DayOff> dayOff=dayOffRepository.findById(id);
-        if(!dayOff.isPresent()){
+    public DayOff rejectedDayOff(int id) {
+        Optional<DayOff> dayOff = dayOffRepository.findById(id);
+        if (!dayOff.isPresent()) {
             throw new NotFoundException("Day off not found");
         }
-        Status status=statusRepository.findByName(Constants.REJECTED).get();
+        Status status = statusRepository.findByName(Constants.REJECTED).get();
         dayOff.get().setStatus(status);
         return dayOffRepository.save(dayOff.get());
     }
