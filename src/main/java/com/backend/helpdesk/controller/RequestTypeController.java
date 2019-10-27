@@ -1,5 +1,6 @@
 package com.backend.helpdesk.controller;
 
+import com.backend.helpdesk.DTO.RequestTypeDTO;
 import com.backend.helpdesk.entity.RequestType;
 import com.backend.helpdesk.service.RequestTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ public class RequestTypeController {
     private RequestTypeService requestTypeService;
 
     @GetMapping("/{id}")
-    public RequestType getRequestTypeById(@PathVariable int id){
+    public RequestTypeDTO getRequestTypeById(@PathVariable int id){
         return requestTypeService.getRequestTypeById(id);
     }
 
     @GetMapping
-    public List<RequestType> getAllRequestType(){
+    public List<RequestTypeDTO> getAllRequestType(){
         return requestTypeService.getAllRequestType();
     }
 
@@ -30,7 +31,7 @@ public class RequestTypeController {
     }
 
     @PutMapping
-    public void updateRequestType(@RequestBody RequestType requestType){
+    public void updateRequestType(@RequestBody RequestTypeDTO requestType){
         requestTypeService.updateRequestType(requestType);
     }
 

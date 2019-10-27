@@ -15,6 +15,15 @@ public class ConvertRequestTypeDTOToRequestType extends Converter<RequestTypeDTO
 
     @Override
     public RequestType convert(RequestTypeDTO requestTypeDTO){
-        return requestTypeRepository.findById(requestTypeDTO.getId()).get();
+
+        if(requestTypeDTO.getName()==null || requestTypeDTO.getName().equals(""))
+            return requestTypeRepository.findById(requestTypeDTO.getId()).get();
+        else
+        {
+            RequestType requestType = new RequestType();
+            requestType.setId(requestTypeDTO.getId());
+            requestType.setName(requestTypeDTO.getName());
+            return requestType;
+        }
     }
 }
