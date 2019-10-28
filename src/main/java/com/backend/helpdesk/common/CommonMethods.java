@@ -47,11 +47,11 @@ public class CommonMethods {
             }
             cal1.add(Calendar.DATE, 1);
         }
-        if (cal1.get(Calendar.HOUR) == 12 && cal2.get(Calendar.HOUR) == 12
+        if (cal1.get(Calendar.HOUR_OF_DAY) == 12 && cal2.get(Calendar.HOUR_OF_DAY) == 12
                 && cal1.get(Calendar.DAY_OF_MONTH) != cal2.get(Calendar.DAY_OF_MONTH)) {
             numberOfDays--;
-        } else if (cal1.get(Calendar.HOUR) == 8 && cal2.get(Calendar.HOUR) == 12
-                || cal1.get(Calendar.HOUR) == 12 && cal2.get(Calendar.HOUR) == 18) {
+        } else if (cal1.get(Calendar.HOUR_OF_DAY) == 8 && cal2.get(Calendar.HOUR_OF_DAY) == 12
+                || cal1.get(Calendar.HOUR_OF_DAY) == 12 && cal2.get(Calendar.HOUR_OF_DAY) == 18) {
             numberOfDays = numberOfDays - 0.5f;
         }
         return numberOfDays;
