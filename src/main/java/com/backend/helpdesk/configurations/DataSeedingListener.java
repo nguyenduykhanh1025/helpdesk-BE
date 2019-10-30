@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Configuration
@@ -76,15 +77,26 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-        addUserIfMissing("minhhuynh@novahub.vn", "minhhuynh@novahub.vn", "ROLE_EMPLOYEES");
+
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        roleEntities.add(roleRepository.findByName("ROLE_ADMIN").get());
+        roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
+        roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("khanhnguyen@novahub.vn");
+        userEntity.setPassword(new BCryptPasswordEncoder().encode("khanhnguyen@novahub.vn"));
+        userEntity.setFirstName("khanh");
+        userEntity.setLastName("nguyen");
+        userEntity.setRoleEntities(roleEntities);
+        userRepository.save(userEntity);
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
 
         addStatusIfMissing("APPROVED");
-        addStatusIfMissing("DENIED");
-        addStatusIfMissing("WAITING");
+        addStatusIfMissing("PENDING");
+        addStatusIfMissing("REJECTED");
 
         if(signingKey == null || signingKey.length() ==0){
             String jws = Jwts.builder()
