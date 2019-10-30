@@ -115,37 +115,19 @@ public class RequestService {
     }
 
     public RequestDTO putRequest(RequestDTO requestDTO){
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        RequestEntity requestEntity = requestRepository.save(convertRequestDTOToRequest.convert(requestDTO));
 
-//        boolean isAdmin = false;
-//
-//        for(RoleEntity role: userRepository.findByEmail(username).get().getRoleEntities()){
-//            if(role.getName()=="ROLE_ADMIN"){
-//                isAdmin=true;
-//                break;
-//            }
-//        }
+        Email email = new Email();
+        List<String> emails = new ArrayList<>();
+        emails.add(requestEntity.getUser().getEmail());
 
-//        if (isAdmin){
-            RequestEntity requestEntity = requestRepository.save(convertRequestDTOToRequest.convert(requestDTO));
+        email.setSendToEmail(emails);
+        email.setSubject(requestEntity.getRequestType().getName());
+        email.setText(requestEntity.getStatus().getName());
 
-            Email email = new Email();
-            List<String> emails = new ArrayList<>();
-            emails.add(requestEntity.getUser().getEmail());
+        emailController.sendEmail(email);
 
-            email.setSendToEmail(emails);
-            email.setSubject(requestEntity.getRequestType().getName());
-            email.setText(requestEntity.getStatus().getName());
-
-            emailController.sendEmail(email);
-
-            return convertRequestToRequestDTO.convert(requestEntity);
-//        }
-//        else {
-//            if(requestDTO.getStatus().getName().equals("APPROVED"))
-//                requestDTO.setStatus(statusRepository.findByName("WAITING").get());
-//            return convertRequestToRequestDTO.convert(requestRepository.save(convertRequestDTOToRequest.convert(requestDTO)));
-//        }
+        return convertRequestToRequestDTO.convert(requestEntity);
     }
 
     public void removeRequest(@RequestParam int id){

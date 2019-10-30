@@ -1,7 +1,6 @@
 package com.backend.helpdesk.controller;
 
 import com.backend.helpdesk.DTO.RequestTypeDTO;
-import com.backend.helpdesk.entity.RequestType;
 import com.backend.helpdesk.service.RequestTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,8 @@ public class RequestTypeController {
         requestTypeService.updateRequestType(requestType);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteRequestType(@PathVariable int id){
+    @DeleteMapping
+    public void deleteRequestType(@RequestParam int id){
         requestTypeService.deleteRequestType(id);
     }
 }
