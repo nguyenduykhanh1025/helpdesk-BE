@@ -1,5 +1,6 @@
 package com.backend.helpdesk.configurations;
 
+import com.backend.helpdesk.entity.RequestType;
 import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.Status;
 import com.backend.helpdesk.entity.UserEntity;
@@ -36,9 +37,18 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private SkillsRepository skillsRepository;
 
+    @Autowired
+    private RequestTypeRepository requestTypeRepository;
+
     private void addRoleIfMissing(String name) {
         if (!roleRepository.findByName(name).isPresent()) {
             roleRepository.save(new RoleEntity(name));
+        }
+    }
+
+    private void addRequestTypeIfMissing(String name){
+        if(!requestTypeRepository.findByName(name).isPresent()){
+            requestTypeRepository.save(new RequestType(name));
         }
     }
 

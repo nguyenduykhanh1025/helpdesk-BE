@@ -99,7 +99,7 @@ public class DayOffService {
         calendar.setTime(startingDay);
         int startingYear = calendar.get(Calendar.YEAR);
         if (startingYear > year) {
-            throw new BadRequestException("Bad request!");
+            throw new BadRequestException("Bad requestConverter!");
         }
         LocalDate startingLocalDate = startingDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate now = LocalDate.of(year, 12, 31);
@@ -148,7 +148,7 @@ public class DayOffService {
     }
 
     public DayOff addDayOff(DayOffDTO dayOffDTO) {
-        //number of day off register in request
+        //number of day off register in requestConverter
         float numberOfDayOff = commonMethods.calculateDaysBetweenTwoDate(dayOffDTO.getDayStartOff(), dayOffDTO.getDayEndOff());
         LocalDate localDateStart = dayOffDTO.getDayStartOff().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int yearStart = localDateStart.getYear();

@@ -9,7 +9,12 @@ public interface RequestRepository extends JpaRepository<RequestEntity, Integer>
     List<RequestEntity> findByRequestTypeName(String problemType);
     List<RequestEntity> findByUserEmail(String email);
     List<RequestEntity> findByStatusName(String statusName);
-    List<RequestEntity> findByOrderByUserEmailAsc();
-    List<RequestEntity> findByOrderByStatusAsc();
+    List<RequestEntity> findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByUserEmailAsc (String email, String status, String requestType, String description);
+    List<RequestEntity> findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByStatusNameAsc (String email, String status, String requestType, String description);
+    List<RequestEntity> findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByRequestTypeNameAsc (String email, String status, String requestType, String description);
+    List<RequestEntity> findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContainingOrderByCreateAtAsc (String email, String status, String requestType, String description);
     List<RequestEntity> findByOrderByRequestTypeAsc();
+    List<RequestEntity> findByOrderByCreateAtAsc();
+    List<RequestEntity> findByOrderByStatusNameAsc();
+    List<RequestEntity> findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(String email, String status, String requestType, String description);
 }
