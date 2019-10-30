@@ -3,11 +3,10 @@ package com.backend.helpdesk.controller;
 import com.backend.helpdesk.common.Constants;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.DTO.DayOffDTO;
-import com.backend.helpdesk.respone.NumberOfDayOff;
+import com.backend.helpdesk.response.NumberOfDayOff;
 import com.backend.helpdesk.service.DayOffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,13 +27,19 @@ public class DayOffController {
 
     @Secured("ROLE_EMPLOYEES")
     @GetMapping
-    public List<DayOff> getAllDayOffs() {
+    public List<DayOffDTO> getAllDayOffs() {
         return dayOffService.getAllDayOff();
     }
 
     @Secured("ROLE_EMPLOYEES")
+    @GetMapping("/{id}")
+    public DayOffDTO getDayOffById(@PathVariable("id") int id) {
+        return dayOffService.getDayOffById(id);
+    }
+
+    @Secured("ROLE_EMPLOYEES")
     @GetMapping("enable")
-    public List<DayOff> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
+    public List<DayOffDTO> getDayOffByEnable(@RequestParam(value = "enable", required = false) String enable) {
         return dayOffService.getDayOffsByStatus(enable);
     }
 

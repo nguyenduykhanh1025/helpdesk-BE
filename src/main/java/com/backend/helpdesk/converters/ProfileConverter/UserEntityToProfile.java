@@ -29,7 +29,7 @@ public class UserEntityToProfile extends Converter<UserEntity, Profile> {
         profile.setEmail(source.getEmail());
         profile.setFirstName(source.getFirstName());
         profile.setLastName(source.getLastName());
-        profile.setSex(source.isSex());
+        profile.setSex(source.getSex());
         profile.setStartingDay(source.getStartingDay());
 
         List<Skills> listSkills = new ArrayList<>();

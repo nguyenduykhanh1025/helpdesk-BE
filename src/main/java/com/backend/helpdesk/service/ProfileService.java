@@ -56,18 +56,23 @@ public class ProfileService {
         // add avatar default
         resultUserEntity.setAvatar(userEntity.getAvatar());
 
+        // add role default
+        resultUserEntity.setRoleEntities(userEntity.getRoleEntities());
+
         userRepository.save(resultUserEntity);
     }
 
-    public void uploadAvatar(byte[] avatar) {
+    public void uploadAvatar(byte[] avatar, int idUser) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
+        Optional<UserEntity> userEntityOpt = userRepository.findById(idUser);
+        if (userEntityOpt.isPresent()) {
+            UserEntity userEntity = userEntityOpt.get();
+            userEntity.setAvatar(avatar);
+            userRepository.save(userEntity);
 
-        UserEntity userEntity = userRepository.findByEmail(currentPrincipalName).get();
-        userEntity.setAvatar(avatar);
-
-        userRepository.save(userEntity);
+        } else {
+            throw new UserNotFoundException();
+        }
     }
 
     public Profile getProfileFollowIdUser(int idUser) {
