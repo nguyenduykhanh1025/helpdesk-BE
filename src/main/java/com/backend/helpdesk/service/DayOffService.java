@@ -163,11 +163,6 @@ public class DayOffService {
         if (yearStart != yearEnd && yearEnd != Calendar.getInstance().get(Calendar.YEAR)) {
             throw new BadRequestException("Please register day off this year!");
         }
-        long dayStart = dayOffDTO.getDayStartOff().getTime();
-        long dayEnd = dayOffDTO.getDayEndOff().getTime();
-        if (dayStart > dayEnd) {
-            throw new BadRequestException("Incorrect information");
-        }
 
         Optional<DayOffType> dayOffType = dayOffTypeRepository.findById(dayOffDTO.getDayOffType().getId());
         if (!dayOffType.isPresent()) {
@@ -178,9 +173,16 @@ public class DayOffService {
         calStart.setTime(dayOffDTO.getDayStartOff());
         Calendar calEnd = Calendar.getInstance();
         calEnd.setTime(dayOffDTO.getDayEndOff());
-        if (!((calStart.get(Calendar.HOUR) == 8 && calStart.get(Calendar.HOUR) == 12) || (calEnd.get(Calendar.HOUR) == 12 && calEnd.get(Calendar.HOUR) == 18))) {
+        if (!((calStart.get(Calendar.HOUR_OF_DAY) == 8 || calStart.get(Calendar.HOUR_OF_DAY) == 12) && (calEnd.get(Calendar.HOUR_OF_DAY) == 12 || calEnd.get(Calendar.HOUR_OF_DAY) == 18))) {
             throw new BadRequestException("Wrong time format");
         }
+
+        long dayStart = dayOffDTO.getDayStartOff().getTime();
+        long dayEnd = dayOffDTO.getDayEndOff().getTime();
+        if (dayStart > dayEnd) {
+            throw new BadRequestException("Incorrect information");
+        }
+
         Date date = new Date(System.currentTimeMillis());
         dayOffDTO.setUserEntity(userEntityProfileConverter.convert(userRepository.findById(getUserId()).get()));
         dayOffDTO.setCreateAt(date);
