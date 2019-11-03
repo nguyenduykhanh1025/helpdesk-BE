@@ -25,17 +25,17 @@ public class RequestTypeController {
     }
 
     @PostMapping
-    public void addRequestType(@RequestParam String nameRequestType){
-        requestTypeService.addRequestType(nameRequestType);
+    public RequestTypeDTO addRequestType(@RequestBody String nameRequestType){
+        return requestTypeService.addRequestType(nameRequestType);
     }
 
     @PutMapping
-    public void updateRequestType(@RequestBody RequestTypeDTO requestType){
-        requestTypeService.updateRequestType(requestType);
+    public List<RequestTypeDTO> updateRequestType(@RequestBody RequestTypeDTO requestType){
+        return requestTypeService.updateRequestType(requestType);
     }
 
-    @DeleteMapping
-    public void deleteRequestType(@RequestParam int id){
+    @DeleteMapping("/{id}")
+    public void deleteRequestType(@PathVariable int id){
         requestTypeService.deleteRequestType(id);
     }
 }
