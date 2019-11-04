@@ -25,6 +25,11 @@ public class RequestController {
         return requestService.searchRequestAndPagination(page,items,sortBy,search);
     }
 
+    @GetMapping("/get-size")
+    public int getSize(@RequestParam String search){
+        return requestService.getSize(search);
+    }
+
     @PostMapping
     public RequestDTO addRequest(@RequestBody @Valid RequestDTO requestDTO){
         return requestService.addRequest(requestDTO);

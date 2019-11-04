@@ -17,4 +17,8 @@ public class RequestType {
     private int id;
 
     private String name;
+
+    public RequestType(String name){
+        this.name = name;
+    }
 }
