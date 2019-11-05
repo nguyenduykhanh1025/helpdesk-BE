@@ -14,12 +14,10 @@ public class RequestDTO {
     @NotNull
     private RequestTypeDTO requestType;
 
-    @NotNull
     private Profile user;
 
     private StatusDTO status;
 
-    @NotNull
     private Date dayRequest;
 
     private Date createAt;

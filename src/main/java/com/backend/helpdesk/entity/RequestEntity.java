@@ -1,6 +1,5 @@
 package com.backend.helpdesk.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,19 +12,18 @@ import java.util.Date;
 public class RequestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonAlias("id")
     private int id;
 
-    @JsonAlias("id_request_type")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn
     private RequestType requestType;
 
-    @JsonAlias("id_status")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn
     private Status status;
 
-    @JsonAlias("id_user")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn
     private UserEntity user;
 
     private Date dayRequest;

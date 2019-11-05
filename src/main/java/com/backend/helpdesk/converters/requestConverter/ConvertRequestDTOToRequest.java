@@ -22,9 +22,8 @@ public class ConvertRequestDTOToRequest extends Converter<RequestDTO, RequestEnt
     private ConvertRequestTypeDTOToRequestType convertRequestTypeDTOToRequestType;
 
     @Override
-    public RequestEntity convert(RequestDTO requestDTO){
+    public RequestEntity convert(RequestDTO requestDTO) {
         RequestEntity requestEntity = new RequestEntity();
-
         requestEntity.setId(requestDTO.getId());
         requestEntity.setUser(userRepository.findById(requestDTO.getUser().getId()).get());
         requestEntity.setRequestType(convertRequestTypeDTOToRequestType.convert(requestDTO.getRequestType()));
@@ -32,7 +31,6 @@ public class ConvertRequestDTOToRequest extends Converter<RequestDTO, RequestEnt
         requestEntity.setCreateAt(requestDTO.getCreateAt());
         requestEntity.setDayRequest(requestDTO.getDayRequest());
         requestEntity.setDescription(requestDTO.getDescription());
-
         return requestEntity;
     }
 }
