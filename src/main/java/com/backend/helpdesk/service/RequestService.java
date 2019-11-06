@@ -48,10 +48,7 @@ public class RequestService {
     private ConvertStatusToStatusDTO convertStatusToStatusDTO;
 
     @Value("${emailAdmin1}")
-    String emailAdmin1;
-
-    @Value("${emailAdmin2}")
-    String emailAdmin2;
+    private List<String> emailAdmin;
 
     public List<RequestDTO> getAllRequest() {
         return convertRequestToRequestDTO.convert(requestRepository.findAll());
@@ -104,8 +101,7 @@ public class RequestService {
 
         Email email = new Email();
         List<String> emails = new ArrayList<>();
-        emails.add(emailAdmin1);
-        emails.add(emailAdmin2);
+        emails.addAll(emailAdmin);
         email.setSendToEmail(emails);
         email.setSubject(requestEntity.getRequestType().getName());
         email.setText("Request by email: " + requestEntity.getUser().getEmail() +
