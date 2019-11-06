@@ -65,8 +65,8 @@ public class DayOffService {
     @Autowired
     private EmailController emailController;
 
-    @Value("${spring.mail.emailAdmins}")
-    String emailAdmin;
+    @Value("#{'${emailAdmins}'.split(',')}")
+    private List<String> emailAdmins;
 
     public int getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -200,8 +200,7 @@ public class DayOffService {
         DayOff dayOff=dayOffDTODayOffConverter.convert(dayOffDTO);
 
         Email email = new Email();
-        List<String> emails = Arrays.asList(emailAdmin.split(","));
-        email.setSendToEmail(emails);
+        email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.SUBJECT_DAY_OFF);
         email.setText("Day off by email: " + dayOff.getUserEntity().getEmail() +
                 "\nDay off type: " + dayOff.getDayOffType().getName() +
@@ -242,8 +241,7 @@ public class DayOffService {
         Status status = statusRepository.findByName(Constants.APPROVED).get();
         dayOff.get().setStatus(status);
         Email email = new Email();
-        List<String> emails = Arrays.asList(emailAdmin.split(","));
-        email.setSendToEmail(emails);
+        email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.RESPONSE_DAY_OFF);
         email.setText("Accept request!");
         emailController.sendEmail(email);
@@ -259,8 +257,7 @@ public class DayOffService {
         dayOff.get().setStatus(status);
 
         Email email = new Email();
-        List<String> emails = Arrays.asList(emailAdmin.split(","));
-        email.setSendToEmail(emails);
+        email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.RESPONSE_DAY_OFF);
         email.setText("Reject request!");
         emailController.sendEmail(email);
