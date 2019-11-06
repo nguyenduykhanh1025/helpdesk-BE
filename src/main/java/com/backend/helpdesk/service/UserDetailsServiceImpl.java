@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component("userDetail")
@@ -23,21 +24,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity user = userRepository.findByEmail(email).get();
+        Optional<UserEntity> userOpt = userRepository.findByEmail(email);
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+        if (userOpt.isPresent()) {
+
+            UserEntity emailEntity = userOpt.get();
+
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+            Set<RoleEntity> roles = emailEntity.getRoleEntities();
+
+            for (RoleEntity role : roles) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+            }
+
+            return new org.springframework.security.core.userdetails.User(
+                    emailEntity.getEmail(), emailEntity.getPassword(), grantedAuthorities);
+
         }
 
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-
-        Set<RoleEntity> roles = user.getRoleEntities();
-
-        for (RoleEntity role : roles) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), grantedAuthorities);
+        throw new UsernameNotFoundException("User not found");
     }
 }
