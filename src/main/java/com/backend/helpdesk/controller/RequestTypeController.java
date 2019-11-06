@@ -3,6 +3,7 @@ package com.backend.helpdesk.controller;
 import com.backend.helpdesk.DTO.RequestTypeDTO;
 import com.backend.helpdesk.service.RequestTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,16 +25,19 @@ public class RequestTypeController {
         return requestTypeService.getAllRequestType();
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public RequestTypeDTO addRequestType(@RequestBody String nameRequestType){
         return requestTypeService.addRequestType(nameRequestType);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping
     public List<RequestTypeDTO> updateRequestType(@RequestBody RequestTypeDTO requestType){
         return requestTypeService.updateRequestType(requestType);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public void deleteRequestType(@PathVariable int id){
         requestTypeService.deleteRequestType(id);

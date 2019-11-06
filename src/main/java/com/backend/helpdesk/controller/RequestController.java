@@ -2,7 +2,6 @@ package com.backend.helpdesk.controller;
 import com.backend.helpdesk.DTO.RequestDTO;
 import com.backend.helpdesk.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,12 +34,13 @@ public class RequestController {
         return requestService.addRequest(request);
     }
 
+    @PutMapping
     public RequestDTO putRequest(@RequestBody @Valid RequestDTO requestDTO){
         return requestService.putRequest(requestDTO);
     }
 
-    @DeleteMapping
-    public void removeRequest(@RequestParam int id){
+    @DeleteMapping("/{id}")
+    public void removeRequest(@PathVariable int id){
         requestService.removeRequest(id);
     }
 }
