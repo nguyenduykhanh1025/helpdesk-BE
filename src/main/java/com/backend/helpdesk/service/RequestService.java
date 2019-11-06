@@ -105,7 +105,7 @@ public class RequestService {
         email.setSendToEmail(emails);
         email.setSubject(requestEntity.getRequestType().getName());
         email.setText("Request by email: " + requestEntity.getUser().getEmail() +
-                "\nRequest type: " + requestEntity.getRequestType().getName() +
+                "\nRequest type: " + requestEntity.getRequestType().getName().toUpperCase() +
                 "\nCreate At: " + requestEntity.getCreateAt() +
                 "\nDay request: " + requestEntity.getDayRequest() +
                 "\nDescription: " + requestEntity.getDescription());
