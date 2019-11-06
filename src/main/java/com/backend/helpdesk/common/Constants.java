@@ -11,6 +11,8 @@ public class Constants {
     public static final String APPROVED="APPROVED";
     public static final String REJECTED="REJECTED";
     public static final Integer PERSONAL=0;
+    public static final String SUBJECT_DAY_OFF="PERMISSION FORM";
+    public static final String RESPONSE_DAY_OFF ="RESPONSE";
 
     // const sort follow skill
     public static final int SORT_BY_NAME = 1;
