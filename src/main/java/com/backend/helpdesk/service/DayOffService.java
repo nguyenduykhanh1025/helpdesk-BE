@@ -5,6 +5,8 @@ import com.backend.helpdesk.DTO.Profile;
 import com.backend.helpdesk.DTO.StatusDTO;
 import com.backend.helpdesk.common.CommonMethods;
 import com.backend.helpdesk.common.Constants;
+import com.backend.helpdesk.common.Email;
+import com.backend.helpdesk.controller.EmailController;
 import com.backend.helpdesk.converters.bases.Converter;
 import com.backend.helpdesk.entity.DayOff;
 import com.backend.helpdesk.entity.DayOffType;
@@ -19,6 +21,7 @@ import com.backend.helpdesk.repository.UserRepository;
 import com.backend.helpdesk.response.NumberOfDayOff;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -58,6 +61,12 @@ public class DayOffService {
 
     @Autowired
     private CommonMethods commonMethods;
+
+    @Autowired
+    private EmailController emailController;
+
+    @Value("${spring.mail.emailAdmins}")
+    String emailAdmin;
 
     public int getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -187,7 +196,22 @@ public class DayOffService {
         dayOffDTO.setUserEntity(userEntityProfileConverter.convert(userRepository.findById(getUserId()).get()));
         dayOffDTO.setCreateAt(date);
         dayOffDTO.setStatus(statusStatusDTOConverter.convert(statusRepository.findByName(Constants.PENDING).get()));
-        return dayOffRepository.save(dayOffDTODayOffConverter.convert(dayOffDTO));
+
+        DayOff dayOff=dayOffDTODayOffConverter.convert(dayOffDTO);
+
+        Email email = new Email();
+        List<String> emails = Arrays.asList(emailAdmin.split(","));
+        email.setSendToEmail(emails);
+        email.setSubject(Constants.SUBJECT_DAY_OFF);
+        email.setText("Day off by email: " + dayOff.getUserEntity().getEmail() +
+                "\nDay off type: " + dayOff.getDayOffType().getName() +
+                "\nCreate At: " + dayOff.getCreateAt() +
+                "\nDay start: " + dayOff.getDayStartOff() +
+                "\nDay end: " + dayOff.getDayEndOff() +
+                "\nDescription: " + dayOff.getDescription());
+        emailController.sendEmail(email);
+
+        return dayOffRepository.save(dayOff);
     }
 
     public void deleteDayOff(int id) {
@@ -217,6 +241,12 @@ public class DayOffService {
         }
         Status status = statusRepository.findByName(Constants.APPROVED).get();
         dayOff.get().setStatus(status);
+        Email email = new Email();
+        List<String> emails = Arrays.asList(emailAdmin.split(","));
+        email.setSendToEmail(emails);
+        email.setSubject(Constants.RESPONSE_DAY_OFF);
+        email.setText("Accept request!");
+        emailController.sendEmail(email);
         return dayOffRepository.save(dayOff.get());
     }
 
@@ -227,6 +257,13 @@ public class DayOffService {
         }
         Status status = statusRepository.findByName(Constants.REJECTED).get();
         dayOff.get().setStatus(status);
+
+        Email email = new Email();
+        List<String> emails = Arrays.asList(emailAdmin.split(","));
+        email.setSendToEmail(emails);
+        email.setSubject(Constants.RESPONSE_DAY_OFF);
+        email.setText("Reject request!");
+        emailController.sendEmail(email);
         return dayOffRepository.save(dayOff.get());
     }
 }
