@@ -47,8 +47,11 @@ public class RequestService {
     @Autowired
     private ConvertStatusToStatusDTO convertStatusToStatusDTO;
 
-    @Value("${spring.mail.username}")
-    String emailAdmin;
+    @Value("${emailAdmin1}")
+    String emailAdmin1;
+
+    @Value("${emailAdmin2}")
+    String emailAdmin2;
 
     public List<RequestDTO> getAllRequest() {
         return convertRequestToRequestDTO.convert(requestRepository.findAll());
@@ -101,7 +104,8 @@ public class RequestService {
 
         Email email = new Email();
         List<String> emails = new ArrayList<>();
-        emails.add(emailAdmin);
+        emails.add(emailAdmin1);
+        emails.add(emailAdmin2);
         email.setSendToEmail(emails);
         email.setSubject(requestEntity.getRequestType().getName());
         email.setText("Request by email: " + requestEntity.getUser().getEmail() +
