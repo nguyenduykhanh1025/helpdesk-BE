@@ -2,18 +2,18 @@ package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.Profile;
 import com.backend.helpdesk.converters.bases.Converter;
+import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
 import com.backend.helpdesk.exception.UserException.UserNotFoundException;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ProfileService {
@@ -90,6 +90,17 @@ public class ProfileService {
             profiles.add(userEntityToProfile.convert(userEntity));
         }
         return profiles;
+    }
+
+    public boolean isAdmin(String emailUser){
+        Set<RoleEntity> roleEntities = this.userRepository.findByEmail(emailUser).get().getRoleEntities();
+
+        for(RoleEntity roleEntity : roleEntities) {
+            if (roleEntity.getName().equals("ROLE_ADMIN")){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

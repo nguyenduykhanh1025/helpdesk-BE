@@ -7,12 +7,15 @@ import com.backend.helpdesk.converters.bases.Converter;
 import com.backend.helpdesk.converters.requestConverter.ConvertRequestToRequestDTO;
 import com.backend.helpdesk.converters.statusConverter.ConvertStatusToStatusDTO;
 import com.backend.helpdesk.entity.RequestEntity;
+import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.RequestRepository;
 import com.backend.helpdesk.repository.RequestTypeRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,6 +49,9 @@ public class RequestService {
 
     @Autowired
     private ConvertStatusToStatusDTO convertStatusToStatusDTO;
+
+    @Autowired
+    private ProfileService profileService;
 
     @Value("#{'${emailAdmins}'.split(',')}")
     private List<String> emailAdmins;
@@ -93,7 +99,6 @@ public class RequestService {
 
     public RequestDTO addRequest(RequestDTO requestDTO) {
 
-
         requestDTO.setStatus(convertStatusToStatusDTO.convert(statusRepository.findByName("PENDING").get()));
         requestDTO.setCreateAt(new Date());
         RequestEntity requestEntity = requestDTORequestEntityConverter.convert(requestDTO);
@@ -115,23 +120,34 @@ public class RequestService {
     }
 
     public RequestDTO putRequest(RequestDTO requestDTO) {
-        RequestEntity requestEntity = requestRepository.save(requestDTORequestEntityConverter.convert(requestDTO));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
+        RequestEntity request = requestRepository.findById(requestDTO.getId()).get();
+        if (request.getUser().getId() == userEntity.getId() || profileService.isAdmin(userEntity.getEmail())) {
+            RequestEntity requestEntity = requestRepository.save(requestDTORequestEntityConverter.convert(requestDTO));
 
-        Email email = new Email();
-        List<String> emails = new ArrayList<>();
-        emails.add(requestEntity.getUser().getEmail());
+            Email email = new Email();
+            List<String> emails = new ArrayList<>();
+            emails.add(requestEntity.getUser().getEmail());
 
-        email.setSendToEmail(emails);
-        email.setSubject(requestEntity.getRequestType().getName());
-        email.setText(requestEntity.getStatus().getName());
+            email.setSendToEmail(emails);
+            email.setSubject(requestEntity.getRequestType().getName());
+            email.setText(requestEntity.getStatus().getName());
 
-        emailController.sendEmail(email);
+            emailController.sendEmail(email);
 
-        return convertRequestToRequestDTO.convert(requestEntity);
+            return convertRequestToRequestDTO.convert(requestEntity);
+        }
+        return convertRequestToRequestDTO.convert(request);
     }
 
     public void removeRequest(@RequestParam int id) {
-        requestRepository.deleteById(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
+        RequestEntity requestEntity = requestRepository.findById(id).get();
+        if (requestEntity.getUser().getId() == userEntity.getId() || profileService.isAdmin(userEntity.getEmail())) {
+            requestRepository.deleteById(id);
+        }
     }
 
     private List<RequestEntity> search(String keySearch) {
