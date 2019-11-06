@@ -7,6 +7,7 @@ import com.backend.helpdesk.converters.bases.Converter;
 import com.backend.helpdesk.converters.requestConverter.ConvertRequestToRequestDTO;
 import com.backend.helpdesk.converters.statusConverter.ConvertStatusToStatusDTO;
 import com.backend.helpdesk.entity.RequestEntity;
+import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.repository.RequestRepository;
 import com.backend.helpdesk.repository.RequestTypeRepository;
@@ -123,13 +124,20 @@ public class RequestService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
         RequestEntity request = requestRepository.findById(requestDTO.getId()).get();
-        if (request.getUser().getId() == userEntity.getId() || profileService.isAdmin(userEntity.getEmail())) {
-            RequestEntity requestEntity = requestRepository.save(requestDTORequestEntityConverter.convert(requestDTO));
 
+        boolean isAdmin = false;
+
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
+                isAdmin=true;
+            }
+        }
+
+        if (request.getUser().getId() == userEntity.getId() || isAdmin) {
+            RequestEntity requestEntity = requestRepository.save(requestDTORequestEntityConverter.convert(requestDTO));
             Email email = new Email();
             List<String> emails = new ArrayList<>();
             emails.add(requestEntity.getUser().getEmail());
-
             email.setSendToEmail(emails);
             email.setSubject(requestEntity.getRequestType().getName());
             email.setText(requestEntity.getStatus().getName());

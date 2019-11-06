@@ -51,10 +51,4 @@ public class ProfileController {
     public List<Profile> searchAllProfileByKeyword(String keyword) {
         return profileService.searchAllUserFollowKeyWord(keyword);
     }
-
-    @GetMapping("/isAdmin")
-    public boolean isAdmin(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return profileService.isAdmin(auth.getName());
-    }
 }

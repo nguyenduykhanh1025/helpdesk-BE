@@ -39,8 +39,8 @@ public class RequestController {
         return requestService.putRequest(requestDTO);
     }
 
-    @DeleteMapping
-    public void removeRequest(@RequestParam int id){
+    @DeleteMapping("/{id}")
+    public void removeRequest(@PathVariable int id){
         requestService.removeRequest(id);
     }
 }
