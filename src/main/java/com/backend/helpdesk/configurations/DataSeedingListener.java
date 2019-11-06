@@ -33,7 +33,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
     @Autowired
     private CategoriesRepository categoriesRepository;
-    
+
     @Autowired
     private SkillsRepository skillsRepository;
 
@@ -46,8 +46,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
     }
 
-    private void addRequestTypeIfMissing(String name){
-        if(!requestTypeRepository.findByName(name).isPresent()){
+    private void addRequestTypeIfMissing(String name) {
+        if (!requestTypeRepository.findByName(name).isPresent()) {
             requestTypeRepository.save(new RequestType(name));
         }
     }
@@ -65,8 +65,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
     }
 
-    private void addStatusIfMissing(String name){
-        if(!statusRepository.findByName(name).isPresent()){
+    private void addStatusIfMissing(String name) {
+        if (!statusRepository.findByName(name).isPresent()) {
             statusRepository.save(new Status(name));
         }
     }
@@ -78,18 +78,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-        Set<RoleEntity> roleEntities = new HashSet<>();
-        roleEntities.add(roleRepository.findByName("ROLE_ADMIN").get());
-        roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
-        roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("khanhnguyen@novahub.vn");
-        userEntity.setPassword(new BCryptPasswordEncoder().encode("khanhnguyen@novahub.vn"));
-        userEntity.setFirstName("khanh");
-        userEntity.setLastName("nguyen");
-        userEntity.setRoleEntities(roleEntities);
-        userRepository.save(userEntity);
-
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
@@ -98,7 +86,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addStatusIfMissing("PENDING");
         addStatusIfMissing("REJECTED");
 
-        if(signingKey == null || signingKey.length() ==0){
+        if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()
                     .setSubject("HelpDesk")
                     .signWith(SignatureAlgorithm.HS256, "helpdeskAPI").compact();

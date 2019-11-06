@@ -30,7 +30,7 @@ public class RequestTypeService {
 
         List<RequestTypeDTO> requestTypeDTOList = new ArrayList<>();
 
-        List<RequestType> requestTypeList = requestTypeRepository.findAll();
+        List<RequestType> requestTypeList = requestTypeRepository.findByOrderByNameAsc();
 
         for(RequestType requestType : requestTypeList){
             requestTypeDTOList.add(convertRequestTypeToRequestTypeDTO.convert(requestType));
@@ -39,15 +39,19 @@ public class RequestTypeService {
         return requestTypeDTOList;
     }
 
-    public void addRequestType(String nameRequestType){
+    public RequestTypeDTO addRequestType(String nameRequestType){
         if(!requestTypeRepository.findByName(nameRequestType).isPresent()){
-            requestTypeRepository.save(new RequestType(nameRequestType));
+            return convertRequestTypeToRequestTypeDTO.convert(requestTypeRepository.save(new RequestType(nameRequestType)));
         }
+        return null;
     }
 
-    public void updateRequestType(RequestTypeDTO requestType){
+    public List<RequestTypeDTO> updateRequestType(RequestTypeDTO requestType){
         requestTypeRepository.save(convertRequestTypeDTOToRequestType.convert(requestType));
+        return getAllRequestType();
     }
 
-    public void deleteRequestType(int id) { requestTypeRepository.deleteById(id);}
+    public void deleteRequestType(int id) {
+        requestTypeRepository.deleteById(id);
+    }
 }
