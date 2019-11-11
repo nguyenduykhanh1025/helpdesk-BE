@@ -153,7 +153,7 @@ public class RequestService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
         RequestEntity requestEntity = requestRepository.findById(id).get();
-        if (requestEntity.getUser().getId() == userEntity.getId() || profileService.isAdmin(userEntity.getEmail())) {
+        if (requestEntity.getUser().getId() == userEntity.getId()) {
             requestRepository.deleteById(id);
         }
     }
