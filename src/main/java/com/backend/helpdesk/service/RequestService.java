@@ -152,8 +152,18 @@ public class RequestService {
     public void removeRequest(@RequestParam int id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
+
+        boolean isAdmin = false;
+
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
+                isAdmin = true;
+                break;
+            }
+        }
+
         RequestEntity requestEntity = requestRepository.findById(id).get();
-        if (requestEntity.getUser().getId() == userEntity.getId() || profileService.isAdmin(userEntity.getEmail())) {
+        if (requestEntity.getUser().getId() == userEntity.getId() || isAdmin) {
             requestRepository.deleteById(id);
         }
     }
