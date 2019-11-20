@@ -65,6 +65,12 @@ public class RequestService {
         return requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(search, search, search, search).size();
     }
 
+    public List<RequestDTO> getAllRequestOfUserLogin(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        return convertRequestToRequestDTO.convert(requestRepository.findByUserEmail(auth.getName()));
+    }
+
     public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search) {
 
         List<RequestEntity> requestEntities = this.search(search);
@@ -110,7 +116,8 @@ public class RequestService {
         emails.addAll(emailAdmins);
         email.setSendToEmail(emails);
         email.setSubject(requestEntity.getRequestType().getName());
-        email.setText("Request by email: " + requestEntity.getUser().getEmail() +
+        email.setText(
+                "Request by email: " + requestEntity.getUser().getEmail() +
                 "\nRequest type: " + requestEntity.getRequestType().getName().toUpperCase() +
                 "\nCreate At: " + requestEntity.getCreateAt() +
                 "\nDay request: " + requestEntity.getDayRequest() +
