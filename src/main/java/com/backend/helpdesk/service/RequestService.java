@@ -65,6 +65,12 @@ public class RequestService {
         return requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(search, search, search, search).size();
     }
 
+    public List<RequestDTO> getAllRequestOfUserLogin(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        return convertRequestToRequestDTO.convert(requestRepository.findByUserEmail(auth.getName()));
+    }
+
     public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search) {
 
         List<RequestEntity> requestEntities = this.search(search);
