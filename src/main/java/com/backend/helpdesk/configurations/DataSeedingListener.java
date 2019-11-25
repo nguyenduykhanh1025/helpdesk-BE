@@ -81,7 +81,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(email);
-        userEntity.setPassword(email);
+        userEntity.setPassword( new BCryptPasswordEncoder().encode(email));
         userEntity.setEnable(true);
         userEntity.setFirstName(firstName);
         userEntity.setLastName(lastName);
