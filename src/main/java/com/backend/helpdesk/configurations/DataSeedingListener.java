@@ -15,7 +15,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -74,6 +76,21 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
+        UserEntity userEntitydelete = new UserEntity();
+        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
+        userRepository.delete(userEntitydelete);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("thangle@novahub.vn");
+        userEntity.setFirstName("Thang");
+        userEntity.setLastName("Le");
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        roleEntities.add(roleRepository.findByName("ROLE_ADMIN").get());
+        roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
+        roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
+        userEntity.setRoleEntities(roleEntities);
+
+
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
@@ -81,8 +98,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
-        addUserIfMissing("thangle@novahub.vn", "thangle@novahub.vn", "ROLE_ADMIN", "ROLE_EMPLOYEES");
-        addUserIfMissing("hoavo@novahub.vn", "hoavo@novahub.vn", "ROLE_ADMIN", "ROLE_EMPLOYEES");
 
         addStatusIfMissing("APPROVED");
         addStatusIfMissing("PENDING");
