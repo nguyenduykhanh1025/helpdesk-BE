@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Integer>{
     Optional<UserEntity> findByEmail(String email);
 
+    List<UserEntity> findAllByEmail(String email);
+
     @Query(
             value = "SELECT * FROM users\n" +
                     "where email like CONCAT('%', :keyword , '%')\n" +

@@ -74,9 +74,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     }
 
     void test(String email, String firstName, String lastName){
-        UserEntity userEntitydelete = new UserEntity();
-        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
-        userRepository.delete(userEntitydelete);
+        List<UserEntity> userEntitydelete = new ArrayList<>();
+        userEntitydelete = userRepository.findAllByEmail(email);
+        userRepository.deleteAll(userEntitydelete);
 
 
         UserEntity userEntity = new UserEntity();
