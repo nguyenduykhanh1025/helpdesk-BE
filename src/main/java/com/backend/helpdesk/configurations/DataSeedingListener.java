@@ -81,6 +81,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
+        addUserIfMissing("thangle@novahub.vn", "thangle@novahub.vn", "ROLE_ADMIN", "ROLE_EMPLOYEES");
+        addUserIfMissing("hoavo@novahub.vn", "hoavo@novahub.vn", "ROLE_ADMIN", "ROLE_EMPLOYEES");
 
         addStatusIfMissing("APPROVED");
         addStatusIfMissing("PENDING");
