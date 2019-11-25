@@ -89,7 +89,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
         roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
         userEntity.setRoleEntities(roleEntities);
-
+        userRepository.save(userEntity);
 
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
