@@ -76,12 +76,17 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
-        UserEntity userEntitydelete = new UserEntity();
-        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
-        userRepository.delete(userEntitydelete);
+//        UserEntity userEntitydelete = new UserEntity();
+//        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
+//        userRepository.delete(userEntitydelete);
+
+        addRoleIfMissing("ROLE_ADMIN");
+        addRoleIfMissing("ROLE_EMPLOYEES");
+        addRoleIfMissing("ROLE_SECRETARY");
 
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail("thangle@novahub.vn");
+        userEntity.setPassword("thangle@novahub.vn");
         userEntity.setFirstName("Thang");
         userEntity.setLastName("Le");
         Set<RoleEntity> roleEntities = new HashSet<>();
@@ -90,10 +95,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
         userEntity.setRoleEntities(roleEntities);
         userRepository.save(userEntity);
-
-        addRoleIfMissing("ROLE_ADMIN");
-        addRoleIfMissing("ROLE_EMPLOYEES");
-        addRoleIfMissing("ROLE_SECRETARY");
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
