@@ -73,28 +73,37 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
     }
 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    void test(String email, String firstName, String lastName){
+        UserEntity userEntitydelete = new UserEntity();
+        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
+        userRepository.delete(userEntitydelete);
 
-//        UserEntity userEntitydelete = new UserEntity();
-//        userEntitydelete = userRepository.findByEmail("thangle@novahub.vn").get();
-//        userRepository.delete(userEntitydelete);
-
-        addRoleIfMissing("ROLE_ADMIN");
-        addRoleIfMissing("ROLE_EMPLOYEES");
-        addRoleIfMissing("ROLE_SECRETARY");
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("thangle@novahub.vn");
-        userEntity.setPassword("thangle@novahub.vn");
-        userEntity.setFirstName("Thang");
-        userEntity.setLastName("Le");
+        userEntity.setEmail(email);
+        userEntity.setPassword(email);
+        userEntity.setEnable(true);
+        userEntity.setFirstName(firstName);
+        userEntity.setLastName(lastName);
         Set<RoleEntity> roleEntities = new HashSet<>();
         roleEntities.add(roleRepository.findByName("ROLE_ADMIN").get());
         roleEntities.add(roleRepository.findByName("ROLE_EMPLOYEES").get());
         roleEntities.add(roleRepository.findByName("ROLE_SECRETARY").get());
         userEntity.setRoleEntities(roleEntities);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+
+
+
+        addRoleIfMissing("ROLE_ADMIN");
+        addRoleIfMissing("ROLE_EMPLOYEES");
+        addRoleIfMissing("ROLE_SECRETARY");
+
+        test("thangle@novahub.vn", "Thang", "Le");
+        test("hoavo@novahub.vn", "Hoa", "Vo");
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
