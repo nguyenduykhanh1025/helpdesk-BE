@@ -44,6 +44,11 @@ public class RequestController {
         return requestService.putRequest(requestDTO);
     }
 
+    @GetMapping("/approvedRequest/{id}")
+    public RequestDTO approvedRequest(@PathVariable int id){
+        return requestService.approvedRequest(id);
+    }
+
     @DeleteMapping("/{id}")
     public void removeRequest(@PathVariable int id){
         requestService.removeRequest(id);

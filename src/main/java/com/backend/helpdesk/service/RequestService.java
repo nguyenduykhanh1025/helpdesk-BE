@@ -128,7 +128,10 @@ public class RequestService {
                 "    <th>Day Description</th>" +
                 "    <td>"+ requestEntity.getDescription() +"</td>" +
                 "  </tr>"+
-                "</table>";
+                "</table>"+
+                "<form method=\"get\" action=\"http://localhost:8081/api/requests/approvedRequest/" + requestEntity.getId() +"\">"+
+                "   <button type=\"submit\">APPROVED</button>"+
+                "</form>";
 
         Email email = new Email();
         List<String> emails = new ArrayList<>();
@@ -168,6 +171,26 @@ public class RequestService {
             return convertRequestToRequestDTO.convert(requestEntity);
         }
         return convertRequestToRequestDTO.convert(request);
+    }
+
+    public RequestDTO approvedRequest(int id){
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
+//
+//        boolean isAdmin = false;
+//
+//        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+//            if(roleEntity.getName().equals("ROLE_ADMIN")){
+//                isAdmin = true;
+//                break;
+//            }
+//        }
+
+        RequestEntity requestEntity = requestRepository.findById(id).get();
+           requestEntity.setStatus(statusRepository.findByName("APPROVED").get());
+           requestEntity = requestRepository.save(requestEntity);
+
+        return convertRequestToRequestDTO.convert(requestEntity);
     }
 
     public void removeRequest(@RequestParam int id) {
