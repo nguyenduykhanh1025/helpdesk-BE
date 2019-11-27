@@ -200,27 +200,28 @@ public class RequestService {
         }
         RequestEntity requestEntity = requestRepository.findById(id).get();
 
+        String html = status + " BY ADMIN: " + userEntity.getEmail() +
+                "<table style=\"width:100%\">" +
+                "  <tr>" +
+                "    <th>Request by email</th>" +
+                "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                "  </tr>" +
+                "  <tr>" +
+                "    <th>Request type</th>" +
+                "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                "  </tr>" +
+                "  <tr>" +
+                "    <th>Day request</th>" +
+                "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                "  </tr>" +
+                "  <tr>" +
+                "    <th>Day Description</th>" +
+                "    <td>" + requestEntity.getDescription() + "</td>" +
+                "  </tr>" +
+                "</table>";
+
         if(isAdmin) {
             if(requestEntity.getStatus().getName().equals("PENDING")) {
-                String html = status + " BY ADMIN: " + userEntity.getEmail() +
-                        "<table style=\"width:100%\">" +
-                        "  <tr>" +
-                        "    <th>Request by email</th>" +
-                        "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                        "  </tr>" +
-                        "  <tr>" +
-                        "    <th>Request type</th>" +
-                        "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                        "  </tr>" +
-                        "  <tr>" +
-                        "    <th>Day request</th>" +
-                        "    <td>" + requestEntity.getDayRequest() + "</td>" +
-                        "  </tr>" +
-                        "  <tr>" +
-                        "    <th>Day Description</th>" +
-                        "    <td>" + requestEntity.getDescription() + "</td>" +
-                        "  </tr>" +
-                        "</table>";
 
                 requestEntity.setStatus(statusRepository.findByName(status).get());
                 requestEntity = requestRepository.save(requestEntity);
@@ -241,8 +242,8 @@ public class RequestService {
                 List<String> emails = new ArrayList<>();
                 emails.add(userEntity.getEmail());
                 email.setSendToEmail(emails);
-                email.setSubject("["+status+" FAILED]");
-                email.setText("Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!");
+                email.setSubject("["+status + " request of "+ requestEntity.getUser().getEmail() +" FAILED]");
+                email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!");
                 emailController.sendEmail(email);
             }
         }
