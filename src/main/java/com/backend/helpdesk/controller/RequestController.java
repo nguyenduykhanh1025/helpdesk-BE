@@ -44,9 +44,14 @@ public class RequestController {
         return requestService.putRequest(requestDTO);
     }
 
-    @GetMapping("/approvedRequest/{id}")
-    public RequestDTO approvedRequest(@PathVariable int id){
-        return requestService.approvedRequest(id);
+    @PostMapping("/approveRequest/{id}/{keyAdmin}")
+    public RequestDTO approvedRequest(@PathVariable int id, @PathVariable String keyAdmin){
+        return requestService.approvedOrRejectRequest(id, keyAdmin, "APPROVED");
+    }
+
+    @PostMapping("rejectRequest/{id}/{keyAdmin}")
+    public RequestDTO rejectRequest(@PathVariable int id, @PathVariable String keyAdmin){
+        return requestService.approvedOrRejectRequest(id, keyAdmin, "REJECTED");
     }
 
     @DeleteMapping("/{id}")

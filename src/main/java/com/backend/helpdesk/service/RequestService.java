@@ -2,6 +2,7 @@ package com.backend.helpdesk.service;
 
 import com.backend.helpdesk.DTO.RequestDTO;
 import com.backend.helpdesk.common.Email;
+import com.backend.helpdesk.configurations.TokenProvider;
 import com.backend.helpdesk.controller.EmailController;
 import com.backend.helpdesk.converters.bases.Converter;
 import com.backend.helpdesk.converters.requestConverter.ConvertRequestToRequestDTO;
@@ -13,6 +14,7 @@ import com.backend.helpdesk.repository.RequestRepository;
 import com.backend.helpdesk.repository.RequestTypeRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -53,6 +55,9 @@ public class RequestService {
 
     @Autowired
     private ProfileService profileService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @Value("#{'${emailAdmins}'.split(',')}")
     private List<String> emailAdmins;
@@ -111,37 +116,46 @@ public class RequestService {
         RequestEntity requestEntity = requestDTORequestEntityConverter.convert(requestDTO);
         this.requestRepository.save(requestEntity);
 
-        String html = "<table style=\"width:100%\">" +
-                "  <tr>" +
-                "    <th>Request by email</th>" +
-                "    <td>"+ requestEntity.getUser().getEmail() +"</td>" +
-                "  </tr>"+
-                "  <tr>" +
-                "    <th>Request type</th>" +
-                "    <td>"+ requestEntity.getRequestType().getName() +"</td>" +
-                "  </tr>"+
-                "  <tr>" +
-                "    <th>Day request</th>" +
-                "    <td>"+ requestEntity.getDayRequest() +"</td>" +
-                "  </tr>"+
-                "  <tr>" +
-                "    <th>Day Description</th>" +
-                "    <td>"+ requestEntity.getDescription() +"</td>" +
-                "  </tr>"+
-                "</table>"+
-                "<form method=\"get\" action=\"http://localhost:8081/api/requests/approvedRequest/" + requestEntity.getId() +"\">"+
-                "   <button type=\"submit\">APPROVED</button>"+
-                "</form>";
-
-        Email email = new Email();
-        List<String> emails = new ArrayList<>();
-        emails.addAll(emailAdmins);
-        email.setSendToEmail(emails);
-        email.setSubject(requestEntity.getRequestType().getName());
-        email.setText(html);
-        emailController.sendEmail(email);
+        sendEmailToAdminWithButtonApproveAndReject(requestEntity.getUser().getEmail(), requestEntity);
 
         return convertRequestToRequestDTO.convert(requestEntity);
+    }
+
+    public void sendEmailToAdminWithButtonApproveAndReject(String emailUserRequest, RequestEntity requestEntity){
+        for(String emailAdmin : emailAdmins) {
+            String html =
+                    "<table style=\"width:100%\">" +
+                    "  <tr>" +
+                    "    <th>Request by email</th>" +
+                    "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                    "  </tr>" +
+                    "  <tr>" +
+                    "    <th>Request type</th>" +
+                    "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                    "  </tr>" +
+                    "  <tr>" +
+                    "    <th>Day request</th>" +
+                    "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                    "  </tr>" +
+                    "  <tr>" +
+                    "    <th>Day Description</th>" +
+                    "    <td>" + requestEntity.getDescription() + "</td>" +
+                    "  </tr>" +
+                    "</table>" +
+                    "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
+                    "   <button type=\"submit\">APPROVE</button>" +
+                    "</form>"+
+                    "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/rejectRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
+                    "   <button type=\"submit\">REJECT</button>" +
+                    "</form>";
+            Email email = new Email();
+            List<String> emails = new ArrayList<>();
+            emails.add(emailAdmin);
+            email.setSendToEmail(emails);
+            email.setSubject(emailUserRequest);
+            email.setText(html);
+            emailController.sendEmail(email);
+        }
     }
 
     public RequestDTO putRequest(RequestDTO requestDTO) {
@@ -161,7 +175,7 @@ public class RequestService {
             RequestEntity requestEntity = requestRepository.save(requestDTORequestEntityConverter.convert(requestDTO));
             Email email = new Email();
             List<String> emails = new ArrayList<>();
-            emails.add(requestEntity.getUser().getEmail());
+            emails.add(request.getUser().getEmail());
             email.setSendToEmail(emails);
             email.setSubject(requestEntity.getRequestType().getName());
             email.setText(requestEntity.getStatus().getName());
@@ -173,22 +187,58 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(request);
     }
 
-    public RequestDTO approvedRequest(int id){
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        UserEntity userEntity = userRepository.findByEmail(auth.getName()).get();
-//
-//        boolean isAdmin = false;
-//
-//        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
-//            if(roleEntity.getName().equals("ROLE_ADMIN")){
-//                isAdmin = true;
-//                break;
-//            }
-//        }
+    public RequestDTO approvedOrRejectRequest(int id, String keyAdmin, String status){
+        Claims claims = tokenProvider.decodeJWTAdmin(keyAdmin);
 
+        String email1 = claims.get("email").toString();
+
+        UserEntity userEntity = userRepository.findByEmail(email1).get();
+
+        boolean isAdmin = false;
+
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
+                isAdmin = true;
+                break;
+            }
+        }
         RequestEntity requestEntity = requestRepository.findById(id).get();
-           requestEntity.setStatus(statusRepository.findByName("APPROVED").get());
-           requestEntity = requestRepository.save(requestEntity);
+
+        if(isAdmin) {
+            String html = status + " BY ADMIN: " + userEntity.getEmail() +
+                    "<table style=\"width:100%\">" +
+                    "  <tr>" +
+                    "    <th>Request by email</th>" +
+                    "    <td>"+ requestEntity.getUser().getEmail() +"</td>" +
+                    "  </tr>"+
+                    "  <tr>" +
+                    "    <th>Request type</th>" +
+                    "    <td>"+ requestEntity.getRequestType().getName() +"</td>" +
+                    "  </tr>"+
+                    "  <tr>" +
+                    "    <th>Day request</th>" +
+                    "    <td>"+ requestEntity.getDayRequest() +"</td>" +
+                    "  </tr>"+
+                    "  <tr>" +
+                    "    <th>Day Description</th>" +
+                    "    <td>"+ requestEntity.getDescription() +"</td>" +
+                    "  </tr>"+
+                    "</table>";
+
+            requestEntity.setStatus(statusRepository.findByName(status).get());
+            requestEntity = requestRepository.save(requestEntity);
+
+            Email email = new Email();
+
+            List<String> sendToEmail = new ArrayList<>();
+            sendToEmail.add(requestEntity.getUser().getEmail());
+            sendToEmail.addAll(emailAdmins);
+
+            email.setSendToEmail(sendToEmail);
+            email.setSubject("["+ status +" Request]");
+            email.setText(html);
+            emailController.sendEmail(email);
+        }
 
         return convertRequestToRequestDTO.convert(requestEntity);
     }
