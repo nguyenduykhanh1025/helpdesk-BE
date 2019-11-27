@@ -14,7 +14,6 @@ import com.backend.helpdesk.repository.RequestRepository;
 import com.backend.helpdesk.repository.RequestTypeRepository;
 import com.backend.helpdesk.repository.StatusRepository;
 import com.backend.helpdesk.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -116,12 +115,12 @@ public class RequestService {
         RequestEntity requestEntity = requestDTORequestEntityConverter.convert(requestDTO);
         this.requestRepository.save(requestEntity);
 
-        sendEmailToAdminWithButtonApproveAndReject(requestEntity.getUser().getEmail(), requestEntity);
+        sendRequestToAdmin(requestEntity.getUser().getEmail(), requestEntity);
 
         return convertRequestToRequestDTO.convert(requestEntity);
     }
 
-    public void sendEmailToAdminWithButtonApproveAndReject(String emailUserRequest, RequestEntity requestEntity){
+    public void sendRequestToAdmin(String emailUserRequest, RequestEntity requestEntity){
         for(String emailAdmin : emailAdmins) {
             String html =
                     "<table style=\"width:100%\">" +
@@ -187,12 +186,9 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(request);
     }
 
-    public RequestDTO approvedOrRejectRequest(int id, String keyAdmin, String status){
-        Claims claims = tokenProvider.decodeJWTAdmin(keyAdmin);
+    public void approvedOrRejectRequest(int id, String keyAdmin, String status){
 
-        String email1 = claims.get("email").toString();
-
-        UserEntity userEntity = userRepository.findByEmail(email1).get();
+        UserEntity userEntity = userRepository.findByEmail(tokenProvider.decodeJWTAdmin(keyAdmin).get("email").toString()).get();
 
         boolean isAdmin = false;
 
@@ -205,42 +201,51 @@ public class RequestService {
         RequestEntity requestEntity = requestRepository.findById(id).get();
 
         if(isAdmin) {
-            String html = status + " BY ADMIN: " + userEntity.getEmail() +
-                    "<table style=\"width:100%\">" +
-                    "  <tr>" +
-                    "    <th>Request by email</th>" +
-                    "    <td>"+ requestEntity.getUser().getEmail() +"</td>" +
-                    "  </tr>"+
-                    "  <tr>" +
-                    "    <th>Request type</th>" +
-                    "    <td>"+ requestEntity.getRequestType().getName() +"</td>" +
-                    "  </tr>"+
-                    "  <tr>" +
-                    "    <th>Day request</th>" +
-                    "    <td>"+ requestEntity.getDayRequest() +"</td>" +
-                    "  </tr>"+
-                    "  <tr>" +
-                    "    <th>Day Description</th>" +
-                    "    <td>"+ requestEntity.getDescription() +"</td>" +
-                    "  </tr>"+
-                    "</table>";
+            if(requestEntity.getStatus().getName().equals("PENDING")) {
+                String html = status + " BY ADMIN: " + userEntity.getEmail() +
+                        "<table style=\"width:100%\">" +
+                        "  <tr>" +
+                        "    <th>Request by email</th>" +
+                        "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                        "  </tr>" +
+                        "  <tr>" +
+                        "    <th>Request type</th>" +
+                        "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                        "  </tr>" +
+                        "  <tr>" +
+                        "    <th>Day request</th>" +
+                        "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                        "  </tr>" +
+                        "  <tr>" +
+                        "    <th>Day Description</th>" +
+                        "    <td>" + requestEntity.getDescription() + "</td>" +
+                        "  </tr>" +
+                        "</table>";
 
-            requestEntity.setStatus(statusRepository.findByName(status).get());
-            requestEntity = requestRepository.save(requestEntity);
+                requestEntity.setStatus(statusRepository.findByName(status).get());
+                requestEntity = requestRepository.save(requestEntity);
 
-            Email email = new Email();
+                Email email = new Email();
 
-            List<String> sendToEmail = new ArrayList<>();
-            sendToEmail.add(requestEntity.getUser().getEmail());
-            sendToEmail.addAll(emailAdmins);
+                List<String> sendToEmail = new ArrayList<>();
+                sendToEmail.add(requestEntity.getUser().getEmail());
+                sendToEmail.addAll(emailAdmins);
 
-            email.setSendToEmail(sendToEmail);
-            email.setSubject("["+ status +" Request]");
-            email.setText(html);
-            emailController.sendEmail(email);
+                email.setSendToEmail(sendToEmail);
+                email.setSubject("[" + status + " Request]");
+                email.setText(html);
+                emailController.sendEmail(email);
+            }else{
+                Email email = new Email();
+
+                List<String> emails = new ArrayList<>();
+                emails.add(userEntity.getEmail());
+                email.setSendToEmail(emails);
+                email.setSubject("["+status+" FAILED]");
+                email.setText("Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!");
+                emailController.sendEmail(email);
+            }
         }
-
-        return convertRequestToRequestDTO.convert(requestEntity);
     }
 
     public void removeRequest(@RequestParam int id) {
