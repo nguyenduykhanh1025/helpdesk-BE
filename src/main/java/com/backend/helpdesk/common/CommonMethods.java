@@ -15,7 +15,7 @@ public class CommonMethods {
     private HolidayService holidayService;
 
     public boolean isEmailNovaHub(String email) {
-        String query = "[a-z][a-z0-9_\\.]{5,32}@novahub.vn";
+        String query = "[a-z][a-z0-9_\\.]{2,32}@novahub.vn";
         return Pattern.matches(query, email);
     }
 
