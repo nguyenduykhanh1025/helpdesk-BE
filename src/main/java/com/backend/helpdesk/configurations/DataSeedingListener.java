@@ -96,6 +96,10 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
+        UserEntity userEntity = userRepository.findByEmail("khanhnguyen@novahub.vn").get();
+        userEntity.setEnable(true);
+        userRepository.save(userEntity);
+
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
