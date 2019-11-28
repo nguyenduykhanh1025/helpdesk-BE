@@ -22,4 +22,9 @@ public class UserExceptionController {
     public ResponseEntity<Object> exception(UserNotFoundException exception) {
         return new ResponseEntity<>("User not found", HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(value = UserDisableException.class)
+    public ResponseEntity<Object> exception(UserDisableException exception) {
+        return new ResponseEntity<>("Account user is disable", HttpStatus.FORBIDDEN);
+    }
 }

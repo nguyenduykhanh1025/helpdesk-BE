@@ -96,14 +96,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
-
-
         addRoleIfMissing("ROLE_ADMIN");
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
-
-        test("thangle@novahub.vn", "Thang", "Le");
-        test("hoavo@novahub.vn", "Hoa", "Vo");
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");

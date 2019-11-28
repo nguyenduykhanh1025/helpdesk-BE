@@ -6,6 +6,7 @@ import com.backend.helpdesk.configurations.TokenProvider;
 import com.backend.helpdesk.entity.RoleEntity;
 import com.backend.helpdesk.entity.UserEntity;
 import com.backend.helpdesk.exception.UserException.EmailUserIsNotMatch;
+import com.backend.helpdesk.exception.UserException.UserDisableException;
 import com.backend.helpdesk.repository.RoleRepository;
 import com.backend.helpdesk.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -55,6 +57,9 @@ public class AuthenticationService {
             checkForUserRegister(email,
                     (String) payload.get("family_name"),
                     (String) payload.get("given_name"));
+
+            checkForUserIsDisable(email);
+
             return email;
         }
         return null;
@@ -84,6 +89,16 @@ public class AuthenticationService {
             throw new EmailUserIsNotMatch();
         }
 
+    }
+
+    public void checkForUserIsDisable(String email){
+        Optional<UserEntity> userEntityOpt = userRepository.findByEmail(email);
+        if(userEntityOpt.isPresent()){
+            UserEntity userEntity = userEntityOpt.get();
+            if(!userEntity.isEnable()){
+                throw new UserDisableException();
+            }
+        }
     }
 
     public void saveNewAccount(String email, String firstName, String lastName) {
