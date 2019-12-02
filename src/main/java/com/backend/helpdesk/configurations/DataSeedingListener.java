@@ -104,6 +104,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         userEntity.setEnable(true);
         userRepository.save(userEntity);
 
+
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
