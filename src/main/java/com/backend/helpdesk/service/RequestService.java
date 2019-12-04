@@ -128,7 +128,7 @@ public class RequestService {
                     "    <th>Request by email</th>" +
                     "    <th>Request type</th>" +
                     "    <th>Day request</th>" +
-                    "    <th>Day Description</th>" +
+                    "    <th>Description</th>" +
                     "  </tr>" +
                     "  <tr>" +
                     "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
@@ -202,7 +202,7 @@ public class RequestService {
                 "    <th>Request by email</th>" +
                 "    <th>Request type</th>" +
                 "    <th>Day request</th>" +
-                "    <th>Day Description</th>" +
+                "    <th>Description</th>" +
                 "  </tr>" +
                 "  <tr>" +
                 "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
@@ -242,7 +242,7 @@ public class RequestService {
                         "    <th>Request by email</th>" +
                         "    <th>Request type</th>" +
                         "    <th>Day request</th>" +
-                        "    <th>Day Description</th>" +
+                        "    <th>Description</th>" +
                         "  </tr>" +
                         "  <tr>" +
                         "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
