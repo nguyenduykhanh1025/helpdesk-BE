@@ -4,7 +4,6 @@ import com.backend.helpdesk.service.HolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -15,7 +14,7 @@ public class CommonMethods {
     private HolidayService holidayService;
 
     public boolean isEmailNovaHub(String email) {
-        String query = "[a-z][a-z0-9_\\.]{5,32}@novahub.vn";
+        String query = "[a-z][a-z0-9_\\.]{3,32}@novahub.vn";
         return Pattern.matches(query, email);
     }
 
