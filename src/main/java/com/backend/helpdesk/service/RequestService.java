@@ -126,21 +126,17 @@ public class RequestService {
                     "<table style=\"width:100%\">" +
                     "  <tr>" +
                     "    <th>Request by email</th>" +
-                    "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                    "  </tr>" +
-                    "  <tr>" +
                     "    <th>Request type</th>" +
-                    "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                    "  </tr>" +
-                    "  <tr>" +
                     "    <th>Day request</th>" +
-                    "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                    "    <th>Day Description</th>" +
                     "  </tr>" +
                     "  <tr>" +
-                    "    <th>Day Description</th>" +
+                    "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                    "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                    "    <td>" + requestEntity.getDayRequest() + "</td>" +
                     "    <td>" + requestEntity.getDescription() + "</td>" +
                     "  </tr>" +
-                    "</table>" +
+                    "</table>"+
                     "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
                     "   <button type=\"submit\">APPROVE</button>" +
                     "</form>"+
@@ -204,18 +200,14 @@ public class RequestService {
                 "<table style=\"width:100%\">" +
                 "  <tr>" +
                 "    <th>Request by email</th>" +
-                "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                "  </tr>" +
-                "  <tr>" +
                 "    <th>Request type</th>" +
-                "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                "  </tr>" +
-                "  <tr>" +
                 "    <th>Day request</th>" +
-                "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                "    <th>Day Description</th>" +
                 "  </tr>" +
                 "  <tr>" +
-                "    <th>Day Description</th>" +
+                "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                "    <td>" + requestEntity.getDayRequest() + "</td>" +
                 "    <td>" + requestEntity.getDescription() + "</td>" +
                 "  </tr>" +
                 "</table>";
@@ -243,7 +235,22 @@ public class RequestService {
                 emails.add(userEntity.getEmail());
                 email.setSendToEmail(emails);
                 email.setSubject("["+status + " request of "+ requestEntity.getUser().getEmail() +" FAILED]");
-                email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!");
+                email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!"+
+                        "This request is: " +
+                        "<table style=\"width:100%\">" +
+                        "  <tr>" +
+                        "    <th>Request by email</th>" +
+                        "    <th>Request type</th>" +
+                        "    <th>Day request</th>" +
+                        "    <th>Day Description</th>" +
+                        "  </tr>" +
+                        "  <tr>" +
+                        "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
+                        "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
+                        "    <td>" + requestEntity.getDayRequest() + "</td>" +
+                        "    <td>" + requestEntity.getDescription() + "</td>" +
+                        "  </tr>" +
+                        "</table>");
                 emailController.sendEmail(email);
             }
         }
