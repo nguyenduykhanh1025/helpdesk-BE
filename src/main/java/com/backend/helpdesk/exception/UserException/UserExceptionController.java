@@ -10,7 +10,7 @@ public class UserExceptionController {
 
     @ExceptionHandler(value = EmailUserIsNotMatch.class)
     public ResponseEntity<Object> exception(EmailUserIsNotMatch exception) {
-        return new ResponseEntity<>("Email User Is Not Match", HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>("Email User Is Not Novahub Email", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(value = UserAccessDeniedException.class)
@@ -21,5 +21,10 @@ public class UserExceptionController {
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<Object> exception(UserNotFoundException exception) {
         return new ResponseEntity<>("User not found", HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = UserDisableException.class)
+    public ResponseEntity<Object> exception(UserDisableException exception) {
+        return new ResponseEntity<>("Account user is disable", HttpStatus.FORBIDDEN);
     }
 }
