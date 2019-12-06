@@ -123,19 +123,23 @@ public class RequestService {
     public void sendRequestToAdmin(String emailUserRequest, RequestEntity requestEntity){
         for(String emailAdmin : emailAdmins) {
             String html =
-                    "<table style=\"width:100%\">" +
-                    "  <tr>" +
-                    "    <th>Request by email</th>" +
-                    "    <th>Request type</th>" +
-                    "    <th>Day request</th>" +
-                    "    <th>Description</th>" +
-                    "  </tr>" +
-                    "  <tr>" +
-                    "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                    "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                    "    <td>" + requestEntity.getDayRequest() + "</td>" +
-                    "    <td>" + requestEntity.getDescription() + "</td>" +
-                    "  </tr>" +
+                    "<table>\n" +
+                    "    <col width=\"350\">\n" +
+                    "    <col width=\"350\">\n" +
+                    "    <col width=\"500\">\n" +
+                    "    <col width=\"450\">\n" +
+                    "    <tr>\n" +
+                    "        <th><span style=\"float: left;\">Request by email</span></th>\n" +
+                    "        <th><span style=\"float: left;\">Request type</span></th>\n" +
+                    "        <th><span style=\"float: left;\">Day request</span</th>\n" +
+                    "        <th><span style=\"float: left;\">Description</span></th>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
+                    "    </tr>\n" +
                     "</table>"+
                     "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
                     "   <button type=\"submit\">APPROVE</button>" +
@@ -197,19 +201,23 @@ public class RequestService {
         RequestEntity requestEntity = requestRepository.findById(id).get();
 
         String html = status + " BY ADMIN: " + userEntity.getEmail() +
-                "<table style=\"width:100%\">" +
-                "  <tr>" +
-                "    <th>Request by email</th>" +
-                "    <th>Request type</th>" +
-                "    <th>Day request</th>" +
-                "    <th>Description</th>" +
-                "  </tr>" +
-                "  <tr>" +
-                "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                "    <td>" + requestEntity.getDayRequest() + "</td>" +
-                "    <td>" + requestEntity.getDescription() + "</td>" +
-                "  </tr>" +
+                "<table>\n" +
+                "    <col width=\"350\">\n" +
+                "    <col width=\"350\">\n" +
+                "    <col width=\"500\">\n" +
+                "    <col width=\"450\">\n" +
+                "    <tr>\n" +
+                "        <th><span style=\"float: left;\">Request by email</span></th>\n" +
+                "        <th><span style=\"float: left;\">Request type</span></th>\n" +
+                "        <th><span style=\"float: left;\">Day request</span</th>\n" +
+                "        <th><span style=\"float: left;\">Description</span></th>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
+                "    </tr>\n" +
                 "</table>";
 
         if(isAdmin) {
@@ -237,19 +245,23 @@ public class RequestService {
                 email.setSubject("["+status + " request of "+ requestEntity.getUser().getEmail() +" FAILED]");
                 email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!"+
                         "This request is: " +
-                        "<table style=\"width:100%\">" +
-                        "  <tr>" +
-                        "    <th>Request by email</th>" +
-                        "    <th>Request type</th>" +
-                        "    <th>Day request</th>" +
-                        "    <th>Description</th>" +
-                        "  </tr>" +
-                        "  <tr>" +
-                        "    <td>" + requestEntity.getUser().getEmail() + "</td>" +
-                        "    <td>" + requestEntity.getRequestType().getName() + "</td>" +
-                        "    <td>" + requestEntity.getDayRequest() + "</td>" +
-                        "    <td>" + requestEntity.getDescription() + "</td>" +
-                        "  </tr>" +
+                        "<table>\n" +
+                        "    <col width=\"350\">\n" +
+                        "    <col width=\"350\">\n" +
+                        "    <col width=\"500\">\n" +
+                        "    <col width=\"450\">\n" +
+                        "    <tr>\n" +
+                        "        <th><span style=\"float: left;\">Request by email</span></th>\n" +
+                        "        <th><span style=\"float: left;\">Request type</span></th>\n" +
+                        "        <th><span style=\"float: left;\">Day request</span</th>\n" +
+                        "        <th><span style=\"float: left;\">Description</span></th>\n" +
+                        "    </tr>\n" +
+                        "    <tr>\n" +
+                        "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
+                        "    </tr>\n" +
                         "</table>");
                 emailController.sendEmail(email);
             }
