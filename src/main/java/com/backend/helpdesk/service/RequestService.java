@@ -65,6 +65,12 @@ public class RequestService {
         return requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(search, search, search, search).size();
     }
 
+    public List<RequestDTO> getAllRequestOfUserLogin(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        return convertRequestToRequestDTO.convert(requestRepository.findByUserEmail(auth.getName()));
+    }
+
     public List<RequestDTO> searchRequestAndPagination(int page, int items, String sortBy, String search) {
 
         List<RequestEntity> requestEntities = this.search(search);
@@ -105,16 +111,31 @@ public class RequestService {
         RequestEntity requestEntity = requestDTORequestEntityConverter.convert(requestDTO);
         this.requestRepository.save(requestEntity);
 
+        String html = "<table style=\"width:100%\">" +
+                "  <tr>" +
+                "    <th>Request by email</th>" +
+                "    <td>"+ requestEntity.getUser().getEmail() +"</td>" +
+                "  </tr>"+
+                "  <tr>" +
+                "    <th>Request type</th>" +
+                "    <td>"+ requestEntity.getRequestType().getName() +"</td>" +
+                "  </tr>"+
+                "  <tr>" +
+                "    <th>Day request</th>" +
+                "    <td>"+ requestEntity.getDayRequest() +"</td>" +
+                "  </tr>"+
+                "  <tr>" +
+                "    <th>Day Description</th>" +
+                "    <td>"+ requestEntity.getDescription() +"</td>" +
+                "  </tr>"+
+                "</table>";
+
         Email email = new Email();
         List<String> emails = new ArrayList<>();
         emails.addAll(emailAdmins);
         email.setSendToEmail(emails);
         email.setSubject(requestEntity.getRequestType().getName());
-        email.setText("Request by email: " + requestEntity.getUser().getEmail() +
-                "\nRequest type: " + requestEntity.getRequestType().getName().toUpperCase() +
-                "\nCreate At: " + requestEntity.getCreateAt() +
-                "\nDay request: " + requestEntity.getDayRequest() +
-                "\nDescription: " + requestEntity.getDescription());
+        email.setText(html);
         emailController.sendEmail(email);
 
         return convertRequestToRequestDTO.convert(requestEntity);
@@ -157,7 +178,8 @@ public class RequestService {
 
         for(RoleEntity roleEntity : userEntity.getRoleEntities()){
             if(roleEntity.getName().equals("ROLE_ADMIN")){
-                isAdmin=true;
+                isAdmin = true;
+                break;
             }
         }
 

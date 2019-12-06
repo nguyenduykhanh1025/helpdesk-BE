@@ -29,6 +29,11 @@ public class RequestController {
         return requestService.getSize(search);
     }
 
+    @GetMapping("/getRequestOfMe")
+    public List<RequestDTO> getAllRequestOfUserLogin(){
+        return this.requestService.getAllRequestOfUserLogin();
+    }
+
     @PostMapping
     public RequestDTO addRequest(@RequestBody RequestDTO request){
         return requestService.addRequest(request);

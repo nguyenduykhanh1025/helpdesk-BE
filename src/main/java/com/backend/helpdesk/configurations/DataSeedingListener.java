@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Component
 @Configuration
 public class DataSeedingListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -101,6 +102,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_SECRETARY");
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
+        addUserIfMissing("khanhnguyen@novahub.vn", "khanhnguyen@novahub.vn", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
         addUserIfMissing("abc@gmail.com", "abc@gmail.com", "ROLE_SECRETARY");
 
