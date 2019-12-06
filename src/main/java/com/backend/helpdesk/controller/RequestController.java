@@ -29,7 +29,7 @@ public class RequestController {
         return requestService.getSize(search);
     }
 
-    @GetMapping("/getRequestOfMe")
+    @GetMapping("/me")
     public List<RequestDTO> getAllRequestOfUserLogin(){
         return this.requestService.getAllRequestOfUserLogin();
     }
