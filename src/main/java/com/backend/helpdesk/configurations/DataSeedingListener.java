@@ -109,9 +109,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
                  for(DayOff dayOff : dayOffRepository.findByUserEntity(userEntity)){
                      dayOffRepository.delete(dayOff);
                  }
-        for(DayOff dayOff : dayOffRepository.findByUserEntity(userEntity1)){
-            dayOffRepository.delete(dayOff);
-        }
         userRepository.save(userEntity);
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("khanhnguyen@novahub.vn", "khanhnguyen@novahub.vn", "ROLE_ADMIN");
