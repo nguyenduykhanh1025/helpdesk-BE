@@ -9,11 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import static com.backend.helpdesk.common.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static com.backend.helpdesk.common.Constants.AUTHORITIES_KEY;
 
@@ -60,6 +62,20 @@ public class TokenProvider {
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS256, signingKey)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
+                .compact();
+    }
+
+    public Claims decodeJWTAdmin(String jwt) {
+         return Jwts.parser()
+                .setSigningKey(signingKey)
+                .parseClaimsJws(jwt).getBody();
+    }
+
+    public String genTokenAdmin(String email){
+        return Jwts.builder()
+                .claim("email", email)
+                .signWith(SignatureAlgorithm.HS256, signingKey)
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .compact();
     }

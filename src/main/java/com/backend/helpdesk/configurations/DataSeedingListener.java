@@ -1,9 +1,6 @@
 package com.backend.helpdesk.configurations;
 
-import com.backend.helpdesk.entity.RequestType;
-import com.backend.helpdesk.entity.RoleEntity;
-import com.backend.helpdesk.entity.Status;
-import com.backend.helpdesk.entity.UserEntity;
+import com.backend.helpdesk.entity.*;
 import com.backend.helpdesk.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,6 +39,9 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
     @Autowired
     private RequestTypeRepository requestTypeRepository;
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
 
     private void addRoleIfMissing(String name) {
         if (!roleRepository.findByName(name).isPresent()) {
@@ -103,6 +103,10 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
         UserEntity userEntity = userRepository.findByEmail("khanhnguyen@novahub.vn").get();
         userEntity.setEnable(true);
+
+                 for(DayOff dayOff : dayOffRepository.findByUserEntity(userEntity)){
+                     dayOffRepository.delete(dayOff);
+                 }
         userRepository.save(userEntity);
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("khanhnguyen@novahub.vn", "khanhnguyen@novahub.vn", "ROLE_ADMIN");

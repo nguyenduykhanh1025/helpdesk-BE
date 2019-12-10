@@ -10,7 +10,7 @@ public class UserExceptionController {
 
     @ExceptionHandler(value = EmailUserIsNotMatch.class)
     public ResponseEntity<Object> exception(EmailUserIsNotMatch exception) {
-        return new ResponseEntity<>("Email User Is Not Match", HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>("Email User Is Not Novahub Email", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(value = UserAccessDeniedException.class)

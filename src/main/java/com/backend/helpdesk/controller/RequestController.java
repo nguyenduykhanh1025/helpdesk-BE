@@ -29,7 +29,7 @@ public class RequestController {
         return requestService.getSize(search);
     }
 
-    @GetMapping("/getRequestOfMe")
+    @GetMapping("/me")
     public List<RequestDTO> getAllRequestOfUserLogin(){
         return this.requestService.getAllRequestOfUserLogin();
     }
@@ -42,6 +42,16 @@ public class RequestController {
     @PutMapping
     public RequestDTO putRequest(@RequestBody @Valid RequestDTO requestDTO){
         return requestService.putRequest(requestDTO);
+    }
+
+    @PostMapping("/approveRequest/{id}/{keyAdmin}")
+    public void approvedRequest(@PathVariable int id, @PathVariable String keyAdmin){
+        requestService.approvedOrRejectRequest(id, keyAdmin, "APPROVED");
+    }
+
+    @PostMapping("rejectRequest/{id}/{keyAdmin}")
+    public void rejectRequest(@PathVariable int id, @PathVariable String keyAdmin){
+        requestService.approvedOrRejectRequest(id, keyAdmin, "REJECTED");
     }
 
     @DeleteMapping("/{id}")
