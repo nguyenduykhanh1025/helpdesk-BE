@@ -101,15 +101,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_EMPLOYEES");
         addRoleIfMissing("ROLE_SECRETARY");
 
-        // huyenpham@novahub.vn
-        UserEntity userEntity = userRepository.findByEmail("khanhnguyen@novahub.vn").get();
-        UserEntity userEntity1 = userRepository.findByEmail("huyenpham@novahub.vn").get();
-        userEntity.setEnable(true);
-
-                 for(DayOff dayOff : dayOffRepository.findByUserEntity(userEntity)){
-                     dayOffRepository.delete(dayOff);
-                 }
-        userRepository.save(userEntity);
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
         addUserIfMissing("khanhnguyen@novahub.vn", "khanhnguyen@novahub.vn", "ROLE_ADMIN");
         addUserIfMissing("bkdn.ntdat@gmail.com", "bkdn.ntdat@gmail.com", "ROLE_EMPLOYEES");
