@@ -76,7 +76,7 @@ public class CommonMethods {
             stringBuffer.append("<b>" + titles[i] + ": </b>");
             stringBuffer.append("<span>" + contents[i] + "</span><br>");
         }
-        stringBuffer.append("<a href="+ point +"target=_blank>"+ pointContent +"</a>");
+        stringBuffer.append("<a href="+ point +" target=_blank>"+ pointContent +"</a>");
         return stringBuffer.toString();
     }
 }
