@@ -104,12 +104,12 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         UserEntity userEntity = userRepository.findByEmail("khanhnguyen@novahub.vn").get();
         UserEntity userEntity1 = userRepository.findByEmail("huyenpham@novahub.vn").get();
 
-        for(SkillsEntity skill : userEntity.getSkillsEntities()) {
-            this.skillsRepository.delete(skill);
+        for(DayOff dayOff : this.dayOffRepository.findByUserEntity(userEntity)) {
+            this.dayOffRepository.delete(dayOff);
         }
 
-        for(SkillsEntity skill : userEntity1.getSkillsEntities()) {
-            this.skillsRepository.delete(skill);
+        for(DayOff dayOff : this.dayOffRepository.findByUserEntity(userEntity1)) {
+            this.dayOffRepository.delete(dayOff);
         }
 
         addUserIfMissing("lunachris1208@gmail.com", "lunachris1208@gmail.com", "ROLE_ADMIN");
