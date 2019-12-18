@@ -69,7 +69,7 @@ public class RequestService {
         return requestRepository.findByUserEmailContainingOrStatusNameContainingOrRequestTypeNameContainingOrDescriptionContaining(search, search, search, search).size();
     }
 
-    public List<RequestDTO> getAllRequestOfUserLogin() {
+    public List<RequestDTO> getAllRequestOfUserLogin(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         return convertRequestToRequestDTO.convert(requestRepository.findByUserEmail(auth.getName()));
@@ -120,43 +120,33 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(requestEntity);
     }
 
-    public void sendRequestToAdmin(String emailUserRequest, RequestEntity requestEntity) {
-        for (String emailAdmin : emailAdmins) {
+    public void sendRequestToAdmin(String emailUserRequest, RequestEntity requestEntity){
+        for(String emailAdmin : emailAdmins) {
             String html =
                     "<table>\n" +
-                            "    <col width=\"350\">\n" +
-                            "    <col width=\"350\">\n" +
-                            "    <col width=\"400\">\n" +
-                            "    <col width=\"450\">\n" +
-                            "    <col width=\"50\">\n" +
-                            "    <col width=\"50\">\n" +
-                            "    <tr>\n" +
-                            "        <th><span style=\"float: left;\">Request by email</span></th>\n" +
-                            "        <th><span style=\"float: left;\">Request type</span></th>\n" +
-                            "        <th><span style=\"float: left;\">Day request</span</th>\n" +
-                            "        <th><span style=\"float: left;\">Description</span></th>\n" +
-                            "        <th><span style=\"float: left;\">Approve</span></th>\n" +
-                            "        <th><span style=\"float: left;\">Reject</span></th>\n" +
-                            "    </tr>\n" +
-                            "    <tr>\n" +
-                            "        <td><span>" + requestEntity.getUser().getEmail() + "</span></td>\n" +
-                            "        <td><span>" + requestEntity.getRequestType().getName() + "</span></td>\n" +
-                            "        <td><span>" + requestEntity.getDayRequest() + "</span></td>\n" +
-                            "        <td><span>" + requestEntity.getDescription() + "</span></td>\n" +
-                            "        <td><span>" +
-                            "               <form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
-                            "                   <button type=\"submit\">APPROVE</button>" +
-                            "               </form>" +
-                            "           </span>" +
-                            "       </td>\n" +
-                            "        <td><span>" +
-                            "               <form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
-                            "                   <button type=\"submit\">REJECT</button>" +
-                            "               </form>" +
-                            "           </span>" +
-                            "       </td>\n" +
-                            "    </tr>\n" +
-                            "</table>";
+                    "    <col width=\"350\">\n" +
+                    "    <col width=\"350\">\n" +
+                    "    <col width=\"500\">\n" +
+                    "    <col width=\"450\">\n" +
+                    "    <tr>\n" +
+                    "        <th><span style=\"float: left;\">Request by email</span></th>\n" +
+                    "        <th><span style=\"float: left;\">Request type</span></th>\n" +
+                    "        <th><span style=\"float: left;\">Day request</span</th>\n" +
+                    "        <th><span style=\"float: left;\">Description</span></th>\n" +
+                    "    </tr>\n" +
+                    "    <tr>\n" +
+                    "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                    "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
+                    "    </tr>\n" +
+                    "</table>"+
+                    "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/approveRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
+                    "   <button type=\"submit\">APPROVE</button>" +
+                    "</form>"+
+                    "<form method=\"post\" action=\"https://helpdesk-kunlez-novahub.herokuapp.com/api/requests/rejectRequest/" + requestEntity.getId() + "/" + tokenProvider.genTokenAdmin(emailAdmin) + "\">" +
+                    "   <button type=\"submit\">REJECT</button>" +
+                    "</form>";
             Email email = new Email();
             List<String> emails = new ArrayList<>();
             emails.add(emailAdmin);
@@ -174,9 +164,9 @@ public class RequestService {
 
         boolean isAdmin = false;
 
-        for (RoleEntity roleEntity : userEntity.getRoleEntities()) {
-            if (roleEntity.getName().equals("ROLE_ADMIN")) {
-                isAdmin = true;
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
+                isAdmin=true;
             }
         }
 
@@ -196,14 +186,14 @@ public class RequestService {
         return convertRequestToRequestDTO.convert(request);
     }
 
-    public void approvedOrRejectRequest(int id, String keyAdmin, String status) {
+    public void approvedOrRejectRequest(int id, String keyAdmin, String status){
 
         UserEntity userEntity = userRepository.findByEmail(tokenProvider.decodeJWTAdmin(keyAdmin).get("email").toString()).get();
 
         boolean isAdmin = false;
 
-        for (RoleEntity roleEntity : userEntity.getRoleEntities()) {
-            if (roleEntity.getName().equals("ROLE_ADMIN")) {
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
                 isAdmin = true;
                 break;
             }
@@ -223,15 +213,15 @@ public class RequestService {
                 "        <th><span style=\"float: left;\">Description</span></th>\n" +
                 "    </tr>\n" +
                 "    <tr>\n" +
-                "        <td><span>" + requestEntity.getUser().getEmail() + "</span></td>\n" +
-                "        <td><span>" + requestEntity.getRequestType().getName() + "</span></td>\n" +
-                "        <td><span>" + requestEntity.getDayRequest() + "</span></td>\n" +
-                "        <td><span>" + requestEntity.getDescription() + "</span></td>\n" +
+                "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
                 "    </tr>\n" +
                 "</table>";
 
-        if (isAdmin) {
-            if (requestEntity.getStatus().getName().equals("PENDING")) {
+        if(isAdmin) {
+            if(requestEntity.getStatus().getName().equals("PENDING")) {
 
                 requestEntity.setStatus(statusRepository.findByName(status).get());
                 requestEntity = requestRepository.save(requestEntity);
@@ -246,14 +236,14 @@ public class RequestService {
                 email.setSubject("[" + status + " Request]");
                 email.setText(html);
                 emailController.sendEmail(email);
-            } else {
+            }else{
                 Email email = new Email();
 
                 List<String> emails = new ArrayList<>();
                 emails.add(userEntity.getEmail());
                 email.setSendToEmail(emails);
-                email.setSubject("[" + status + " request of " + requestEntity.getUser().getEmail() + " FAILED]");
-                email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!" +
+                email.setSubject("["+status + " request of "+ requestEntity.getUser().getEmail() +" FAILED]");
+                email.setText(html + "Request was not PENDING, please click <a href=\"https://helpdesk-owt.herokuapp.com/admin/requests\">here</a> to edit this request!!!"+
                         "This request is: " +
                         "<table>\n" +
                         "    <col width=\"350\">\n" +
@@ -267,10 +257,10 @@ public class RequestService {
                         "        <th><span style=\"float: left;\">Description</span></th>\n" +
                         "    </tr>\n" +
                         "    <tr>\n" +
-                        "        <td><span>" + requestEntity.getUser().getEmail() + "</span></td>\n" +
-                        "        <td><span>" + requestEntity.getRequestType().getName() + "</span></td>\n" +
-                        "        <td><span>" + requestEntity.getDayRequest() + "</span></td>\n" +
-                        "        <td><span>" + requestEntity.getDescription() + "</span></td>\n" +
+                        "        <td><span>" + requestEntity.getUser().getEmail()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getRequestType().getName()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getDayRequest()+"</span></td>\n" +
+                        "        <td><span>"+requestEntity.getDescription()+"</span></td>\n" +
                         "    </tr>\n" +
                         "</table>");
                 emailController.sendEmail(email);
@@ -284,8 +274,8 @@ public class RequestService {
 
         boolean isAdmin = false;
 
-        for (RoleEntity roleEntity : userEntity.getRoleEntities()) {
-            if (roleEntity.getName().equals("ROLE_ADMIN")) {
+        for(RoleEntity roleEntity : userEntity.getRoleEntities()){
+            if(roleEntity.getName().equals("ROLE_ADMIN")){
                 isAdmin = true;
                 break;
             }
