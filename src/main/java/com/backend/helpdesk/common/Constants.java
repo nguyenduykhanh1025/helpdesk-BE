@@ -14,7 +14,7 @@ public class Constants {
     public static final String SUBJECT_DAY_OFF="PERMISSION FORM";
     public static final String RESPONSE_DAY_OFF ="RESPONSE";
     public static String POINT_PAGE_MANAGEMENT_DAY_OFF = "https://helpdesk-owt.herokuapp.com/admin/day-offs";
-    public static String POINT_CONTENT_MANAGEMENT_DAY_OFF = "Go to management day off page";
+    public static String POINT_CONTENT_MANAGEMENT_DAY_OFF = "=> Go to management day off page";
 
     // const sort follow skill
     public static final int SORT_BY_NAME = 1;
