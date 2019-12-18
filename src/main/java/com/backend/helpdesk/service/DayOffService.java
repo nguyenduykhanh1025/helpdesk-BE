@@ -202,14 +202,14 @@ public class DayOffService {
         Email email = new Email();
         email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.SUBJECT_DAY_OFF);
-        email.setText("<h1>Day off by email</h1>: " + dayOff.getUserEntity().getEmail() +
-                "\nDay off type: " + dayOff.getDayOffType().getName() +
-                "\nCreate At: " + dayOff.getCreateAt() +
-                "\nDay start: " + dayOff.getDayStartOff() +
-                "\nDay end: " + dayOff.getDayEndOff() +
-                "\nDescription: " + dayOff.getDescription());
-        emailController.sendEmail(email);
 
+        String []titles = {"Day off by email", "Day off type", "Create At", "Day start", "Day end", "Description"};
+        String []content = {dayOff.getUserEntity().getEmail(), dayOff.getDayOffType().getName(),
+                            dayOff.getCreateAt().toString(), dayOff.getDayStartOff().toString(),
+                            dayOff.getDayEndOff().toString(), dayOff.getDescription()};
+
+        email.setText(CommonMethods.formatContentEmail(titles, content));
+        emailController.sendEmail(email);
         return dayOffRepository.save(dayOff);
     }
 

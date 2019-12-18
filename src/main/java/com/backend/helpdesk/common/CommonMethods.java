@@ -68,4 +68,15 @@ public class CommonMethods {
         dates.add(date2);
         return dates;
     }
+
+    public static String formatContentEmail(String []titles, String[] contents) {
+        StringBuffer stringBuffer = new StringBuffer();
+
+        for(int i = 0; i< titles.length; ++i) {
+            stringBuffer.append("<b>" + titles[i] + ": </b>");
+            stringBuffer.append("<span>" + contents[i] + "</span><br>");
+        }
+
+        return stringBuffer.toString();
+    }
 }
