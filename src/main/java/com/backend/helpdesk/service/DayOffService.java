@@ -202,7 +202,7 @@ public class DayOffService {
         Email email = new Email();
         email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.SUBJECT_DAY_OFF);
-        email.setText("Day off by email: " + dayOff.getUserEntity().getEmail() +
+        email.setText("<h1>Day off by email</h1>: " + dayOff.getUserEntity().getEmail() +
                 "\nDay off type: " + dayOff.getDayOffType().getName() +
                 "\nCreate At: " + dayOff.getCreateAt() +
                 "\nDay start: " + dayOff.getDayStartOff() +
