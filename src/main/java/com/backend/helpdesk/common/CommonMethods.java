@@ -69,14 +69,14 @@ public class CommonMethods {
         return dates;
     }
 
-    public static String formatContentEmail(String []titles, String[] contents) {
+    public static String formatContentEmail(String []titles, String[] contents, String point, String pointContent) {
         StringBuffer stringBuffer = new StringBuffer();
 
         for(int i = 0; i< titles.length; ++i) {
             stringBuffer.append("<b>" + titles[i] + ": </b>");
             stringBuffer.append("<span>" + contents[i] + "</span><br>");
         }
-
+        stringBuffer.append("<a href="+ point +"target=_blank>"+ pointContent +"</a>");
         return stringBuffer.toString();
     }
 }

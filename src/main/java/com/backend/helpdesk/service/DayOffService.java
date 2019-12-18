@@ -197,18 +197,19 @@ public class DayOffService {
         dayOffDTO.setCreateAt(date);
         dayOffDTO.setStatus(statusStatusDTOConverter.convert(statusRepository.findByName(Constants.PENDING).get()));
 
-        DayOff dayOff=dayOffDTODayOffConverter.convert(dayOffDTO);
+        DayOff dayOff = dayOffDTODayOffConverter.convert(dayOffDTO);
 
         Email email = new Email();
         email.setSendToEmail(emailAdmins);
         email.setSubject(Constants.SUBJECT_DAY_OFF);
 
-        String []titles = {"Day off by email", "Day off type", "Create At", "Day start", "Day end", "Description"};
-        String []content = {dayOff.getUserEntity().getEmail(), dayOff.getDayOffType().getName(),
-                            dayOff.getCreateAt().toString(), dayOff.getDayStartOff().toString(),
-                            dayOff.getDayEndOff().toString(), dayOff.getDescription()};
+        String[] titles = {"Day off by email", "Day off type", "Create At", "Day start", "Day end", "Description"};
+        String[] content = {dayOff.getUserEntity().getEmail(), dayOff.getDayOffType().getName(),
+                dayOff.getCreateAt().toString(), dayOff.getDayStartOff().toString(),
+                dayOff.getDayEndOff().toString(), dayOff.getDescription()};
 
-        email.setText(CommonMethods.formatContentEmail(titles, content));
+        email.setText(CommonMethods.formatContentEmail(titles, content, Constants.POINT_PAGE_MANAGEMENT_DAY_OFF,
+                Constants.POINT_CONTENT_MANAGEMENT_DAY_OFF));
         emailController.sendEmail(email);
         return dayOffRepository.save(dayOff);
     }
