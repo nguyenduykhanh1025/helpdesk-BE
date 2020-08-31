@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 @Data
-@Entity(name="users")
+@Entity(name = "users")
 @NoArgsConstructor
 public class UserEntity {
 
@@ -70,4 +70,5 @@ public class UserEntity {
         this.lastName = lastName;
         this.enable = true;
     }
+
 }
